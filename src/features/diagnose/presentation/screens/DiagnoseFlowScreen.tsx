@@ -33,7 +33,7 @@ export function DiagnoseFlowScreen() {
             {step === DiagnoseStep.Dose && (
                 <DoseStep
                     doseGrams={answers.doseGrams}
-                    hasScale={answers.hasScale ?? true}
+                    hasScale={answers.hasScale}
                     onSubmit={(doseGrams, hasScale) => {
                         updateAnswers({ doseGrams, hasScale });
                         nextStep();

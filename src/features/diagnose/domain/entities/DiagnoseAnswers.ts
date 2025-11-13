@@ -3,9 +3,9 @@ import { TasteFeedback } from "../valueObjects/TasteFeedback";
 
 
 export interface DiagnoseAnswers {
-    coffeeType?: CoffeeType;
-    doseGrams?: number | null;
-    hasScale?: boolean;
-    extractionDuration?: number | null;
-    tasteFeedback?: TasteFeedback;
+    coffeeType: CoffeeType;
+    doseGrams: number;
+    hasScale: boolean;
+    extractionDuration: number;
+    tasteFeedback: TasteFeedback;
 }
