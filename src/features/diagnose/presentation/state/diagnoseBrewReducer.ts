@@ -5,7 +5,7 @@ import { getNextStep } from "../../domain/usecases/GetNextStep";
 import { getPreviousStep } from "../../domain/usecases/GetPreviousStep";
 
 type DiagnoseEvent =
-  | { type: "UPDATE_ANSWERS"; patch: Partial<DiagnoseAnswersDraft> }
+  | { type: "UPDATE_ANSWERS"; patch: DiagnoseAnswersDraft }
   | { type: "NEXT_STEP" }
   | { type: "PREV_STEP" }
   | { type: "RESET" }

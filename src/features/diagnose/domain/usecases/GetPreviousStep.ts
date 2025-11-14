@@ -1,10 +1,10 @@
 import { assertNever } from "../../../../shared/config/functions";
-import type { DiagnoseAnswers } from "../entities/DiagnoseAnswers";
+import type { DiagnoseAnswersDraft } from "../entities/DiagnoseAnswers";
 import { DiagnoseStep, type DiagnoseStep as DiagnoseStepType } from "../valueObjects/DiagnoseStep";
 
 export function getPreviousStep(
   current: DiagnoseStepType,
-  answers: DiagnoseAnswers
+  answers: DiagnoseAnswersDraft
 ): DiagnoseStepType {
   switch (current) {
     case DiagnoseStep.CoffeeType:
