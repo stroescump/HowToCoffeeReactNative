@@ -11,3 +11,15 @@ export interface DiagnoseAnswers {
 }
 
 export type DiagnoseAnswersDraft = Partial<DiagnoseAnswers>
+
+export function isDiagnoseAnswersComplete(
+    draft: DiagnoseAnswersDraft
+): draft is DiagnoseAnswers {
+    return (
+        draft.coffeeType !== undefined &&
+        draft.doseGrams !== undefined &&
+        draft.hasScale !== undefined &&
+        draft.extractionDuration !== undefined &&
+        draft.tasteFeedback !== undefined
+    );
+}

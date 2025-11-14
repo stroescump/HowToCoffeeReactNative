@@ -1,11 +1,7 @@
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import React from "react";
-import { Text } from "react-native";
 import { DiagnoseRepositoryImpl } from "../../data/repositories/DiagnoseRepositoryImpl";
-import { DiagnoseAnswers, DiagnoseAnswersDraft } from "../../domain/entities/DiagnoseAnswers";
-import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
-import { CoffeeTypeStep } from "../components/steps/CoffeeTypeStep";
-import { DoseStep } from "../components/steps/DoseStep";
+import { DiagnoseFlowView } from "../components/DiagnoseFlowView";
 import { useDiagnoseFlow } from "../state/useDiagnoseFlow";
 
 const draftRepo = new DiagnoseRepositoryImpl(); // DI super simplu pentru MVP
@@ -22,41 +18,15 @@ export function DiagnoseFlowScreen() {
 
     return (
         <BaseScreen>
-            {step === DiagnoseStep.CoffeeType && (
-                <CoffeeTypeStep
-                    value={answers.coffeeType}
-                    onSubmit={(coffeeType) => {
-                        updateAnswers({ coffeeType });
-                        nextStep();
-                    }}
-                />
-            )}
-
-            {step === DiagnoseStep.Dose && (
-                <DoseStep
-                    doseGrams={answers.doseGrams}
-                    hasScale={answers.hasScale}
-                    onSubmit={(doseGrams, hasScale) => {
-                        updateAnswers({ doseGrams, hasScale });
-                        nextStep();
-                    }}
-                    onBack={prevStep}
-                />
-            )}
-            {/* Time, Taste, Recommendation la fel */}
-            <Text>You've reached Brew Diagnoseee</Text>
+            <DiagnoseFlowView
+                step={step}
+                answers={answers}
+                onUpdateAnswers={updateAnswers}
+                onNext={nextStep}
+                onBack={prevStep}
+                onReset={reset}
+            />
         </BaseScreen>
     );
 }
 
-export function isDiagnoseAnswersComplete(
-    draft: DiagnoseAnswersDraft
-): draft is DiagnoseAnswers {
-    return (
-        draft.coffeeType !== undefined &&
-        draft.doseGrams !== undefined &&
-        draft.hasScale !== undefined &&
-        draft.extractionDuration !== undefined &&
-        draft.tasteFeedback !== undefined
-    );
-}
