@@ -6,6 +6,8 @@ import Svg, { G, Path, Text as SvgText, TSpan } from "react-native-svg";
 const FIGMA_HEIGHT = 746;
 const FIGMA_WIDTH = 428;
 
+  //TODO: Decide on a strategy for mitigating different padding/margings when device size varies.
+
 type ButtonLabelConfig = {
   label?: string;
   fontSize?: number;
