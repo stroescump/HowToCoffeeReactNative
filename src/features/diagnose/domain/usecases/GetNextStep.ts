@@ -1,9 +1,6 @@
+import { assertNever } from "../../../../shared/config/functions";
 import type { DiagnoseAnswers } from "../entities/DiagnoseAnswers";
 import { DiagnoseStep, type DiagnoseStep as DiagnoseStepType } from "../valueObjects/DiagnoseStep";
-
-function assertNever(x: never): never {
-  throw new Error(`Unexpected step: ${x}`);
-}
 
 export function getNextStep(
   current: DiagnoseStepType,

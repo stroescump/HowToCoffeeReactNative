@@ -1,3 +1,4 @@
+import { assertNever } from "../../../../shared/config/functions";
 import { DiagnoseAnswersDraft } from "../../domain/entities/DiagnoseAnswers";
 import { DiagnoseFlowState, INITIAL_DIAGNOSE_STATE } from "../../domain/entities/DiagnoseFlowState";
 import { getNextStep } from "../../domain/usecases/GetNextStep";
@@ -33,7 +34,6 @@ export function diagnoseReducer(
     case "RESET":
       return INITIAL_DIAGNOSE_STATE;
     default:
-      // assertNever(event) aici
-      throw new Error("Unhandled DiagnoseEvent");
+      assertNever(event)
   }
 }
