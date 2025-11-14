@@ -40,9 +40,9 @@ export function DiagnoseFlowScreen() {
                     }}
                     onBack={prevStep}
                 />
-            )}            
+            )}
             {/* Time, Taste, Recommendation la fel */}
-            <Text>You've reached Brew Diagnose</Text>
+            <Text>You've reached Brew Diagnoseee</Text>
         </View>
     );
 }

@@ -1,63 +1,40 @@
-import { Link } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
-const HOME_ITEMS = [
-  { href: "/findyourtaste", label: "Find your taste" },
-  { href: "/diagnose", label: "Diagnose brew" },
-  { href: "/recipeagenda", label: "Recipe agenda" },
-  { href: "/coffeeplacesnearby", label: "Coffee places nearby" },
-  { href: "/marketplace", label: "Coffee marketplace (soon)" },
-];
+// app/index.tsx
+import React from "react";
+import { Text, View } from "react-native";
+import { ButtonsSvg } from "../src/features/homescreen/presentation/components/ButtonsSvg";
+// dacă ai și background separat, îl poți importa și pe ăla:
+// import { HomeBackgroundSvg } from "../src/features/homescreen/presentation/components/HomeBackgroundSvg";
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>HowToCoffee</Text>
-      <Text style={styles.subtitle}>What do you want to do?</Text>
+    <View className="flex-1 bg-[#F1E9DD]">
+      <Text className="text-4xl font-extrabold mt-16 text-center">
+        ?ToCoffee
+      </Text>
 
-      <View style={styles.list}>
-        {HOME_ITEMS.map((item) => (
-          <Link key={item.href} href={item.href} asChild>
-            <Pressable style={styles.button}>
-              <Text style={styles.buttonText}>{item.label}</Text>
-            </Pressable>
-          </Link>
-        ))}
+      <View className="flex-1">
+        {/* Variante: 
+           1) Dacă background + butoane sunt același SVG => doar ButtonsSvg.
+           2) Dacă ai un background separat, faci un container și le pui bot în bot cu absolute.
+         */}
+
+        {/* 1) Doar ButtonsSvg (conține și culorile Bauhaus) */}
+        <ButtonsSvg />
+
+        {/*
+        2) Dacă vrei background + butoane separate:
+
+        <View style={{ flex: 1 }}>
+          <HomeBackgroundSvg
+            width="100%"
+            height="100%"
+          />
+          <View style={StyleSheet.absoluteFillObject}>
+            <ButtonsSvg />
+          </View>
+        </View>
+        */}
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#0F172A", // dark blue-ish
-    paddingHorizontal: 24,
-    paddingTop: 80,
-  },
-  title: {
-    color: "white",
-    fontSize: 32,
-    fontWeight: "800",
-    marginBottom: 8,
-  },
-  subtitle: {
-    color: "rgba(255,255,255,0.7)",
-    fontSize: 16,
-    marginBottom: 32,
-  },
-  list: {
-    gap: 12,
-  },
-  button: {
-    backgroundColor: "#111827",
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderRadius: 999,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-});
