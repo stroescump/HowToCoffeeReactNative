@@ -1,12 +1,13 @@
 import { DiagnoseStep } from '../valueObjects/DiagnoseStep';
-import { DiagnoseAnswers } from './DiagnoseAnswers';
+import { DiagnoseAnswersDraft } from './DiagnoseAnswers';
 
 
 export interface DiagnoseFlowState {
     step: DiagnoseStep;
-    answers: DiagnoseAnswers;
+    answers: DiagnoseAnswersDraft;
 }
+
 export const INITIAL_DIAGNOSE_STATE: DiagnoseFlowState = {
     step: DiagnoseStep.CoffeeType,
-    answers: {},
-};
+    answers: {}
+}

@@ -1,59 +1,56 @@
-import { useEffect, useState } from "react";
-import type { DiagnoseAnswers } from "../../domain/entities/DiagnoseAnswers";
-import type { DiagnoseFlowState } from "../../domain/entities/DiagnoseFlowState";
+import { useEffect, useReducer, useState } from "react";
+import type { DiagnoseAnswersDraft } from "../../domain/entities/DiagnoseAnswers";
 import { INITIAL_DIAGNOSE_STATE } from "../../domain/entities/DiagnoseFlowState";
 import type { DiagnoseRepository } from "../../domain/repositories/DiagnoseRepository";
-import { getNextStep } from "../../domain/usecases/GetNextStep";
-import { getPreviousStep } from "../../domain/usecases/GetPreviousStep";
+import { diagnoseReducer } from './diagnoseBrewReducer';
 
 interface UseDiagnoseFlowDeps {
     draftRepository: DiagnoseRepository;
 }
 
 export function useDiagnoseFlow({ draftRepository }: UseDiagnoseFlowDeps) {
-    const [state, setState] = useState<DiagnoseFlowState>(INITIAL_DIAGNOSE_STATE);
+    const [state, dispatch] = useReducer(diagnoseReducer, INITIAL_DIAGNOSE_STATE);
     const { step, answers } = state;
+
+    const [hydrated, setHydrated] = useState(false);
 
     useEffect(() => {
         (async () => {
             const draft = await draftRepository.loadDraft();
-            if (draft) setState(draft);
+            if (draft) {
+                dispatch({ type: "RESET" }); // optional
+                // sau direct setState(draft) dacă ții un setState extern
+            }
+            setHydrated(true);
         })();
     }, [draftRepository]);
 
     useEffect(() => {
+        if (!hydrated) return;
         draftRepository.saveDraft(state).catch(() => { });
-    }, [state, draftRepository]);
+    }, [state, hydrated, draftRepository]);
 
-    function updateAnswers(patch: Partial<DiagnoseAnswers>) {
-        setState((prev) => ({
-            ...prev,
-            answers: { ...prev.answers, ...patch },
-        }));
+    function updateAnswers(patch: Partial<DiagnoseAnswersDraft>) {
+        dispatch({ type: "UPDATE_ANSWERS", patch });
     }
 
     function nextStep() {
-        setState((prev) => ({
-            ...prev,
-            step: getNextStep(prev.step, prev.answers),
-        }));
+        dispatch({ type: "NEXT_STEP" });
     }
 
     function prevStep() {
-        setState((prev) => ({
-            ...prev,
-            step: getPreviousStep(prev.step, prev.answers),
-        }));
+        dispatch({ type: "PREV_STEP" });
     }
 
     async function reset() {
-        setState(INITIAL_DIAGNOSE_STATE);
+        dispatch({ type: "RESET" });
         await draftRepository.clearDraft();
     }
 
     return {
         step,
         answers,
+        state,
         updateAnswers,
         nextStep,
         prevStep,
