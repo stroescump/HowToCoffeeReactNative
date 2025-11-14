@@ -1,40 +1,49 @@
 // app/index.tsx
-import React from "react";
+import { ButtonsSvg } from "@/src/features/homescreen/presentation/components/ButtonsSvg";
+import React, { useState } from "react";
 import { Text, View } from "react-native";
-import { ButtonsSvg } from "../src/features/homescreen/presentation/components/ButtonsSvg";
-// dacă ai și background separat, îl poți importa și pe ăla:
-// import { HomeBackgroundSvg } from "../src/features/homescreen/presentation/components/HomeBackgroundSvg";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
+  const [availableHeight, setAvailableHeight] = useState(0);
   return (
-    <View className="flex-1 bg-[#F1E9DD]">
-      <Text className="text-4xl font-extrabold mt-16 text-center">
-        ?ToCoffee
-      </Text>
-
-      <View className="flex-1">
-        {/* Variante: 
-           1) Dacă background + butoane sunt același SVG => doar ButtonsSvg.
-           2) Dacă ai un background separat, faci un container și le pui bot în bot cu absolute.
-         */}
-
-        {/* 1) Doar ButtonsSvg (conține și culorile Bauhaus) */}
-        <ButtonsSvg />
-
-        {/*
-        2) Dacă vrei background + butoane separate:
-
-        <View style={{ flex: 1 }}>
-          <HomeBackgroundSvg
-            width="100%"
-            height="100%"
+    <SafeAreaView
+      className="flex-1 bg-[#F1E9DD]"
+      edges={["top"]} // protejează doar în jurul notch-ului
+    >
+      <Text className="text-5xl font-bold text-center mt-2 mb-2 tracking-[-3px]">?ToCoffee</Text>
+      <View className="flex-1 mb-2" onLayout={(e) => {
+        const { height } = e.nativeEvent.layout;
+        setAvailableHeight(height);
+      }}>
+        {availableHeight > 0 && (
+          <ButtonsSvg
+            availableHeight={availableHeight}
+            labels={{
+              findYourTaste: {
+                fontSize: 32,
+                fill: "#010101",
+              },
+              marketplace: {
+                fontSize: 32,
+                fill: "#010101",
+              },
+              diagnoseBrew: {
+                fontSize: 32,
+                fill: "#FFFFFF",
+              },
+              recipeAgenda: {
+                fontSize: 32,
+                fill: "#FFFFFF",
+              },
+              coffeePlacesNearby: {
+                fontSize: 32,
+                fill: "#010101",
+              },
+            }}
           />
-          <View style={StyleSheet.absoluteFillObject}>
-            <ButtonsSvg />
-          </View>
-        </View>
-        */}
+        )}
       </View>
-    </View>
+    </SafeAreaView >
   );
 }
