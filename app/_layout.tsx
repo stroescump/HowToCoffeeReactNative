@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import "../global.css";
@@ -6,14 +7,14 @@ import "../global.css";
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <Stack>
+      <StatusBar style="dark" backgroundColor="#F1E9DD" />
+      <Stack screenOptions={{
+        headerShown: false
+      }}>
         {/* HomeScreen = app/home/index.tsx */}
         <Stack.Screen
           name="index"
-          options={{
-            headerShown: false,
-            title: "Home"
-          }}
+          options={{ title: "Home" }}
         />
 
         {/* restul screen-urilor pornite din HOME_ITEMS */}

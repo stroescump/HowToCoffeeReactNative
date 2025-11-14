@@ -1,5 +1,6 @@
+import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import { DiagnoseRepositoryImpl } from "../../data/repositories/DiagnoseRepositoryImpl";
 import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
 import { CoffeeTypeStep } from "../components/steps/CoffeeTypeStep";
@@ -19,7 +20,7 @@ export function DiagnoseFlowScreen() {
     } = useDiagnoseFlow({ draftRepository: draftRepo });
 
     return (
-        <View className="flex-1 bg-blue-700 px-6 pt-14 pb-6">
+        <BaseScreen>
             {step === DiagnoseStep.CoffeeType && (
                 <CoffeeTypeStep
                     value={answers.coffeeType}
@@ -43,6 +44,6 @@ export function DiagnoseFlowScreen() {
             )}
             {/* Time, Taste, Recommendation la fel */}
             <Text>You've reached Brew Diagnoseee</Text>
-        </View>
+        </BaseScreen>
     );
 }

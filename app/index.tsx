@@ -1,16 +1,13 @@
 // app/index.tsx
 import { ButtonsSvg } from "@/src/features/homescreen/presentation/components/ButtonsSvg";
+import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const [availableHeight, setAvailableHeight] = useState(0);
   return (
-    <SafeAreaView
-      className="flex-1 bg-[#F1E9DD]"
-      edges={["top"]} // protejează doar în jurul notch-ului
-    >
+    <BaseScreen showHeader={false}>
       <Text className="text-5xl font-bold text-center mt-2 mb-2 tracking-[-3px]">?ToCoffee</Text>
       <View className="flex-1 mb-2" onLayout={(e) => {
         const { height } = e.nativeEvent.layout;
@@ -44,6 +41,6 @@ export default function HomeScreen() {
           />
         )}
       </View>
-    </SafeAreaView >
+    </BaseScreen >
   );
 }
