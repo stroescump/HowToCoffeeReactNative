@@ -2,10 +2,10 @@ import { Link } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const HOME_ITEMS = [
-  { href: "/find-taste", label: "Find your taste" },
+  { href: "/findyourtaste", label: "Find your taste" },
   { href: "/diagnose", label: "Diagnose brew" },
-  { href: "/recipes", label: "Recipe agenda" },
-  { href: "/places", label: "Coffee places nearby" },
+  { href: "/recipeagenda", label: "Recipe agenda" },
+  { href: "/coffeeplacesnearby", label: "Coffee places nearby" },
   { href: "/marketplace", label: "Coffee marketplace (soon)" },
 ];
 

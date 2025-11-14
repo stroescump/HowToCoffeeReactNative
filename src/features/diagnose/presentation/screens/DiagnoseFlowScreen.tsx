@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import { DiagnoseRepositoryImpl } from "../../data/repositories/DiagnoseRepositoryImpl";
 import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
 import { CoffeeTypeStep } from "../components/steps/CoffeeTypeStep";
@@ -40,9 +40,9 @@ export function DiagnoseFlowScreen() {
                     }}
                     onBack={prevStep}
                 />
-            )}
-
+            )}            
             {/* Time, Taste, Recommendation la fel */}
+            <Text>You've reached Brew Diagnose</Text>
         </View>
     );
 }
