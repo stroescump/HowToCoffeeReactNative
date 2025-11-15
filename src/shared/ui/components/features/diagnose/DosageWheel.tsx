@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+    Animated,
     FlatList,
     NativeScrollEvent,
     NativeSyntheticEvent,
     StyleSheet,
-    Text,
     useWindowDimensions,
-    View,
+    View
 } from 'react-native';
 import { DosageScaleFrame } from './DosageScaleFrame';
 
@@ -23,13 +23,93 @@ const MAX_WHEEL_FRACTION = 1;
 
 const DEFAULT_DOSAGE_VALUES = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
-{/** Horizontal offset for the item that is in focus in the Spinner */ }
+/** Horizontal offset for the item that is in focus in the Spinner */
 const SELECTED_HORIZONTAL_OFFSET = 10;
 
 type DosageWheelProps = {
     values?: number[];
     initialValue?: number;
     onChange?: (value: number) => void;
+};
+
+type WheelItemProps = {
+    value: number;
+    isSelected: boolean;
+    onLayout?: (event: any) => void;
+    selectedFontSize: number;
+    unselectedFontSize: number;
+    unitFontSize: number;
+    horizontalOffsetFraction: number;
+    wheelWidth: number;
+};
+
+const WheelItem: React.FC<WheelItemProps> = ({
+    value,
+    isSelected,
+    onLayout,
+    selectedFontSize,
+    unselectedFontSize,
+    unitFontSize,
+    horizontalOffsetFraction,
+    wheelWidth,
+}) => {
+    const anim = React.useRef(new Animated.Value(isSelected ? 1 : 0)).current;
+
+    useEffect(() => {
+        Animated.spring(anim, {
+            toValue: isSelected ? 1 : 0,
+            friction: 7,
+            tension: 60,
+            useNativeDriver: false,
+        }).start();
+    }, [isSelected, anim]);
+
+    const animatedFontSize = anim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [unselectedFontSize, selectedFontSize],
+    });
+
+    const animatedOpacity = anim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0.4, 1],
+    });
+
+    const horizontalOffset = wheelWidth * horizontalOffsetFraction;
+
+    return (
+        <View
+            style={[
+                styles.item,
+                isSelected && {
+                    marginRight: horizontalOffset,
+                },
+            ]}
+            onLayout={onLayout}
+        >
+            <Animated.Text
+                style={[
+                    styles.itemText,
+                    {
+                        fontSize: animatedFontSize,
+                        opacity: animatedOpacity,
+                    },
+                ]}
+            >
+                {value}
+            </Animated.Text>
+            <Animated.Text
+                style={[
+                    styles.itemUnit,
+                    {
+                        fontSize: unitFontSize,
+                        opacity: animatedOpacity,
+                    },
+                ]}
+            >
+                grams
+            </Animated.Text>
+        </View>
+    );
 };
 
 export const DosageWheel: React.FC<DosageWheelProps> = ({
@@ -145,15 +225,13 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
             selectedIndexRef.current = clamped;
             setSelectedIndex(clamped);
         }
-
-
     };
 
-    {/** 5px din înălțimea design-ului Figma pentru a alinia gradation-ul cu mijlocul gap ului din bg */ }
+    /** 5px din înălțimea design-ului Figma pentru a alinia gradation-ul cu mijlocul gap ului din bg */
     const GRADATION_OFFSET_RATIO = 5 / 618;
 
-    {/** Horizontal offset for the item that is in focus in the Spinner */ }
-    const SELECTED_HORIZONTAL_OFFSET = 80 / (DESIGN_WIDTH * 0.75);
+    /** Horizontal offset for the item that is in focus in the Spinner */
+    const SELECTED_HORIZONTAL_OFFSET = 50 / (DESIGN_WIDTH * 0.75);
 
     return (
         <View
@@ -195,7 +273,7 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
                     keyExtractor={(item) => item.toString()}
                     bounces={false}
                     showsVerticalScrollIndicator={false}
-                    decelerationRate={0.87}
+                    decelerationRate={0.96}
                     onScroll={handleScroll}
                     onMomentumScrollEnd={handleMomentumScrollEnd}
                     scrollEventThrottle={16}
@@ -223,37 +301,16 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
                                 : undefined;
 
                         return (
-                            <View style={[
-                                styles.item,
-                                isSelected && {
-                                    marginRight: wheelWidth * SELECTED_HORIZONTAL_OFFSET
-                                }]
-                            } onLayout={onItemLayout}>
-                                <Text
-                                    style={[
-                                        styles.itemText,
-                                        {
-                                            fontSize: isSelected
-                                                ? selectedFontSize
-                                                : unselectedFontSize,
-                                            opacity: isSelected ? 1 : 0.4,
-                                        },
-                                    ]}
-                                >
-                                    {item}
-                                </Text>
-                                <Text
-                                    style={[
-                                        styles.itemUnit,
-                                        {
-                                            fontSize: unitFontSize,
-                                            opacity: isSelected ? 1 : 0.4,
-                                        },
-                                    ]}
-                                >
-                                    grams
-                                </Text>
-                            </View>
+                            <WheelItem
+                                value={item}
+                                isSelected={isSelected}
+                                onLayout={onItemLayout}
+                                selectedFontSize={selectedFontSize}
+                                unselectedFontSize={unselectedFontSize}
+                                unitFontSize={unitFontSize}
+                                horizontalOffsetFraction={SELECTED_HORIZONTAL_OFFSET}
+                                wheelWidth={wheelWidth}
+                            />
                         );
                     }}
                 />
