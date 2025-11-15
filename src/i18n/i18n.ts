@@ -9,7 +9,6 @@ if (!i18n.isInitialized) {
   i18n
     .use(initReactI18next)
     .init({
-      lng: "de",
       fallbackLng: "en",
       resources: {
         en: { common: en },
