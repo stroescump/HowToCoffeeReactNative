@@ -11,7 +11,6 @@ import {
 import { DosageScaleFrame } from './DosageScaleFrame';
 
 // --- Figma reference frame ---
-const DESIGN_HEIGHT = 932;
 const DESIGN_WIDTH = 428;
 
 // Figma text sizes
@@ -20,9 +19,9 @@ const FIGMA_UNSELECTED_SIZE = 80;
 const FIGMA_UNIT_SIZE = 32;
 
 const VISIBLE_ITEMS = 5;
-const MAX_WHEEL_FRACTION = 0.8;
+const MAX_WHEEL_FRACTION = 1;
 
-const DEFAULT_DOSAGE_VALUES = [7, 8, 9, 10, 11, 12, 13];
+const DEFAULT_DOSAGE_VALUES = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
 type DosageWheelProps = {
     values?: number[];
@@ -36,6 +35,7 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
     onChange,
 }) => {
     const { height: screenHeight, width: screenWidth } = useWindowDimensions();
+    const [containerHeight, setContainerHeight] = useState<number | null>(null);
     const EXTRA_ITEM_SPACING = 8; // px vizuali între cifre
 
     // Scale fonts from Figma based on screen width
@@ -47,7 +47,8 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
     // Base item height derived from the selected font; keep enough room to avoid clipping
     const itemHeightRaw = selectedFontRaw + EXTRA_ITEM_SPACING;
     const wheelHeightRaw = itemHeightRaw * VISIBLE_ITEMS;
-    const maxWheelHeight = screenHeight * MAX_WHEEL_FRACTION;
+    const availableHeight = containerHeight ?? screenHeight;
+    const maxWheelHeight = availableHeight * MAX_WHEEL_FRACTION;
 
     // If the raw wheel is too tall, scale everything down uniformly
     const uniformScale =
@@ -130,7 +131,16 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
     };
 
     return (
-        <View style={[styles.root, { width: screenWidth }]}>
+        <View style={[styles.root,
+        { width: screenWidth },
+        ]}
+            onLayout={(e) => {
+                const h = e.nativeEvent.layout.height;
+                if (h > 0 && h !== containerHeight) {
+                    setContainerHeight(h);
+                }
+            }}
+        >
             {/* Left: meter, anchored to the left side */}
             <View
                 style={[
@@ -225,8 +235,10 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
 
 const styles = StyleSheet.create({
     root: {
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center', // centrează scale + wheel în zona primită
     },
     svgContainer: {
         justifyContent: 'center',
