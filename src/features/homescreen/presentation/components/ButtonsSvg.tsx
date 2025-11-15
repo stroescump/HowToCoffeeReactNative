@@ -9,7 +9,7 @@ const FIGMA_WIDTH = 428;
   //TODO: Decide on a strategy for mitigating different padding/margings when device size varies.
 
 type ButtonLabelConfig = {
-  label?: string;
+  label: string;
   fontSize?: number;
   fontFamily?: string;
   fill?: string;
@@ -28,10 +28,9 @@ type BuiltLabel = {
 };
 
 function buildLabel(
-  config: ButtonLabelConfig | undefined,
-  fallback: string
+  config: ButtonLabelConfig,
 ): BuiltLabel {
-  const baseText = config?.label ?? fallback;
+  const baseText = config?.label;
   const text = config?.uppercase ? baseText.toUpperCase() : baseText;
 
   const lines = text.split("\n");
@@ -51,12 +50,12 @@ function buildLabel(
 
 type ButtonsSvgProps = {
   availableHeight: number,
-  labels?: {
-    findYourTaste?: ButtonLabelConfig;
-    marketplace?: ButtonLabelConfig;
-    diagnoseBrew?: ButtonLabelConfig;
-    recipeAgenda?: ButtonLabelConfig;
-    coffeePlacesNearby?: ButtonLabelConfig;
+  labels: {
+    findYourTaste: ButtonLabelConfig;
+    marketplace: ButtonLabelConfig;
+    diagnoseBrew: ButtonLabelConfig;
+    recipeAgenda: ButtonLabelConfig;
+    coffeePlacesNearby: ButtonLabelConfig;
   };
 };
 
@@ -105,6 +104,7 @@ function renderLabel(
 export function ButtonsSvg({ availableHeight, labels }: ButtonsSvgProps) {
   const router = useRouter();
   const [containerWidth, setContainerWidth] = useState(0);
+
   if (availableHeight <= 0) return null;
 
   const aspectRatio = FIGMA_HEIGHT / FIGMA_WIDTH;
@@ -114,24 +114,19 @@ export function ButtonsSvg({ availableHeight, labels }: ButtonsSvgProps) {
   const preserve = canUseSlice ? "xMidYMax slice" : "xMidYMax meet";
 
   const findYourTasteLabel = buildLabel(
-    labels?.findYourTaste,
-    "find your\ntaste"
+    labels?.findYourTaste
   );
   const marketplaceLabel = buildLabel(
-    labels?.marketplace,
-    "buy\ncoffee"
+    labels?.marketplace
   );
   const diagnoseBrewLabel = buildLabel(
-    labels?.diagnoseBrew,
-    "diagnose\nbrew"
+    labels?.diagnoseBrew
   );
   const recipeAgendaLabel = buildLabel(
-    labels?.recipeAgenda,
-    "recipe\nagenda"
+    labels?.recipeAgenda
   );
   const coffeePlacesNearbyLabel = buildLabel(
-    labels?.coffeePlacesNearby,
-    "coffee\nplaces\nnearby"
+    labels?.coffeePlacesNearby
   );
 
   return (

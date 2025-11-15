@@ -1,0 +1,10 @@
+{
+  "title": "?ToCoffee",
+  "buttons": {
+    "findYourTaste": "finde\ndeinen\ngeschmack",
+    "marketplace": "kaffee\nmarktplatz",
+    "diagnoseBrew": "brüh\ndiagnose",
+    "recipeAgenda": "rezept-\nagenda",
+    "coffeePlacesNearby": "cafés\nin der\nNähe"
+  }
+}

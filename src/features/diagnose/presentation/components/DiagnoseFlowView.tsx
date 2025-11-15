@@ -9,7 +9,6 @@ import { CoffeeType } from "../../domain/valueObjects/CoffeeType";
 import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
 import { CoffeeTypeStep } from "./steps/CoffeeTypeStep";
 import { DoseStep } from "./steps/DoseStep";
-// importă TimeStep, TasteStep, RecommendationStep când le ai
 
 type DiagnoseFlowViewProps = {
     step: DiagnoseStep;
