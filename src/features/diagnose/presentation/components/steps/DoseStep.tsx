@@ -1,3 +1,4 @@
+import { DosageWheel } from "@/src/shared/ui/components/features/diagnose/DosageWheel";
 import React, { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 
@@ -37,14 +38,10 @@ export const DoseStep = ({
 
     return (
         <View className="flex-1">
-            {/* Foreground content rendered above the background */}
-            <View className="flex-1 flex-col">
-
-                {/* Children */}
-                <View>
-
-                </View>
-            </View>
+            <DosageWheel
+                initialValue={parsedDose || doseGrams || 10}
+                onChange={(value) => setDoseInput(String(value))}
+            />
         </View>
     );
 };
