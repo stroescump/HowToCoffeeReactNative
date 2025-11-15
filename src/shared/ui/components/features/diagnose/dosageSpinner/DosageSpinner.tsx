@@ -40,9 +40,9 @@ type SpinnerItemProps = {
     baseFontSize: number;
     unitFontSize: number;
     selectedScale: number;
-    horizontalOffsetFraction: number;
-    wheelWidth: number;
+    selectedHorizontalOffset: number;
     itemHeight: number;
+    onMeasuredWidth?: (width: number) => void;
 };
 
 const SpinnerItem: React.FC<SpinnerItemProps> = ({
@@ -52,11 +52,12 @@ const SpinnerItem: React.FC<SpinnerItemProps> = ({
     baseFontSize,
     unitFontSize,
     selectedScale,
-    horizontalOffsetFraction,
-    wheelWidth,
-    itemHeight
+    selectedHorizontalOffset,
+    itemHeight,
+    onMeasuredWidth,
 }) => {
     const anim = React.useRef(new Animated.Value(isSelected ? 1 : 0)).current;
+    const hasReportedWidthRef = React.useRef(false);
 
     useEffect(() => {
         Animated.spring(anim, {
@@ -77,16 +78,9 @@ const SpinnerItem: React.FC<SpinnerItemProps> = ({
         outputRange: [0.4, 1],
     });
 
-    const baseUnitMargin = 4;
-    const animatedUnitMarginLeft = anim.interpolate({
-        inputRange: [0, 1],
-        outputRange: [
-            baseUnitMargin,
-            baseUnitMargin + (baseFontSize * (selectedScale - 1)) / 2,
-        ],
-    });
-
-    const horizontalOffset = wheelWidth * horizontalOffsetFraction;
+    const unitMarginLeft = isSelected
+        ? baseFontSize * 0.5   // mai mult spațiu când numărul e mărit
+        : baseFontSize * 0.2;  // un pic mai mult decât 0.12, dar tot raportat la font
 
     return (
         <View
@@ -94,12 +88,17 @@ const SpinnerItem: React.FC<SpinnerItemProps> = ({
                 styles.item,
                 {
                     height: itemHeight,
-                },
-                isSelected && {
-                    marginRight: horizontalOffset,
+                    marginRight: isSelected ? selectedHorizontalOffset : 0,
                 },
             ]}
-            onLayout={onLayout}
+            onLayout={(e) => {
+                onLayout?.(e);
+                const w = e.nativeEvent.layout.width;
+                if (!hasReportedWidthRef.current && w > 0) {
+                    hasReportedWidthRef.current = true;
+                    onMeasuredWidth?.(w);
+                }
+            }}
         >
             <Animated.Text
                 style={[
@@ -119,11 +118,11 @@ const SpinnerItem: React.FC<SpinnerItemProps> = ({
                         fontFamily: "InterSemiBold",
                         fontSize: unitFontSize,
                         opacity: animatedOpacity,
-                        marginLeft: animatedUnitMarginLeft,
+                        marginLeft: unitMarginLeft,
                     },
                 ]}
             >
-                grams
+                g
             </Animated.Text>
         </View>
     );
@@ -138,6 +137,14 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
     const { height: screenHeight, width: screenWidth } = useWindowDimensions();
     const [containerHeight, setContainerHeight] = useState<number | null>(null);
     const [containerY, setContainerY] = useState<number | null>(null);
+
+    const [maxItemWidth, setMaxItemWidth] = useState(0);
+
+    const handleItemWidthMeasured = (width: number) => {
+        if (width > 0) {
+            setMaxItemWidth((prev) => (width > prev ? width : prev));
+        }
+    };
 
     // spațiu vertical între cifre (în jurul fontului de bază – cel neselectat)
     const EXTRA_ITEM_SPACING = 8;
@@ -165,6 +172,7 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
         unitFontSize,
         selectedScale,
         verticalPadding,
+        selectedHorizontalOffset
     } = React.useMemo(() => {
         const widthScale = screenWidth / DESIGN_WIDTH;
 
@@ -208,6 +216,18 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
         const scaleWidth = screenWidth * SCALE_FRACTION;
         const wheelWidth = screenWidth - scaleWidth;
 
+        // --- calcul matematic pentru offset ---
+        const DESIRED_OFFSET_FRACTION = 0.10; // cât de mult AI VREA să intre spre stânga (10% din wheelWidth)
+        const SAFE_LEFT_PADDING = 8;          // spațiu minim între cifre și marginea stângă
+
+        const desiredOffsetPx = wheelWidth * DESIRED_OFFSET_FRACTION;
+        const maxAllowedOffsetPx = Math.max(
+            0,
+            wheelWidth - maxItemWidth - SAFE_LEFT_PADDING
+        );
+
+        const selectedHorizontalOffset = Math.min(desiredOffsetPx, maxAllowedOffsetPx);
+
         return {
             scaleWidth,
             wheelWidth,
@@ -217,8 +237,9 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
             unitFontSize,
             selectedScale: SELECTED_SCALE,
             verticalPadding,
+            selectedHorizontalOffset,
         };
-    }, [screenWidth, screenHeight, containerHeight]);
+    }, [screenWidth, screenHeight, containerHeight, maxItemWidth]);
 
     const snapToIndex = (index: number) => {
         if (!listRef.current || !itemHeight) return;
@@ -280,12 +301,20 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
             setSelectedIndex(clamped);
         }
 
-        const targetOffset = clamped * itemHeight;
+        // 🔧 Micro-snap: doar pe iOS, doar dacă suntem vizibil între item-uri
+        if (Platform.OS === 'ios' && listRef.current && itemHeight > 0) {
+            const targetOffset = clamped * itemHeight;
+            const delta = Math.abs(offsetY - targetOffset);
 
-        // Snap DOAR dacă suntem suficient de departe ca să merite
-        const SNAP_THRESHOLD = itemHeight * 0.1;
-        if (Math.abs(targetOffset - offsetY) > SNAP_THRESHOLD) {
-            snapToIndex(clamped);
+            // nu vrem să "corectăm" dacă e practic deja aliniat
+            const SNAP_THRESHOLD = itemHeight * 0.5; // 5% din înălțimea itemului
+
+            if (delta > SNAP_THRESHOLD) {
+                listRef.current.scrollToOffset({
+                    offset: targetOffset,
+                    animated: true,
+                });
+            }
         }
     };
 
@@ -371,7 +400,10 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
                     keyExtractor={(item) => item.toString()}
                     bounces={false}
                     showsVerticalScrollIndicator={false}
-                    decelerationRate={Platform.OS === 'ios' ? 'fast' : 0.98}
+                    decelerationRate={Platform.OS === 'ios' ? 0.993 : 0.979}
+                    snapToInterval={itemHeight}
+                    snapToAlignment="start"
+                    disableIntervalMomentum={false}
                     onScroll={handleScroll}
                     onMomentumScrollEnd={handleMomentumScrollEnd}
                     scrollEventThrottle={16}
@@ -397,9 +429,9 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
                                 baseFontSize={baseFontSize}
                                 unitFontSize={unitFontSize}
                                 selectedScale={selectedScale}
-                                horizontalOffsetFraction={50 / (DESIGN_WIDTH * 0.75)}
-                                wheelWidth={wheelWidth}
+                                selectedHorizontalOffset={selectedHorizontalOffset}
                                 itemHeight={itemHeight}
+                                onMeasuredWidth={handleItemWidthMeasured}
                             />
                         );
                     }}
@@ -426,7 +458,7 @@ const styles = StyleSheet.create({
     },
     item: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'baseline',
         justifyContent: 'center',
     },
 });
