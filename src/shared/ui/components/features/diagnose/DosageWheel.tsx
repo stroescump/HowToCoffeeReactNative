@@ -23,6 +23,9 @@ const MAX_WHEEL_FRACTION = 1;
 
 const DEFAULT_DOSAGE_VALUES = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
+{/** Horizontal offset for the item that is in focus in the Spinner */ }
+const SELECTED_HORIZONTAL_OFFSET = 10;
+
 type DosageWheelProps = {
     values?: number[];
     initialValue?: number;
@@ -142,7 +145,15 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
             selectedIndexRef.current = clamped;
             setSelectedIndex(clamped);
         }
+
+
     };
+
+    {/** 5px din înălțimea design-ului Figma pentru a alinia gradation-ul cu mijlocul gap ului din bg */ }
+    const GRADATION_OFFSET_RATIO = 5 / 618;
+
+    {/** Horizontal offset for the item that is in focus in the Spinner */ }
+    const SELECTED_HORIZONTAL_OFFSET = 80 / (DESIGN_WIDTH * 0.75);
 
     return (
         <View
@@ -161,6 +172,7 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
                     {
                         width: scaleWidth,
                         height: wheelHeight,
+                        marginTop: wheelHeight * GRADATION_OFFSET_RATIO
                     },
                 ]}
             >
@@ -211,7 +223,12 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
                                 : undefined;
 
                         return (
-                            <View style={styles.item} onLayout={onItemLayout}>
+                            <View style={[
+                                styles.item,
+                                isSelected && {
+                                    marginRight: wheelWidth * SELECTED_HORIZONTAL_OFFSET
+                                }]
+                            } onLayout={onItemLayout}>
                                 <Text
                                     style={[
                                         styles.itemText,

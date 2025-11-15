@@ -37,7 +37,7 @@ export const DoseStep = ({
     }
 
     return (
-        <View className="flex-1">
+        <View className="flex-1 justify-center items-center">
             <DosageWheel
                 initialValue={parsedDose || doseGrams || 10}
                 onChange={(value) => setDoseInput(String(value))}

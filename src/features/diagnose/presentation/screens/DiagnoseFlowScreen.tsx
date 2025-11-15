@@ -15,7 +15,7 @@ const getBackgroundForStep = (step: DiagnoseStep) => {
         case DiagnoseStep.Dose:
             return (
                 <View className="flex-1 bg-[#F1E9DD]">
-                    <View className="flex-1">
+                    <View className="flex-1 gap-4">
                         <View className="flex-1 bg-[#FC9401] rounded-b-[40px]" />
                         <View className="flex-[0.75] bg-[#FF5210] rounded-t-[40px]" />
                     </View>
@@ -23,15 +23,6 @@ const getBackgroundForStep = (step: DiagnoseStep) => {
             );
         default:
             return undefined;
-    }
-};
-
-const getSafeAreaColorForStep = (step: DiagnoseStep) => {
-    switch (step) {
-        case DiagnoseStep.Dose:
-            return "#FC9401";
-        default:
-            return undefined; // fallback: defaultBg din BaseScreen
     }
 };
 
