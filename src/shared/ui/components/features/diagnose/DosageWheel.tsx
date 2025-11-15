@@ -36,55 +36,81 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
 }) => {
     const { height: screenHeight, width: screenWidth } = useWindowDimensions();
     const [containerHeight, setContainerHeight] = useState<number | null>(null);
-    const EXTRA_ITEM_SPACING = 8; // px vizuali între cifre
 
-    // Scale fonts from Figma based on screen width
-    const widthScale = screenWidth / DESIGN_WIDTH;
-    const selectedFontRaw = FIGMA_SELECTED_SIZE * widthScale;
-    const unselectedFontRaw = FIGMA_UNSELECTED_SIZE * widthScale;
-    const unitFontRaw = FIGMA_UNIT_SIZE * widthScale;
+    const EXTRA_ITEM_SPACING = 8; // spațiu vertical între cifre
 
-    // Base item height derived from the selected font; keep enough room to avoid clipping
-    const itemHeightRaw = selectedFontRaw + EXTRA_ITEM_SPACING;
-    const wheelHeightRaw = itemHeightRaw * VISIBLE_ITEMS;
-    const availableHeight = containerHeight ?? screenHeight;
-    const maxWheelHeight = availableHeight * MAX_WHEEL_FRACTION;
-
-    // If the raw wheel is too tall, scale everything down uniformly
-    const uniformScale =
-        wheelHeightRaw > maxWheelHeight
-            ? maxWheelHeight / wheelHeightRaw
-            : 1;
-
-    const ITEM_HEIGHT = itemHeightRaw * uniformScale;
-    const WHEEL_HEIGHT = ITEM_HEIGHT * VISIBLE_ITEMS;
-
-    // Final font sizes for selected / unselected / unit
-    const itemFontSizeSelected = selectedFontRaw * uniformScale;
-    const itemFontSize = unselectedFontRaw * uniformScale;
-    const unitFontSize = unitFontRaw * uniformScale;
-
-    // Horizontal layout:
-    // - 25% of width for the scale on the left
-    // - remaining space for the wheel
-    const SCALE_FRACTION = 0.25;
-    const SCALE_WIDTH = screenWidth * SCALE_FRACTION;
-    const WHEEL_WIDTH = screenWidth - SCALE_WIDTH;
-
-    // Center the middle item: padding = (containerHeight - itemHeight) / 2
-    const verticalPadding = (WHEEL_HEIGHT - ITEM_HEIGHT) / 2;
-
-    const candidateIndex = values.indexOf(initialValue);
-    const initialIndex = candidateIndex === -1 ? 0 : candidateIndex;
+    // determinăm indexul inițial
+    const initialIndex = (() => {
+        const candidateIndex = values.indexOf(initialValue);
+        return candidateIndex === -1 ? 0 : candidateIndex;
+    })();
 
     const [selectedIndex, setSelectedIndex] = useState(initialIndex);
     const selectedIndexRef = useRef(initialIndex);
     const listRef = useRef<FlatList<number>>(null);
 
+    // înălțimea efectivă măsurată a unui item (folosită pentru calculul scroll-ului)
     const [measuredItemHeight, setMeasuredItemHeight] = useState<number | null>(null);
-    const EFFECTIVE_ITEM_HEIGHT = measuredItemHeight ?? ITEM_HEIGHT;
 
-    // Keep external world informed when selection changes
+    // memo pentru toate măsurătorile de layout și font
+    const {
+        scaleWidth,
+        wheelWidth,
+        wheelHeight,
+        itemHeight,
+        selectedFontSize,
+        unselectedFontSize,
+        unitFontSize,
+        verticalPadding,
+    } = React.useMemo(() => {
+        // scale de lățime raportat la design-ul Figma
+        const widthScale = screenWidth / DESIGN_WIDTH;
+
+        const selectedFontBase = FIGMA_SELECTED_SIZE * widthScale;
+        const unselectedFontBase = FIGMA_UNSELECTED_SIZE * widthScale;
+        const unitFontBase = FIGMA_UNIT_SIZE * widthScale;
+
+        // înălțimea de bază a unui item, derivată din fontul selectat + ceva spațiu
+        const baseItemHeight = selectedFontBase + EXTRA_ITEM_SPACING;
+        const rawWheelHeight = baseItemHeight * VISIBLE_ITEMS;
+
+        // folosim înălțimea containerului dacă o avem, altfel fallback pe înălțimea ecranului
+        const availableHeight = (containerHeight ?? screenHeight) || screenHeight;
+        const maxWheelHeight = availableHeight * MAX_WHEEL_FRACTION;
+
+        // dacă roata e prea înaltă, scalăm totul uniform
+        const scaleFactor =
+            rawWheelHeight > maxWheelHeight
+                ? maxWheelHeight / rawWheelHeight
+                : 1;
+
+        const itemHeight = baseItemHeight * scaleFactor;
+        const wheelHeight = itemHeight * VISIBLE_ITEMS;
+
+        // padding pentru a centra vizual item-ul din mijloc
+        const verticalPadding = (wheelHeight - itemHeight) / 2;
+
+        // layout orizontal: fracție pentru scală și restul pentru roată
+        const SCALE_FRACTION = 0.25;
+        const scaleWidth = screenWidth * SCALE_FRACTION;
+        const wheelWidth = screenWidth - scaleWidth;
+
+        return {
+            scaleWidth,
+            wheelWidth,
+            wheelHeight,
+            itemHeight,
+            selectedFontSize: selectedFontBase * scaleFactor,
+            unselectedFontSize: unselectedFontBase * scaleFactor,
+            unitFontSize: unitFontBase * scaleFactor,
+            verticalPadding,
+        };
+    }, [screenWidth, screenHeight, containerHeight]);
+
+    // înălțimea efectivă de calcul pentru scroll (folosim cea măsurată dacă există)
+    const effectiveItemHeight = measuredItemHeight ?? itemHeight;
+
+    // anunțăm în exterior când se schimbă selecția
     useEffect(() => {
         if (!onChange) return;
         const value = values[selectedIndex];
@@ -93,20 +119,10 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
         }
     }, [selectedIndex, onChange, values]);
 
-    // Scroll to initial value on mount / layout change
-    // useEffect(() => {
-    //     if (!listRef.current) return;
-    //     listRef.current.scrollToOffset({
-    //         offset: initialIndex * ITEM_HEIGHT,
-    //         animated: false,
-    //     });
-    // }, [initialIndex, ITEM_HEIGHT]);
-
-    const handleScroll = (
-        e: NativeSyntheticEvent<NativeScrollEvent>,
-    ) => {
+    // logica de scroll: nu o atingem, doar folosim effectiveItemHeight
+    const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = e.nativeEvent.contentOffset.y;
-        const rawIndex = offsetY / EFFECTIVE_ITEM_HEIGHT;
+        const rawIndex = offsetY / effectiveItemHeight;
         const index = Math.round(rawIndex);
         const clamped = Math.max(0, Math.min(index, values.length - 1));
 
@@ -116,11 +132,9 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
         }
     };
 
-    const handleMomentumScrollEnd = (
-        e: NativeSyntheticEvent<NativeScrollEvent>,
-    ) => {
+    const handleMomentumScrollEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = e.nativeEvent.contentOffset.y;
-        const rawIndex = offsetY / EFFECTIVE_ITEM_HEIGHT;
+        const rawIndex = offsetY / effectiveItemHeight;
         const index = Math.round(rawIndex);
         const clamped = Math.max(0, Math.min(index, values.length - 1));
 
@@ -131,9 +145,8 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
     };
 
     return (
-        <View style={[styles.root,
-        { width: screenWidth },
-        ]}
+        <View
+            style={[styles.root, { width: screenWidth }]}
             onLayout={(e) => {
                 const h = e.nativeEvent.layout.height;
                 if (h > 0 && h !== containerHeight) {
@@ -141,26 +154,26 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
                 }
             }}
         >
-            {/* Left: meter, anchored to the left side */}
+            {/* Left: meter, ancorat la stânga */}
             <View
                 style={[
                     styles.svgContainer,
                     {
-                        width: SCALE_WIDTH,
-                        height: WHEEL_HEIGHT,
+                        width: scaleWidth,
+                        height: wheelHeight,
                     },
                 ]}
             >
-                <DosageScaleFrame width={SCALE_WIDTH} height={WHEEL_HEIGHT} />
+                <DosageScaleFrame width={scaleWidth} height={wheelHeight} />
             </View>
 
-            {/* Middle: numeric wheel, centered in its own column */}
+            {/* Middle: numeric wheel, centrat în coloana lui */}
             <View
                 style={[
                     styles.wheelContainer,
                     {
-                        width: WHEEL_WIDTH,
-                        height: WHEEL_HEIGHT,
+                        width: wheelWidth,
+                        height: wheelHeight,
                     },
                 ]}
             >
@@ -178,35 +191,34 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
                         paddingVertical: verticalPadding,
                     }}
                     getItemLayout={(_, index) => ({
-                        length: EFFECTIVE_ITEM_HEIGHT,
-                        offset: EFFECTIVE_ITEM_HEIGHT * index,
+                        length: effectiveItemHeight,
+                        offset: effectiveItemHeight * index,
                         index,
                     })}
                     renderItem={({ item, index }) => {
                         const isSelected = index === selectedIndex;
 
-                        // handler de layout doar pentru primul item
+                        // măsurăm înălțimea DOAR pentru primul item
                         const onItemLayout =
                             index === 0
                                 ? (event: any) => {
                                     if (measuredItemHeight == null) {
-                                        setMeasuredItemHeight(event.nativeEvent.layout.height);
+                                        setMeasuredItemHeight(
+                                            event.nativeEvent.layout.height,
+                                        );
                                     }
                                 }
                                 : undefined;
 
                         return (
-                            <View
-                                style={styles.item}
-                                onLayout={onItemLayout}
-                            >
+                            <View style={styles.item} onLayout={onItemLayout}>
                                 <Text
                                     style={[
                                         styles.itemText,
                                         {
                                             fontSize: isSelected
-                                                ? itemFontSizeSelected
-                                                : itemFontSize,
+                                                ? selectedFontSize
+                                                : unselectedFontSize,
                                             opacity: isSelected ? 1 : 0.4,
                                         },
                                     ]}
