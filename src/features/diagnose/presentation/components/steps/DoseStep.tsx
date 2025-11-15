@@ -1,4 +1,4 @@
-import { DosageWheel } from "@/src/shared/ui/components/features/diagnose/DosageWheel";
+import DosageSpinner from "@/src/shared/ui/components/features/diagnose/DosageWheel";
 import React, { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 
@@ -38,8 +38,8 @@ export const DoseStep = ({
 
     return (
         <View className="flex-1 justify-center items-center">
-            <DosageWheel
-                initialValue={parsedDose || doseGrams || 10}
+            <DosageSpinner
+                initialValue={parsedDose || doseGrams || 18}
                 onChange={(value) => setDoseInput(String(value))}
             />
         </View>

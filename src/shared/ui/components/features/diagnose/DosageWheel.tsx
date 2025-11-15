@@ -43,7 +43,7 @@ type WheelItemProps = {
     wheelWidth: number;
 };
 
-const WheelItem: React.FC<WheelItemProps> = ({
+const SpinnerItem: React.FC<WheelItemProps> = ({
     value,
     isSelected,
     onLayout,
@@ -58,7 +58,7 @@ const WheelItem: React.FC<WheelItemProps> = ({
     useEffect(() => {
         Animated.spring(anim, {
             toValue: isSelected ? 1 : 0,
-            friction: 7,
+            friction: 6,
             tension: 60,
             useNativeDriver: false,
         }).start();
@@ -112,7 +112,7 @@ const WheelItem: React.FC<WheelItemProps> = ({
     );
 };
 
-export const DosageWheel: React.FC<DosageWheelProps> = ({
+export const DosageSpinner: React.FC<DosageWheelProps> = ({
     values = DEFAULT_DOSAGE_VALUES,
     initialValue = 10,
     onChange,
@@ -131,6 +131,9 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
     const [selectedIndex, setSelectedIndex] = useState(initialIndex);
     const selectedIndexRef = useRef(initialIndex);
     const listRef = useRef<FlatList<number>>(null);
+
+    // NEW: guard so we only auto-scroll once
+    const hasDoneInitialScroll = useRef(false);
 
     // înălțimea efectivă măsurată a unui item (folosită pentru calculul scroll-ului)
     const [measuredItemHeight, setMeasuredItemHeight] = useState<number | null>(null);
@@ -201,6 +204,24 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
             onChange(value);
         }
     }, [selectedIndex, onChange, values]);
+
+    // scroll to the initial index once we know the real (measured) item height
+    useEffect(() => {
+        // already did the initial scroll => never do it again
+        if (hasDoneInitialScroll.current) return;
+        if (!listRef.current) return;
+
+        // we only want to scroll once we have the actual measured height
+        if (measuredItemHeight == null || measuredItemHeight <= 0) return;
+
+        const offset = measuredItemHeight * initialIndex;
+        listRef.current.scrollToOffset({
+            offset,
+            animated: false,
+        });
+
+        hasDoneInitialScroll.current = true;
+    }, [measuredItemHeight, initialIndex]);
 
     // logica de scroll: nu o atingem, doar folosim effectiveItemHeight
     const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -301,7 +322,7 @@ export const DosageWheel: React.FC<DosageWheelProps> = ({
                                 : undefined;
 
                         return (
-                            <WheelItem
+                            <SpinnerItem
                                 value={item}
                                 isSelected={isSelected}
                                 onLayout={onItemLayout}
@@ -348,4 +369,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DosageWheel;
+export default DosageSpinner;
