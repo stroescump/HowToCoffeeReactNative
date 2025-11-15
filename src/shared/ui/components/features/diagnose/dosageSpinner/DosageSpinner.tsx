@@ -4,9 +4,10 @@ import {
     FlatList,
     NativeScrollEvent,
     NativeSyntheticEvent,
+    Platform,
     StyleSheet,
     useWindowDimensions,
-    View
+    View,
 } from 'react-native';
 import { DosageScaleFrame } from './DosageScaleFrame';
 
@@ -18,60 +19,71 @@ const FIGMA_SELECTED_SIZE = 140;
 const FIGMA_UNSELECTED_SIZE = 80;
 const FIGMA_UNIT_SIZE = 32;
 
-const VISIBLE_ITEMS = 5;
 const MAX_WHEEL_FRACTION = 1;
 
 const DEFAULT_DOSAGE_VALUES = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
-/** Horizontal offset for the item that is in focus in the Spinner */
-const SELECTED_HORIZONTAL_OFFSET = 10;
+// Ce fracțiune din înălțimea unui item are voie să ocupe fontul SELECTAT.
+const SELECTED_FONT_ITEM_FRACTION = 1.3;
 
-type DosageWheelProps = {
+type DosageSpinnerProps = {
     values?: number[];
     initialValue?: number;
     onChange?: (value: number) => void;
+    gapCenter?: number | null;
 };
 
-type WheelItemProps = {
+type SpinnerItemProps = {
     value: number;
     isSelected: boolean;
     onLayout?: (event: any) => void;
-    selectedFontSize: number;
-    unselectedFontSize: number;
+    baseFontSize: number;
     unitFontSize: number;
+    selectedScale: number;
     horizontalOffsetFraction: number;
     wheelWidth: number;
+    itemHeight: number;
 };
 
-const SpinnerItem: React.FC<WheelItemProps> = ({
+const SpinnerItem: React.FC<SpinnerItemProps> = ({
     value,
     isSelected,
     onLayout,
-    selectedFontSize,
-    unselectedFontSize,
+    baseFontSize,
     unitFontSize,
+    selectedScale,
     horizontalOffsetFraction,
     wheelWidth,
+    itemHeight
 }) => {
     const anim = React.useRef(new Animated.Value(isSelected ? 1 : 0)).current;
 
     useEffect(() => {
         Animated.spring(anim, {
             toValue: isSelected ? 1 : 0,
-            friction: 6,
-            tension: 60,
+            friction: 7,
+            tension: 55,
             useNativeDriver: false,
         }).start();
     }, [isSelected, anim]);
 
-    const animatedFontSize = anim.interpolate({
+    const animatedScale = anim.interpolate({
         inputRange: [0, 1],
-        outputRange: [unselectedFontSize, selectedFontSize],
+        outputRange: [1, selectedScale],
     });
 
     const animatedOpacity = anim.interpolate({
         inputRange: [0, 1],
         outputRange: [0.4, 1],
+    });
+
+    const baseUnitMargin = 4;
+    const animatedUnitMarginLeft = anim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [
+            baseUnitMargin,
+            baseUnitMargin + (baseFontSize * (selectedScale - 1)) / 2,
+        ],
     });
 
     const horizontalOffset = wheelWidth * horizontalOffsetFraction;
@@ -80,6 +92,9 @@ const SpinnerItem: React.FC<WheelItemProps> = ({
         <View
             style={[
                 styles.item,
+                {
+                    height: itemHeight,
+                },
                 isSelected && {
                     marginRight: horizontalOffset,
                 },
@@ -88,10 +103,11 @@ const SpinnerItem: React.FC<WheelItemProps> = ({
         >
             <Animated.Text
                 style={[
-                    styles.itemText,
                     {
-                        fontSize: animatedFontSize,
+                        fontFamily: "InterBold",
+                        fontSize: baseFontSize,
                         opacity: animatedOpacity,
+                        transform: [{ scale: animatedScale }],
                     },
                 ]}
             >
@@ -99,10 +115,11 @@ const SpinnerItem: React.FC<WheelItemProps> = ({
             </Animated.Text>
             <Animated.Text
                 style={[
-                    styles.itemUnit,
                     {
+                        fontFamily: "InterSemiBold",
                         fontSize: unitFontSize,
                         opacity: animatedOpacity,
+                        marginLeft: animatedUnitMarginLeft,
                     },
                 ]}
             >
@@ -112,15 +129,18 @@ const SpinnerItem: React.FC<WheelItemProps> = ({
     );
 };
 
-export const DosageSpinner: React.FC<DosageWheelProps> = ({
+export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
     values = DEFAULT_DOSAGE_VALUES,
     initialValue = 10,
     onChange,
+    gapCenter,
 }) => {
     const { height: screenHeight, width: screenWidth } = useWindowDimensions();
     const [containerHeight, setContainerHeight] = useState<number | null>(null);
+    const [containerY, setContainerY] = useState<number | null>(null);
 
-    const EXTRA_ITEM_SPACING = 8; // spațiu vertical între cifre
+    // spațiu vertical între cifre (în jurul fontului de bază – cel neselectat)
+    const EXTRA_ITEM_SPACING = 8;
 
     // determinăm indexul inițial
     const initialIndex = (() => {
@@ -132,51 +152,58 @@ export const DosageSpinner: React.FC<DosageWheelProps> = ({
     const selectedIndexRef = useRef(initialIndex);
     const listRef = useRef<FlatList<number>>(null);
 
-    // NEW: guard so we only auto-scroll once
+    // guard: facem auto-scroll inițial o singură dată
     const hasDoneInitialScroll = useRef(false);
 
-    // înălțimea efectivă măsurată a unui item (folosită pentru calculul scroll-ului)
-    const [measuredItemHeight, setMeasuredItemHeight] = useState<number | null>(null);
-
-    // memo pentru toate măsurătorile de layout și font
+    // memo pentru layout + fonturi
     const {
         scaleWidth,
         wheelWidth,
         wheelHeight,
         itemHeight,
-        selectedFontSize,
-        unselectedFontSize,
+        baseFontSize,
         unitFontSize,
+        selectedScale,
         verticalPadding,
     } = React.useMemo(() => {
-        // scale de lățime raportat la design-ul Figma
         const widthScale = screenWidth / DESIGN_WIDTH;
 
-        const selectedFontBase = FIGMA_SELECTED_SIZE * widthScale;
-        const unselectedFontBase = FIGMA_UNSELECTED_SIZE * widthScale;
-        const unitFontBase = FIGMA_UNIT_SIZE * widthScale;
+        const baseFontFromWidth = FIGMA_UNSELECTED_SIZE * widthScale;
+        const unitFontFromWidth = FIGMA_UNIT_SIZE * widthScale;
 
-        // înălțimea de bază a unui item, derivată din fontul selectat + ceva spațiu
-        const baseItemHeight = selectedFontBase + EXTRA_ITEM_SPACING;
-        const rawWheelHeight = baseItemHeight * VISIBLE_ITEMS;
+        const SELECTED_SCALE = FIGMA_SELECTED_SIZE / FIGMA_UNSELECTED_SIZE;
 
-        // folosim înălțimea containerului dacă o avem, altfel fallback pe înălțimea ecranului
+        const idealItemHeight = baseFontFromWidth * 1.1 + EXTRA_ITEM_SPACING;
+
         const availableHeight = (containerHeight ?? screenHeight) || screenHeight;
         const maxWheelHeight = availableHeight * MAX_WHEEL_FRACTION;
 
-        // dacă roata e prea înaltă, scalăm totul uniform
-        const scaleFactor =
-            rawWheelHeight > maxWheelHeight
-                ? maxWheelHeight / rawWheelHeight
-                : 1;
+        const MIN_VISIBLE_ITEMS = 5;
+        let visibleItems = Math.floor(maxWheelHeight / idealItemHeight);
 
-        const itemHeight = baseItemHeight * scaleFactor;
-        const wheelHeight = itemHeight * VISIBLE_ITEMS;
+        if (visibleItems < MIN_VISIBLE_ITEMS) {
+            visibleItems = MIN_VISIBLE_ITEMS;
+        }
+        if (visibleItems % 2 === 0) {
+            visibleItems += 1;
+        }
 
-        // padding pentru a centra vizual item-ul din mijloc
+        const wheelHeight = maxWheelHeight;
+        const itemHeight = wheelHeight / visibleItems;
+        console.log('🛞 wheelHeight =', wheelHeight);
+
+        const maxSelectedFontSize = itemHeight * SELECTED_FONT_ITEM_FRACTION;
+
+        const baseFontSize =
+            maxSelectedFontSize > 0
+                ? Math.min(baseFontFromWidth, maxSelectedFontSize / SELECTED_SCALE)
+                : baseFontFromWidth;
+
+        const fontScaleFactor = baseFontSize / baseFontFromWidth;
+        const unitFontSize = unitFontFromWidth * fontScaleFactor;
+
         const verticalPadding = (wheelHeight - itemHeight) / 2;
 
-        // layout orizontal: fracție pentru scală și restul pentru roată
         const SCALE_FRACTION = 0.25;
         const scaleWidth = screenWidth * SCALE_FRACTION;
         const wheelWidth = screenWidth - scaleWidth;
@@ -186,17 +213,26 @@ export const DosageSpinner: React.FC<DosageWheelProps> = ({
             wheelWidth,
             wheelHeight,
             itemHeight,
-            selectedFontSize: selectedFontBase * scaleFactor,
-            unselectedFontSize: unselectedFontBase * scaleFactor,
-            unitFontSize: unitFontBase * scaleFactor,
+            baseFontSize,
+            unitFontSize,
+            selectedScale: SELECTED_SCALE,
             verticalPadding,
         };
     }, [screenWidth, screenHeight, containerHeight]);
 
-    // înălțimea efectivă de calcul pentru scroll (folosim cea măsurată dacă există)
-    const effectiveItemHeight = measuredItemHeight ?? itemHeight;
+    const snapToIndex = (index: number) => {
+        if (!listRef.current || !itemHeight) return;
 
-    // anunțăm în exterior când se schimbă selecția
+        const clamped = Math.max(0, Math.min(index, values.length - 1));
+        const offset = clamped * itemHeight;
+
+        listRef.current.scrollToOffset({
+            offset,
+            animated: true,
+        });
+    };
+
+    // notify onChange când se schimbă selecția
     useEffect(() => {
         if (!onChange) return;
         const value = values[selectedIndex];
@@ -205,28 +241,25 @@ export const DosageSpinner: React.FC<DosageWheelProps> = ({
         }
     }, [selectedIndex, onChange, values]);
 
-    // scroll to the initial index once we know the real (measured) item height
+    // scroll inițial la valoarea dorită
     useEffect(() => {
-        // already did the initial scroll => never do it again
         if (hasDoneInitialScroll.current) return;
         if (!listRef.current) return;
+        if (!itemHeight) return;
 
-        // we only want to scroll once we have the actual measured height
-        if (measuredItemHeight == null || measuredItemHeight <= 0) return;
+        const offset = itemHeight * initialIndex;
 
-        const offset = measuredItemHeight * initialIndex;
         listRef.current.scrollToOffset({
             offset,
             animated: false,
         });
 
         hasDoneInitialScroll.current = true;
-    }, [measuredItemHeight, initialIndex]);
+    }, [itemHeight, initialIndex]);
 
-    // logica de scroll: nu o atingem, doar folosim effectiveItemHeight
     const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = e.nativeEvent.contentOffset.y;
-        const rawIndex = offsetY / effectiveItemHeight;
+        const rawIndex = offsetY / itemHeight;
         const index = Math.round(rawIndex);
         const clamped = Math.max(0, Math.min(index, values.length - 1));
 
@@ -238,7 +271,7 @@ export const DosageSpinner: React.FC<DosageWheelProps> = ({
 
     const handleMomentumScrollEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = e.nativeEvent.contentOffset.y;
-        const rawIndex = offsetY / effectiveItemHeight;
+        const rawIndex = offsetY / itemHeight;
         const index = Math.round(rawIndex);
         const clamped = Math.max(0, Math.min(index, values.length - 1));
 
@@ -246,39 +279,83 @@ export const DosageSpinner: React.FC<DosageWheelProps> = ({
             selectedIndexRef.current = clamped;
             setSelectedIndex(clamped);
         }
+
+        const targetOffset = clamped * itemHeight;
+
+        // Snap DOAR dacă suntem suficient de departe ca să merite
+        const SNAP_THRESHOLD = itemHeight * 0.1;
+        if (Math.abs(targetOffset - offsetY) > SNAP_THRESHOLD) {
+            snapToIndex(clamped);
+        }
     };
 
-    /** 5px din înălțimea design-ului Figma pentru a alinia gradation-ul cu mijlocul gap ului din bg */
-    const GRADATION_OFFSET_RATIO = 5 / 618;
+    // Dimensiuni Figma pentru SVG-ul scalei
+    const VIEWBOX_HEIGHT = 618;
+    const LONG_GRADATION_Y = 308;
+    const linePosInSvg = LONG_GRADATION_Y / VIEWBOX_HEIGHT;
 
-    /** Horizontal offset for the item that is in focus in the Spinner */
-    const SELECTED_HORIZONTAL_OFFSET = 50 / (DESIGN_WIDTH * 0.75);
+    let gradationMarginTop = 0;
+
+    if (
+        gapCenter != null &&
+        containerY != null &&
+        containerHeight != null &&
+        wheelHeight > 0
+    ) {
+        const localGapCenter = gapCenter - containerY;
+
+        const clampedLocalGap = Math.max(0, Math.min(localGapCenter, containerHeight));
+
+        const gapFraction = clampedLocalGap / containerHeight;
+
+        const lineFractionInWheelComputed =
+            (containerHeight * gapFraction -
+                (containerHeight - wheelHeight) / 2) /
+            wheelHeight;
+
+        gradationMarginTop =
+            wheelHeight * (lineFractionInWheelComputed - linePosInSvg);
+
+        console.log(
+            '🎯 localGapCenter =',
+            localGapCenter,
+            'gapFraction =',
+            gapFraction,
+            'gradationMarginTop =',
+            gradationMarginTop
+        );
+    }
 
     return (
         <View
             style={[styles.root, { width: screenWidth }]}
             onLayout={(e) => {
-                const h = e.nativeEvent.layout.height;
-                if (h > 0 && h !== containerHeight) {
-                    setContainerHeight(h);
+                const { height, y } = e.nativeEvent.layout;
+                if (height > 0 && height !== containerHeight) {
+                    setContainerHeight(height);
+                    console.log('📏 Spinner containerHeight:', height, 'screenHeight:', screenHeight);
+                }
+                if (y !== containerY) {
+                    setContainerY(y);
+                    console.log('📍 Spinner containerY:', y);
                 }
             }}
         >
-            {/* Left: meter, ancorat la stânga */}
+            {/* Stânga: meter */}
             <View
                 style={[
                     styles.svgContainer,
                     {
                         width: scaleWidth,
                         height: wheelHeight,
-                        marginTop: wheelHeight * GRADATION_OFFSET_RATIO
+                        marginTop: gradationMarginTop,
                     },
                 ]}
             >
                 <DosageScaleFrame width={scaleWidth} height={wheelHeight} />
             </View>
 
-            {/* Middle: numeric wheel, centrat în coloana lui */}
+            {/* Dreapta: numeric wheel */}
             <View
                 style={[
                     styles.wheelContainer,
@@ -294,43 +371,35 @@ export const DosageSpinner: React.FC<DosageWheelProps> = ({
                     keyExtractor={(item) => item.toString()}
                     bounces={false}
                     showsVerticalScrollIndicator={false}
-                    decelerationRate={0.96}
+                    decelerationRate={Platform.OS === 'ios' ? 'fast' : 0.98}
                     onScroll={handleScroll}
                     onMomentumScrollEnd={handleMomentumScrollEnd}
                     scrollEventThrottle={16}
-                    contentContainerStyle={{
-                        paddingVertical: verticalPadding,
-                    }}
+                    ListHeaderComponent={
+                        <View style={{ height: verticalPadding }} />
+                    }
+                    ListFooterComponent={
+                        <View style={{ height: verticalPadding }} />
+                    }
                     getItemLayout={(_, index) => ({
-                        length: effectiveItemHeight,
-                        offset: effectiveItemHeight * index,
+                        length: itemHeight,
+                        offset: itemHeight * index,
                         index,
                     })}
                     renderItem={({ item, index }) => {
                         const isSelected = index === selectedIndex;
 
-                        // măsurăm înălțimea DOAR pentru primul item
-                        const onItemLayout =
-                            index === 0
-                                ? (event: any) => {
-                                    if (measuredItemHeight == null) {
-                                        setMeasuredItemHeight(
-                                            event.nativeEvent.layout.height,
-                                        );
-                                    }
-                                }
-                                : undefined;
-
                         return (
                             <SpinnerItem
                                 value={item}
                                 isSelected={isSelected}
-                                onLayout={onItemLayout}
-                                selectedFontSize={selectedFontSize}
-                                unselectedFontSize={unselectedFontSize}
+                                onLayout={undefined}
+                                baseFontSize={baseFontSize}
                                 unitFontSize={unitFontSize}
-                                horizontalOffsetFraction={SELECTED_HORIZONTAL_OFFSET}
+                                selectedScale={selectedScale}
+                                horizontalOffsetFraction={50 / (DESIGN_WIDTH * 0.75)}
                                 wheelWidth={wheelWidth}
+                                itemHeight={itemHeight}
                             />
                         );
                     }}
@@ -345,7 +414,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center', // centrează scale + wheel în zona primită
+        justifyContent: 'center',
     },
     svgContainer: {
         justifyContent: 'center',
@@ -358,14 +427,7 @@ const styles = StyleSheet.create({
     item: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center', // center the number+unit horizontally
-    },
-    itemText: {
-        fontWeight: '600',
-        textAlign: 'center',
-    },
-    itemUnit: {
-        marginLeft: 4,
+        justifyContent: 'center',
     },
 });
 

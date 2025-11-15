@@ -1,4 +1,4 @@
-import DosageSpinner from "@/src/shared/ui/components/features/diagnose/DosageWheel";
+import DosageSpinner from "@/src/shared/ui/components/features/diagnose/dosageSpinner/DosageSpinner";
 import React, { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 
@@ -37,11 +37,19 @@ export const DoseStep = ({
     }
 
     return (
-        <View className="flex-1 justify-center items-center">
-            <DosageSpinner
-                initialValue={parsedDose || doseGrams || 18}
-                onChange={(value) => setDoseInput(String(value))}
-            />
+        <View className="flex-1 relative">
+            <View className="absolute inset-0">
+                <View className="flex-1 bg-[#F1E9DD] gap-2">
+                    <View className="flex-1 bg-[#FC9401] rounded-b-[40px]" />
+                    <View className="flex-1 bg-[#FF5210] rounded-t-[40px]" />
+                </View>
+            </View>
+            <View className="flex-1">
+                <DosageSpinner
+                    initialValue={parsedDose || doseGrams || 18}
+                    onChange={(value) => setDoseInput(String(value))}
+                />
+            </View>
         </View>
     );
 };

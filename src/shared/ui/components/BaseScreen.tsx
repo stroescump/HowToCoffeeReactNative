@@ -13,9 +13,8 @@ type BaseScreenProps = {
   safeAreaBgColor?: string;
 };
 
-export function BaseScreen({ children, showHeader = true, title, background, disablePadding, safeAreaBgColor }: BaseScreenProps) {
-  const defaultBg = "#F1E9DD";
-  const bg = safeAreaBgColor ?? (!background ? defaultBg : undefined);
+export function BaseScreen({ children, showHeader = true, title, disablePadding, safeAreaBgColor }: BaseScreenProps) {
+  const bg = safeAreaBgColor;
 
   return (
     <SafeAreaView
@@ -25,13 +24,7 @@ export function BaseScreen({ children, showHeader = true, title, background, dis
         backgroundColor: bg,
       }}
     >
-      <View className="flex-1 relative">
-        {background && (
-          <View className="absolute inset-0">
-            {background}
-          </View>
-        )}
-
+      <View className="flex-1 relative">       
         <View className={disablePadding ? "flex-1" : "flex-1"}>
           {showHeader && <HeaderHowToCoffee title={title} />}
           {children}

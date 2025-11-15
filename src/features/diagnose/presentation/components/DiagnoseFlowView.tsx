@@ -17,10 +17,11 @@ type DiagnoseFlowViewProps = {
     onNext: () => void;
     onBack: () => void;
     onReset: () => void;
+    gapCenter?: number | null;
 };
 
 export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
-    const { step, answers, onUpdateAnswers, onNext, onBack, onReset } = props;
+    const { step, answers, onUpdateAnswers, onNext, onBack, onReset, gapCenter } = props;
 
     const handleCoffeeTypeSubmit = (coffeeType: CoffeeType) => {
         onUpdateAnswers({ coffeeType });
@@ -63,6 +64,7 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
                     hasScale={answers.hasScale}
                     onSubmit={handleDoseSubmit}
                     onBack={onBack}
+                    gapCenter={gapCenter}
                 />
             );
 
