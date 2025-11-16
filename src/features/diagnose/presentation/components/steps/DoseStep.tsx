@@ -1,13 +1,15 @@
-import DosageSpinner from "@/src/shared/ui/components/features/diagnose/dosageSpinner/DosageSpinner";
+import { Spinner } from "@/src/shared/ui/components/features/diagnose/dosageSpinner/Spinner";
 import React, { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 
 type DoseStepProps = {
-    doseGrams: number;
-    hasScale: boolean;
-    onSubmit: (doseGrams: number, hasScale: boolean) => void;
+    doseGrams?: number;
+    hasScale?: boolean;
+    onSubmit: (doseGrams: number, hasScale: boolean | undefined) => void;
     onBack: () => void;
 };
+
+const SPINNER_DOSAGE_VALUES = [...Array(21 - 7 + 1).keys()].map(i => i + 7)
 
 export const DoseStep = ({
     doseGrams,
@@ -45,7 +47,9 @@ export const DoseStep = ({
                 </View>
             </View>
             <View className="flex-1">
-                <DosageSpinner
+                <Spinner
+                    values={SPINNER_DOSAGE_VALUES}
+                    unitOfMeasurement="g"
                     initialValue={parsedDose || doseGrams || 18}
                     onChange={(value) => setDoseInput(String(value))}
                 />

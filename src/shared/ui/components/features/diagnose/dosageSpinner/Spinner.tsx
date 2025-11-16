@@ -9,7 +9,7 @@ import {
     useWindowDimensions,
     View,
 } from 'react-native';
-import { DosageScaleFrame } from './DosageScaleFrame';
+import { SpinnerGradation } from './SpinnerGradation';
 
 {/** TODO: Align Spinner to the middle of the screen */ }
 {/** TODO: When opening the Spinner with a cached/default dose, sizing is broken on iOS */ }
@@ -28,7 +28,7 @@ const MAX_WHEEL_FRACTION = 1;
 const DEFAULT_DOSAGE_VALUES = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
 
-type DosageSpinnerProps = {
+type SpinnerProps = {
     values?: number[];
     initialValue?: number;
     onChange?: (value: number) => void;
@@ -130,7 +130,7 @@ const SpinnerItem: React.FC<SpinnerItemProps> = ({
     );
 };
 
-export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
+export const Spinner: React.FC<SpinnerProps> = ({
     values = DEFAULT_DOSAGE_VALUES,
     initialValue = 10,
     onChange,
@@ -246,7 +246,7 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
 
         const selectedHorizontalOffset = Math.min(desiredOffsetPx, maxAllowedOffsetPx);
 
-        console.log('[DosageSpinner] layout', {
+        console.log('[Spinner] layout', {
             baseFontSize,
             selectedFontSize,
             unitFontSize,
@@ -297,13 +297,13 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
         if (!listRef.current) return;
         if (!itemHeight || !Number.isFinite(itemHeight)) return;
         if (containerHeight == null) {
-            console.log('[DosageSpinner] initialScroll: waiting for containerHeight');
+            console.log('[Spinner] initialScroll: waiting for containerHeight');
             return;
         }
 
         const offset = itemHeight * initialIndex;
 
-        console.log('[DosageSpinner] initialScroll', {
+        console.log('[Spinner] initialScroll', {
             initialIndex,
             itemHeight,
             offset,
@@ -428,7 +428,7 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
                             },
                         ]}
                     >
-                        <DosageScaleFrame width={scaleWidth} height={wheelHeight} />
+                        <SpinnerGradation width={scaleWidth} height={wheelHeight} />
                     </View>
 
                     {/* Dreapta: numeric wheel */}
@@ -512,4 +512,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DosageSpinner;
+export default Spinner;

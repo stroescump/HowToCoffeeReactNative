@@ -2,8 +2,8 @@
 export const DiagnoseStep = {
     CoffeeType: "coffeeType",
     Dose: "dose",
-    Time: "time",
-    Taste: "taste",
+    ExtractionDuration: "extractionDuration",
+    TasteFeedback: "tasteFeedback",
     Recommendation: "recommendation"
 } as const;
 

@@ -9,6 +9,7 @@ import { CoffeeType } from "../../domain/valueObjects/CoffeeType";
 import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
 import { CoffeeTypeStep } from "./steps/CoffeeTypeStep";
 import { DoseStep } from "./steps/DoseStep";
+import { ExtractionDuration } from "./steps/ExtractionDurationStep";
 
 type DiagnoseFlowViewProps = {
     step: DiagnoseStep;
@@ -64,18 +65,18 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
                     hasScale={answers.hasScale}
                     onSubmit={handleDoseSubmit}
                     onBack={onBack}
-                    gapCenter={gapCenter}
                 />
             );
 
-        // case DiagnoseStep.Time:
-        //   return (
-        //     <TimeStep
-        //       extractionDuration={answers.extractionDuration}
-        //       onSubmit={handleTimeSubmit}
-        //       onBack={onBack}
-        //     />
-        //   );
+        case DiagnoseStep.ExtractionDuration:
+          return (
+            <ExtractionDuration
+                    extractionDuration={answers.extractionDuration}
+                    hasScale={answers.hasScale}
+                    onSubmit={handleDoseSubmit}
+                    onBack={onBack}
+            />
+          );
 
         // case DiagnoseStep.Taste:
         //   return (

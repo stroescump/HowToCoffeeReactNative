@@ -1,4 +1,4 @@
-// DosageScaleFrame.tsx
+// SpinnerGradation.tsx
 import React from 'react';
 import Svg, { G, Path } from 'react-native-svg';
 
@@ -10,7 +10,7 @@ type DosageScaleFrameProps = {
 const DESIGN_WIDTH = 112;
 const DESIGN_HEIGHT = 618;
 
-export const DosageScaleFrame: React.FC<DosageScaleFrameProps> = ({
+export const SpinnerGradation: React.FC<DosageScaleFrameProps> = ({
   width = DESIGN_WIDTH,
   height = DESIGN_HEIGHT,
 }) => {

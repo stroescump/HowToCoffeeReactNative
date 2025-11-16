@@ -14,14 +14,12 @@ type BaseScreenProps = {
 };
 
 export function BaseScreen({ children, showHeader = true, title, disablePadding, safeAreaBgColor }: BaseScreenProps) {
-  const bg = safeAreaBgColor;
-
   return (
     <SafeAreaView
       className="flex-1"
       edges={["top"]}
       style={{
-        backgroundColor: bg,
+        backgroundColor: safeAreaBgColor,
       }}
     >
       <View className="flex-1 relative">       

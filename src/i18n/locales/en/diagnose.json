@@ -1,0 +1,9 @@
+{
+    "steps": {
+        "CoffeeType": {},
+        "Dose": {},
+        "ExtractionDuration": {},
+        "TasteFeedback": {},
+        "Recommendation": {}
+    }
+}

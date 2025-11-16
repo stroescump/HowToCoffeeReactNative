@@ -9,10 +9,11 @@ export const DIAGNOSE_STEP_CONFIG: Record<DiagnoseStep, { title: string; safeAre
         title: "How many \ngrams of coffee?",
         safeAreaColor: "#FC9401",
     },
-    [DiagnoseStep.Time]: {
+    [DiagnoseStep.ExtractionDuration]: {
         title: "How long was the extraction?",
+        safeAreaColor: "#FF5210"
     },
-    [DiagnoseStep.Taste]: {
+    [DiagnoseStep.TasteFeedback]: {
         title: "How did it taste?",
     },
     [DiagnoseStep.Recommendation]: {

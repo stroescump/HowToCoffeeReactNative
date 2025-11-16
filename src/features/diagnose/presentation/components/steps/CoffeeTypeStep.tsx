@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { CoffeeType } from "../../../domain/valueObjects/CoffeeType";
 
 type CoffeeTypeStepProps = {
-  value: CoffeeType;
+  value?: CoffeeType;
   onSubmit: (coffeeType: CoffeeType) => void;
 };
 
