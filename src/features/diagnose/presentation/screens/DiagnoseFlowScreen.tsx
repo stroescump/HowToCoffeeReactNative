@@ -21,7 +21,7 @@ export function DiagnoseFlowScreen() {
     const diagnoseStep = DIAGNOSE_STEP_CONFIG[step]
 
     return (
-        <BaseScreen safeAreaBgColor={diagnoseStep.safeAreaColor} title={diagnoseStep.title}>
+        <BaseScreen safeAreaBgColor={diagnoseStep.safeAreaColor} titleRes={diagnoseStep.titleRes}>
             <DiagnoseFlowView
                 step={step}
                 answers={answers}

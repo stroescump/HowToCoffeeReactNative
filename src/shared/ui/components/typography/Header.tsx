@@ -5,11 +5,11 @@ import { useTranslation } from "react-i18next";
 import { Pressable, Text, View, useWindowDimensions } from "react-native";
 
 type HeaderProps = {
-  title: string;
+  titleRes: string;
   showBack?: boolean;
 };
 
-export function HeaderHowToCoffee({ title, showBack = true }: HeaderProps) {
+export function HeaderHowToCoffee({ titleRes, showBack = true }: HeaderProps) {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const { t } = useTranslation("diagnose");
@@ -41,7 +41,7 @@ export function HeaderHowToCoffee({ title, showBack = true }: HeaderProps) {
           }}
           numberOfLines={2}
         >
-          {t(title)}
+          {t(titleRes)}
         </Text>
       </View>
     </View>

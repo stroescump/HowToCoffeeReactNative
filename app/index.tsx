@@ -11,7 +11,7 @@ export default function HomeScreen() {
 
   return (
     <BaseScreen showHeader={false}>
-      <Text className="text-5xl font-bold text-center mt-2 mb-2 tracking-[-3px]">?ToCoffee</Text>
+      <Text className="text-5xl text-center mt-2 mb-2 tracking-[-3px] font-[InterBold]">{t("appTitle")}</Text>
       <View className="flex-1 mb-2" onLayout={(e) => {
         const { height } = e.nativeEvent.layout;
         setAvailableHeight(height);
@@ -23,26 +23,31 @@ export default function HomeScreen() {
               findYourTaste: {
                 label: t("buttons.findYourTaste"),
                 fontSize: 32,
+                fontFamily: "InterBold",
                 fill: "#010101",
               },
               marketplace: {
                 label: t("buttons.marketplace"),
                 fontSize: 32,
+                fontFamily: "InterBold",
                 fill: "#010101",
               },
               diagnoseBrew: {
                 label: t("buttons.diagnoseBrew"),
                 fontSize: 32,
+                fontFamily: "InterBold",
                 fill: "#FFFFFF",
               },
               recipeAgenda: {
                 label: t("buttons.recipeAgenda"),
                 fontSize: 32,
+                fontFamily: "InterBold",
                 fill: "#FFFFFF",
               },
               coffeePlacesNearby: {
                 label: t("buttons.coffeePlacesNearby"),
                 fontSize: 32,
+                fontFamily: "InterBold",
                 fill: "#010101",
               },
             }}

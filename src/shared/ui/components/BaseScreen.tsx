@@ -7,13 +7,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 type BaseScreenProps = {
   children: ReactNode;
   showHeader?: boolean;
-  title?: string;
+  titleRes?: string;
   background?: ReactNode;
   disablePadding?: boolean;
   safeAreaBgColor?: string;
 };
 
-export function BaseScreen({ children, showHeader = true, title, disablePadding, safeAreaBgColor }: BaseScreenProps) {
+export function BaseScreen({ children, showHeader = true, titleRes, disablePadding, safeAreaBgColor }: BaseScreenProps) {
   return (
     <SafeAreaView
       className="flex-1"
@@ -24,7 +24,7 @@ export function BaseScreen({ children, showHeader = true, title, disablePadding,
     >
       <View className="flex-1 relative">       
         <View className={disablePadding ? "flex-1" : "flex-1"}>
-          {showHeader && <HeaderHowToCoffee title={title ?? ""} />}
+          {showHeader && <HeaderHowToCoffee titleRes={titleRes ?? ""} />}
           {children}
         </View>
       </View>
