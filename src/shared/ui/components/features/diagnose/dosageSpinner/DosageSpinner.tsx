@@ -12,7 +12,8 @@ import {
 import { DosageScaleFrame } from './DosageScaleFrame';
 
 {/** TODO: Align Spinner to the middle of the screen */ }
-{/** TODO: When opening the Spinner with a preselected dose, scrolling is broken on Android and slightly off on iOS */ }
+{/** TODO: When opening the Spinner with a cached/default dose, sizing is broken on iOS */ }
+{/** TODO: The "g" in is misaligned when font scaling is done. */ }
 
 // --- Figma reference frame ---
 const DESIGN_WIDTH = 428;
