@@ -12,9 +12,10 @@ type BaseScreenProps = {
   background?: ReactNode;
   disablePadding?: boolean;
   safeAreaBgColor?: string;
+  onBack: () => void
 };
 
-export function BaseScreen({ children, showHeader = true, titleRes, disablePadding, safeAreaBgColor }: BaseScreenProps) {
+export function BaseScreen({ children, showHeader = true, titleRes, disablePadding, safeAreaBgColor, onBack }: BaseScreenProps) {
   const { t } = useTranslation()
   const screenTitle: string = t(titleRes);
   return (
@@ -27,7 +28,7 @@ export function BaseScreen({ children, showHeader = true, titleRes, disablePaddi
     >
       <View className="flex-1 relative">
         <View className={disablePadding ? "flex-1" : "flex-1"}>
-          {showHeader && <HeaderHowToCoffee title={screenTitle} />}
+          {showHeader && <HeaderHowToCoffee title={screenTitle} onBack={onBack} />}
           {children}
         </View>
       </View>

@@ -4,11 +4,12 @@ import React from "react";
 import { Pressable, Text, View, useWindowDimensions } from "react-native";
 
 type HeaderProps = {
-  title: string;
-  showBack?: boolean;
+  title: string
+  showBack?: boolean
+  onBack?: () => void
 };
 
-export function HeaderHowToCoffee({ title, showBack = true }: HeaderProps) {
+export function HeaderHowToCoffee({ title, showBack = true, onBack }: HeaderProps) {
   const router = useRouter();
   const { width } = useWindowDimensions();
 
@@ -23,7 +24,7 @@ export function HeaderHowToCoffee({ title, showBack = true }: HeaderProps) {
         {/* Back button */}
         {showBack && (
           <Pressable
-            onPress={() => router.back()}
+            onPress={onBack}
             hitSlop={12}
           >
             <ArrowLeft size={38} />

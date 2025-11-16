@@ -1,7 +1,11 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-const TasteFeedbackStep = () => {
+type TasteFeedbackStepProps = {
+  onSubmit: () => void
+}
+
+const TasteFeedbackStep = ({ onSubmit }: TasteFeedbackStepProps) => {
   return (
     <View>
       <Text>TasteFeedbackStep</Text>

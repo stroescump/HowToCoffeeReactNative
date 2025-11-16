@@ -10,18 +10,18 @@ import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
 import { CoffeeTypeStep } from "./steps/CoffeeTypeStep";
 import { DoseStep } from "./steps/DoseStep";
 import { ExtractionDuration } from "./steps/ExtractionDurationStep";
+import RecommendationStep from "./steps/RecommendationStep";
+import TasteFeedbackStep from "./steps/TasteFeedbackStep";
 
 type DiagnoseFlowViewProps = {
     step: DiagnoseStep
     answers: DiagnoseAnswersDraft
     onUpdateAnswers: (patch: DiagnoseAnswersDraft) => void
     onNext: () => void
-    onBack: () => void
-    onReset: () => void
 };
 
 export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
-    const { step, answers, onUpdateAnswers, onNext, onBack, onReset } = props
+    const { step, answers, onUpdateAnswers, onNext } = props
 
     const handleCoffeeTypeSubmit = (coffeeType: CoffeeType) => {
         onUpdateAnswers({ coffeeType })
@@ -31,10 +31,6 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
     const handleDoseSubmit = (doseGrams: number) => {
         onUpdateAnswers({ doseGrams })
         onNext()
-    };
-
-    const handleRestart = () => {
-        onReset()
     };
 
     switch (step) {
@@ -50,9 +46,7 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
             return (
                 <DoseStep
                     doseGrams={answers.doseGrams}
-                    hasScale={answers.hasScale}
                     onSubmit={handleDoseSubmit}
-                    onBack={onBack}
                 />
             );
 
@@ -60,20 +54,16 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
             return (
                 <ExtractionDuration
                     extractionDuration={answers.extractionDuration}
-                    hasScale={answers.hasScale}
                     onSubmit={handleDoseSubmit}
-                    onBack={onBack}
                 />
             );
 
-        // case DiagnoseStep.Taste:
-        //   return (
-        //     <TasteStep
-        //       tasteFeedback={answers.tasteFeedback}
-        //       onSubmit={handleTasteSubmit}
-        //       onBack={onBack}
-        //     />
-        //   );
+        case DiagnoseStep.TasteFeedback:
+            return (
+                <TasteFeedbackStep
+                    onSubmit={() => { }}
+                />
+            );
 
         case DiagnoseStep.Recommendation:
             if (!isDiagnoseAnswersComplete(answers)) {
@@ -84,18 +74,8 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
                 );
             }
 
-            // return (
-            //   <RecommendationStep
-            //     answers={answers} // aici TS știe că e DiagnoseAnswers
-            //     onRestart={handleRestart}
-            //   />
-            // );
-
             return (
-                <Text>
-                    Recommendation step (TODO). All answers complete:{" "}
-                    {JSON.stringify(answers, null, 2)}
-                </Text>
+                <RecommendationStep />
             );
 
         default:
