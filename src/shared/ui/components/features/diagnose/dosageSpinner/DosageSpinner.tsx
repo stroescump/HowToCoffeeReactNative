@@ -177,59 +177,67 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
         verticalPadding,
         selectedHorizontalOffset
     } = React.useMemo(() => {
+        // dacă încă nu avem containerHeight, întoarcem niște valori “placeholder”.
+        // NU le folosim la randare, pentru că isReady = false în perioada asta.
+        if (containerHeight == null || containerHeight === 0) {
+            return {
+                scaleWidth: 0,
+                wheelWidth: 0,
+                wheelHeight: 0,
+                itemHeight: 0,
+                baseFontSize: 0,
+                unitFontSize: 0,
+                selectedScale: FIGMA_SELECTED_SIZE / FIGMA_UNSELECTED_SIZE,
+                verticalPadding: 0,
+                selectedHorizontalOffset: 0,
+            };
+        }
+
         const widthScale = screenWidth / DESIGN_WIDTH;
 
-        // 1) Determinăm cât spațiu vertical avem
-        const availableHeight = (containerHeight ?? screenHeight) || screenHeight;
-        const wheelHeight = availableHeight * MAX_WHEEL_FRACTION;
+        // 1) TOT ce înseamnă roata numerică trăiește strict în containerHeight
+        const wheelHeight = containerHeight * MAX_WHEEL_FRACTION;
 
-        // 2) Câte item-uri vrem să fie vizibile aproximativ?
-        //    Asta controlează spacing-ul dintre cifrele NEselectate.
-        //    Dacă vrei mai compacte => crești la 6–7.
+        // 2) Câte items vizibile -> spacing între cifre NEselectate
         const TARGET_VISIBLE_ITEMS = 5;
-        let itemHeight = wheelHeight / TARGET_VISIBLE_ITEMS;
+        const itemHeight = wheelHeight / TARGET_VISIBLE_ITEMS;
 
-        // 3) Raportul dintre selected / unselected din Figma (140 / 80)
+        // 3) Raport Figma
         const SELECTED_SCALE = FIGMA_SELECTED_SIZE / FIGMA_UNSELECTED_SIZE; // 1.75
 
-        // 4) Limite pentru fontul selectat:
-        //    - după înălțime: putem depăși puțin itemHeight pentru că avem padding vizual
-        //    - după lățime: permitem să fie ~20% mai mare decât versiunea Figma-scaled
-        const MAX_SELECTED_HEIGHT_RATIO = 1; // până la 110% din itemHeight
+        // 4) Limite pentru fontul selectat
+        const MAX_SELECTED_HEIGHT_RATIO = 1;
         const selectedFontMaxByHeight = itemHeight * MAX_SELECTED_HEIGHT_RATIO;
 
         const selectedFontFromWidth = FIGMA_SELECTED_SIZE * widthScale;
-        const selectedFontMaxByWidth = selectedFontFromWidth * 1.2; // +20% față de Figma width-scale
+        const selectedFontMaxByWidth = selectedFontFromWidth * 1.2;
 
-        // font mare final = cel mai mic dintre cele două limite
         const selectedFontSize = Math.min(
             selectedFontMaxByHeight,
             selectedFontMaxByWidth
         );
 
-        // font de bază (unselected) derivat din raportul Figma
         const baseFontSize = selectedFontSize / SELECTED_SCALE;
 
-        // 5) Unit font („g”) – scalat proporțional
+        // 5) Unit font (“g”)
         const baseFontFromWidth = FIGMA_UNSELECTED_SIZE * widthScale;
         const unitFontBase = FIGMA_UNIT_SIZE * widthScale;
         const fontScaleFactor = baseFontSize / baseFontFromWidth;
         const unitFontSize = unitFontBase * fontScaleFactor;
 
-        // 6) Padding vertical simetric: item-ul selectat la mijlocul roții
+        // 6) Padding vertical
         const verticalPadding = (wheelHeight - itemHeight) / 2;
 
-        // 7) Layout orizontal: scale (SVG) + wheel (numere)
-        const SCALE_FRACTION = 0.25; // 25% scale, 75% numere
+        // 7) Scale (stânga) + wheel (dreapta)
+        const SCALE_FRACTION = 0.25;
         const scaleWidth = screenWidth * SCALE_FRACTION;
         const wheelWidth = screenWidth - scaleWidth;
 
-        // 8) Offset orizontal pentru numărul selectat – CALCULAT, nu magic constant
-        const DESIRED_OFFSET_FRACTION = 0.10; // vrem cam 10% din wheelWidth
+        // 8) Offset orizontal calculat
+        const DESIRED_OFFSET_FRACTION = 0.10;
         const SAFE_LEFT_PADDING = 8;
 
         const desiredOffsetPx = wheelWidth * DESIRED_OFFSET_FRACTION;
-
         const maxAllowedOffsetPx = Math.max(
             0,
             wheelWidth - maxItemWidth - SAFE_LEFT_PADDING
@@ -259,7 +267,7 @@ export const DosageSpinner: React.FC<DosageSpinnerProps> = ({
             verticalPadding,
             selectedHorizontalOffset,
         };
-    }, [screenWidth, screenHeight, containerHeight, maxItemWidth]);
+    }, [screenWidth, containerHeight, maxItemWidth]);
 
     const snapToIndex = (index: number) => {
         if (!listRef.current || !itemHeight) return;
