@@ -40,23 +40,32 @@ export const ExtractionDuration = ({
   }
 
   return (
-    <View className="flex-1 relative">
-      <View className="absolute inset-0">
-        <View className="flex-1 bg-[#F1E9DD] gap-2">
-          <View className="flex-1 bg-[#FF5210] rounded-b-[40px]" />
-          <View className="flex-1 bg-[#FC9401]  rounded-t-[40px]" />
+    <View className="flex-1">
+      {/* ZONA SPINNER + BACKGROUND */}
+      <View className="flex-[0.85] relative">
+        {/* Background-ul, întins pe toată zona spinnerului */}
+        <View className="absolute inset-0">
+          <View className="flex-1 bg-[#F1E9DD] gap-2">
+            <View className="flex-1 bg-[#FF5210] rounded-b-[40px]" />
+            <View className="flex-1 bg-[#FC9401] rounded-t-[40px]" />
+          </View>
+        </View>
+
+        {/* Conținutul spinnerului */}
+        <View className="flex-1">
+          <Spinner
+            values={EXTRACTION_TIME_VALUES}
+            unitOfMeasurement="sec."
+            initialValue={parsedExtractionDuration || extractionDuration || 14}
+            onChange={(value) => setExtractionDuration(String(value))}
+          />
         </View>
       </View>
-      <View className="flex-1">
-        <Spinner
-          values={EXTRACTION_TIME_VALUES}
-          unitOfMeasurement="sec."
-          initialValue={parsedExtractionDuration || extractionDuration || 14}
-          onChange={(value) => setExtractionDuration(String(value))}
-        />
-      </View>
-      <View className="flex flex-row">
-        <Button title="" onPress={onIdontKnow} color="#010101">
+
+      {/* ZONA BUTOANELOR – NU mai afectează matematică spinnerului */}
+      <View className="flex-row items-center justify-end px-6 py-4">
+        {/* Poți stiliza cum vrei */}
+        <Button title="Nu știu" onPress={onIdontKnow} color="#010101" />
       </View>
     </View>
   );
