@@ -8,6 +8,6 @@ export interface DiagnoseFlowState {
 }
 
 export const INITIAL_DIAGNOSE_STATE: DiagnoseFlowState = {
-    step: DiagnoseStep.ExtractionDuration,
+    step: DiagnoseStep.Dose,
     answers: {}
 }

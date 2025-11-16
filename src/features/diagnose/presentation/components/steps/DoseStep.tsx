@@ -1,5 +1,6 @@
 import { Spinner } from "@/src/shared/ui/components/features/diagnose/dosageSpinner/Spinner";
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 type DoseStepProps = {
@@ -21,6 +22,7 @@ export const DoseStep = ({
         doseGrams != null ? String(doseGrams) : "",
     );
     const [localHasScale, setLocalHasScale] = useState(hasScale);
+    const { t } = useTranslation(["diagnose", "common"]);
 
     useEffect(() => {
         setDoseInput(doseGrams != null ? String(doseGrams) : "");

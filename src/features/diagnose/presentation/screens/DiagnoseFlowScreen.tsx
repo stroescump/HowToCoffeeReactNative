@@ -2,7 +2,7 @@ import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import React from "react";
 import { DiagnoseRepositoryImpl } from "../../data/repositories/DiagnoseRepositoryImpl";
 
-import { DIAGNOSE_STEP_CONFIG } from "@/src/features/diagnose/presentation/components/steps/utils/DIAGNOSE_STEP_CONFIG";
+import { DiagnoseStepConfigurator } from "@/src/features/diagnose/presentation/components/steps/utils/DiagnoseStepConfigurator";
 import { DiagnoseFlowView } from "../components/DiagnoseFlowView";
 import { useDiagnoseFlow } from "../state/useDiagnoseFlow";
 
@@ -18,7 +18,7 @@ export function DiagnoseFlowScreen() {
         reset,
     } = useDiagnoseFlow({ draftRepository: draftRepo });
 
-    const diagnoseStep = DIAGNOSE_STEP_CONFIG[step]
+    const diagnoseStep = DiagnoseStepConfigurator[step]
 
     return (
         <BaseScreen safeAreaBgColor={diagnoseStep.safeAreaColor} titleRes={diagnoseStep.titleRes}>

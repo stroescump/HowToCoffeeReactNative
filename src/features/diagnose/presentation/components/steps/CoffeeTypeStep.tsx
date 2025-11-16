@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 import { CoffeeType } from "../../../domain/valueObjects/CoffeeType";
 
@@ -8,6 +9,7 @@ type CoffeeTypeStepProps = {
 };
 
 export const CoffeeTypeStep = ({ value, onSubmit }: CoffeeTypeStepProps) => {
+  const { t } = useTranslation(["diagnose", "common"]);
   return (
     <View className="flex-1 pb-4">
       <Text className=" font-semibold text-5xl tracking-[-3px] text-center pb-4" style={{includeFontPadding: true}}>{`What kind of coffee\nare you using?`}</Text>

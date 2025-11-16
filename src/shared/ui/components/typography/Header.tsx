@@ -12,7 +12,7 @@ type HeaderProps = {
 export function HeaderHowToCoffee({ titleRes, showBack = true }: HeaderProps) {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const { t } = useTranslation("diagnose");
+  const { t } = useTranslation(["diagnose", "common"]);
 
   // single, simple formula:
   // - scale with screen width

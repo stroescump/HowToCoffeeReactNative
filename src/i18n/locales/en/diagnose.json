@@ -1,12 +1,20 @@
 {
     "steps": {
-        "coffeeType": {},
-        "dose": {},
+        "coffeeType": {
+            "title":"What kind of coffee?"
+        },
+        "dose": {
+            "title":"How much coffee?"
+        },
         "extractionDuration": {
             "title":"Extraction duration",
             "buttonIdontKnow": "I don't know"
         },
-        "tasteFeedback": {},
-        "recommendation": {}
+        "tasteFeedback": {
+            "title":"How did it taste?"
+        },
+        "recommendation": {
+            "title":"Brew advice 4 you"
+        }
     }
 }

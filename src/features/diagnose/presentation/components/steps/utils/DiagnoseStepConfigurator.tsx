@@ -1,12 +1,12 @@
 import { DiagnoseStep } from "@/src/features/diagnose/domain/valueObjects/DiagnoseStep";
 
-export const DIAGNOSE_STEP_CONFIG: Record<DiagnoseStep, { titleRes: string; safeAreaColor?: string; }> = {
+export const DiagnoseStepConfigurator: Record<DiagnoseStep, { titleRes: string; safeAreaColor?: string; }> = {
     [DiagnoseStep.CoffeeType]: {
-        titleRes: "What kind of coffee are you using?",
+        titleRes: "diagnose:steps.coffeeType.title",
         safeAreaColor: "#F1E9DD",
     },
     [DiagnoseStep.Dose]: {
-        titleRes: "How many \ngrams of coffee?",
+        titleRes: "diagnose:steps.dose.title",
         safeAreaColor: "#FC9401",
     },
     [DiagnoseStep.ExtractionDuration]: {
@@ -14,9 +14,9 @@ export const DIAGNOSE_STEP_CONFIG: Record<DiagnoseStep, { titleRes: string; safe
         safeAreaColor: "#FF5210"
     },
     [DiagnoseStep.TasteFeedback]: {
-        titleRes: "How did it taste?",
+        titleRes: "diagnose:steps.tasteFeedback.title",
     },
     [DiagnoseStep.Recommendation]: {
-        titleRes: "Your brew diagnosis",
+        titleRes: "diagnose:steps.recommendation.title",
     },
 };
