@@ -9,5 +9,26 @@
     "continue": "Continue"
   },
   "defaultErrorTitle": "Oops, something is kaputt.",
-  "defaultErrorButtonText": "Try Again"
+  "defaultErrorButtonText": "Try Again",
+  "steps": {
+    "coffeeType": {
+      "title": "What kind of coffee?"
+    },
+    "dose": {
+      "title": "How much coffee?",
+      "buttonNoScale": "I don't have\na scale",
+      "popupNoScaleMessage": "Without a scale it will be very difficult to ensure consistency or precise adjustments, so it's recommended to purchase a scale.",
+      "popupNoScaleButtonText": "Okay, I understand"
+    },
+    "extractionDuration": {
+      "title": "Extraction duration",
+      "buttonIdontKnow": "I don't know"
+    },
+    "tasteFeedback": {
+      "title": "How did it taste?"
+    },
+    "recommendation": {
+      "title": "Brew advice 4 you"
+    }
+  }
 }

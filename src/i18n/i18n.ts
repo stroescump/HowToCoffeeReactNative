@@ -1,40 +1,35 @@
+// src/i18n/i18n.ts
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-//DE
-import de_common from "../../src/i18n/locales/de/common.json";
-import de_diagnose from "../../src/i18n/locales/de/diagnose.json";
-import de_home from "../../src/i18n/locales/de/home.json";
+// Load merged JSONs
+import de_common from "./locales/de/common.json";
+import en_common from "./locales/en/common.json";
 
-//EN
-import en_common from "../../src/i18n/locales/en/common.json";
-import en_diagnose from "../../src/i18n/locales/en/diagnose.json";
-import en_home from "../../src/i18n/locales/en/home.json";
+// Merge into one namespace
+const resources = {
+  en: {
+    common: en_common,
+  },
+  de: {
+    common: de_common,
+  },
+} as const;
 
-if (!i18n.isInitialized) {
-  i18n
-    .use(initReactI18next)
-    .init({
-      fallbackLng: "en",
-      resources: {
-        en: {
-          common: en_common,
-          diagnose: en_diagnose,
-          home: en_home
-        },
-        de: {
-          common: de_common,
-          diagnose: de_diagnose,
-          home: de_home
-        }
-      },
-      ns: ["common", "diagnose", "home"],
-      defaultNS: "common",
-      interpolation: {
-        escapeValue: false,
-      },
-    })
-    .catch((err) => console.error("i18n init error:", err));
-}
+const defaultNS = "common" as const;
 
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    fallbackLng: "en",
+    ns: [defaultNS],
+    defaultNS,
+    interpolation: {
+      escapeValue: false,
+    },
+  })
+  .catch((err) => console.error("i18n init error:", err));
+
+export { defaultNS, resources };
 export default i18n;

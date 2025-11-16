@@ -1,9 +1,9 @@
-import ErrorPopup from "@/src/shared/ui/components/errorhandling/ErrorPopup";
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import { View } from "react-native";
+import Popup from "../components/Popup";
 
 type PopupContextValue = {
-  showError: (message?: string) => void;
+  showPopup: (popupTitle: string, popupButtonDescription: string) => void;
   hide: () => void;
 };
 
@@ -23,10 +23,12 @@ type PopupProviderProps = {
 
 export const PopupProvider = ({ children }: PopupProviderProps) => {
   const [visible, setVisible] = useState(false);
-  const [message, setMessage] = useState<string | undefined>();
+  const [popupButtonDescription, setPopupButtonDescription] = useState<string>("");
+  const [popupTitle, setPopupTitle] = useState<string>("");
 
-  const showError = (msg?: string) => {
-    setMessage(msg);
+  const showPopup = (popupTitle: string, msg: string) => {
+    setPopupButtonDescription(msg);
+    setPopupTitle(popupTitle);
     setVisible(true);
   };
 
@@ -35,13 +37,14 @@ export const PopupProvider = ({ children }: PopupProviderProps) => {
   };
 
   return (
-    <PopupContext.Provider value={{ showError, hide }}>
+    <PopupContext.Provider value={{ showPopup, hide }}>
       {children}
 
       {visible && (
         <View className="absolute w-full h-full justify-center bg-[#010101]/50">
-          <ErrorPopup
-            errorMessage={message}
+          <Popup
+            popupTitle={popupTitle}
+            popupButtonDescription={popupButtonDescription}
             onDismiss={hide}
           />
         </View>

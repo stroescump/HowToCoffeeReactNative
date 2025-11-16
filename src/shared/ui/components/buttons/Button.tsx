@@ -1,12 +1,10 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, Text, useWindowDimensions } from "react-native";
 
 export type ButtonVariant = "primary" | "ghost";
 
 export type ButtonProps = {
-  title?: string;
-  titleRes?: string;
+  text: string;
   onPress?: () => void;
   variant?: ButtonVariant;
   color?: string;
@@ -41,12 +39,10 @@ const VARIANT_STYLES: Record<
 };
 
 export default function Button({
-  title,
-  titleRes,
+  text,
   onPress,
   variant = "primary",
 }: ButtonProps) {
-  const { t } = useTranslation(["diagnose", "common"]);
   const { width } = useWindowDimensions();
 
   const buttonWidth = Math.min(MAX_WIDTH, width * 0.45);
@@ -59,9 +55,6 @@ export default function Button({
   );
 
   const handlePress = onPress;
-
-  const label = title ?? (titleRes ? t(titleRes) : "");
-
   const theme = VARIANT_STYLES[variant];
 
   return (
@@ -87,7 +80,7 @@ export default function Button({
           },
         ]}
       >
-        {label}
+        {text}
       </Text>
     </Pressable>
   );

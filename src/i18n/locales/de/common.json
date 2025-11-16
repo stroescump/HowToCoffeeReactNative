@@ -1,10 +1,34 @@
 {
-  "title": "?ToCoffee",
+  "appTitle": "?ToCoffee",
   "buttons": {
-    "findYourTaste": "finde\ndeinen\ngeschmack",
-    "marketplace": "kaffee\nmarktplatz",
-    "diagnoseBrew": "brüh\ndiagnose",
-    "recipeAgenda": "rezept-\nagenda",
-    "coffeePlacesNearby": "cafés\nin der\nNähe"
+    "findYourTaste": "find\nyour\ntaste",
+    "marketplace": "buy\ncoffee",
+    "diagnoseBrew": "diagnose\nbrew",
+    "recipeAgenda": "recipe\nagenda",
+    "coffeePlacesNearby": "coffee\nplaces\nnearby",
+    "continue": "Continue"
+  },
+  "defaultErrorTitle": "Oops, something is kaputt.",
+  "defaultErrorButtonText": "Try Again",
+  "steps": {
+    "coffeeType": {
+      "title": "What kind of coffee?"
+    },
+    "dose": {
+      "title": "How much coffee?",
+      "buttonNoScale": "I don't have\na scale",
+      "popupNoScaleMessage": "Without a scale it will be very difficult to ensure consistency or precise adjustments, so it's recommended to purchase a scale.",
+      "popupNoScaleButtonText": "Okay, I understand"
+    },
+    "extractionDuration": {
+      "title": "Extraction duration",
+      "buttonIdontKnow": "I don't know"
+    },
+    "tasteFeedback": {
+      "title": "How did it taste?"
+    },
+    "recommendation": {
+      "title": "Brew advice 4 you"
+    }
   }
 }

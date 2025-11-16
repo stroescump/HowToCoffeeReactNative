@@ -2,6 +2,7 @@ import PrimaryButton from "@/src/shared/ui/components/buttons/Button";
 import { Spinner } from "@/src/shared/ui/components/features/diagnose/dosageSpinner/Spinner";
 import { usePopup } from "@/src/shared/ui/contextproviders/PopupContext";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 type DoseStepProps = {
@@ -16,7 +17,8 @@ export const DoseStep = ({
     onSubmit,
 }: DoseStepProps) => {
     const [doseInput, setDoseInput] = useState(doseGrams);
-    const { showError } = usePopup();
+    const { showPopup } = usePopup();
+    const { t } = useTranslation();
 
     return (
         <View className="flex-1 relative">
@@ -36,9 +38,13 @@ export const DoseStep = ({
             </View>
 
             <View className="absolute flex-row justify-center left-0 right-0 bottom-5 gap-2">
-                <PrimaryButton titleRes="diagnose:steps.dose.buttonNoScale"
-                    onPress={() => { showError() }} />
-                <PrimaryButton titleRes="common:buttons.continue"
+                <PrimaryButton text={t("steps.dose.buttonNoScale")}
+                    onPress={() => {
+                        showPopup(
+                            t("steps.dose.popupNoScaleMessage"),
+                            t("steps.dose.popupNoScaleButtonText"))
+                    }} />
+                <PrimaryButton text={t("buttons.continue")}
                     onPress={() => { onSubmit(doseInput) }} />
             </View>
         </View>
