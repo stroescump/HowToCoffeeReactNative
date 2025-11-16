@@ -33,7 +33,7 @@ type SpinnerProps = {
     initialValue: number;
     onChange?: (value: number) => void;
     gapCenter?: number | null;
-    unitOfMeasurement: number;
+    unitOfMeasurement: string;
 };
 
 type SpinnerItemProps = {
@@ -46,7 +46,7 @@ type SpinnerItemProps = {
     selectedHorizontalOffset: number;
     itemHeight: number;
     onMeasuredWidth?: (width: number) => void;
-    unitOfMeasurement: number;
+    unitOfMeasurement: string;
 };
 
 const SpinnerItem: React.FC<SpinnerItemProps> = ({
