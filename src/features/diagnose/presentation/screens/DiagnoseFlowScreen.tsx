@@ -1,9 +1,8 @@
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
+import { PopupProvider } from "@/src/shared/ui/contextproviders/PopupContext";
 import React from "react";
 import { DiagnoseRepositoryImpl } from "../../data/repositories/DiagnoseRepositoryImpl";
-
-import { DiagnoseStepConfigurator } from "@/src/features/diagnose/presentation/components/steps/utils/DiagnoseStepConfigurator";
-import { PopupProvider } from "@/src/shared/ui/contextproviders/PopupContext";
+import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
 import { DiagnoseFlowView } from "../components/DiagnoseFlowView";
 import { useDiagnoseFlow } from "../state/useDiagnoseFlow";
 
@@ -36,3 +35,24 @@ export function DiagnoseFlowScreen() {
         </PopupProvider>
     );
 }
+
+const DiagnoseStepConfigurator: Record<DiagnoseStep, { titleRes: string; safeAreaColor?: string; }> = {
+    [DiagnoseStep.CoffeeType]: {
+        titleRes: "steps.coffeeType.title",
+        safeAreaColor: "#F1E9DD",
+    },
+    [DiagnoseStep.Dose]: {
+        titleRes: "steps.dose.title",
+        safeAreaColor: "#FC9401",
+    },
+    [DiagnoseStep.ExtractionDuration]: {
+        titleRes: "steps.extractionDuration.title",
+        safeAreaColor: "#FF5210"
+    },
+    [DiagnoseStep.TasteFeedback]: {
+        titleRes: "steps.tasteFeedback.title",
+    },
+    [DiagnoseStep.Recommendation]: {
+        titleRes: "steps.recommendation.title",
+    },
+};

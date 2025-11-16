@@ -20,7 +20,7 @@ export const ExtractionDuration = ({
     extractionDuration != null ? String(extractionDuration) : "",
   );
   const [localHasScale, setLocalHasScale] = useState(hasScale);
-  const { t } = useTranslation(["diagnose", "common"]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setExtractionDuration(extractionDuration != null ? String(extractionDuration) : "");
@@ -68,12 +68,12 @@ export const ExtractionDuration = ({
       {/* ZONA BUTOANELOR – NU mai afectează matematică spinnerului */}
       <View className="absolute flex-row gap-2 justify-center bottom-5 left-0 right-0">
         {/* Poți stiliza cum vrei */}
-        <PrimaryButton titleRes={"diagnose:steps.extractionDuration.buttonIdontKnow"} onPress={() => { }} />
-        <PrimaryButton titleRes={"common:buttons.continue"} onPress={() => {
+        <PrimaryButton text={t("steps.extractionDuration.buttonIdontKnow")} onPress={() => { }} />
+        <PrimaryButton text={t("buttons.continue")} onPress={() => {
           if (canSubmit) {
             onSubmit(parsedExtractionDuration)
           } else {
-            
+
           }
         }} />
       </View>

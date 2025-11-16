@@ -13,7 +13,6 @@ export type ButtonProps = {
 // Figma constraints
 const MAX_WIDTH = 186;
 const MAX_HEIGHT = 80;
-const MIN_HEIGHT = 44;
 
 const BASE_FONT_SIZE = 22;
 const BASE_LINE_HEIGHT = 26;

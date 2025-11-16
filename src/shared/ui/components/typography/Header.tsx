@@ -1,18 +1,16 @@
 import { useRouter } from "expo-router";
 import { ArrowLeft } from "lucide-react-native";
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { Pressable, Text, View, useWindowDimensions } from "react-native";
 
 type HeaderProps = {
-  titleRes: string;
+  title: string;
   showBack?: boolean;
 };
 
-export function HeaderHowToCoffee({ titleRes, showBack = true }: HeaderProps) {
+export function HeaderHowToCoffee({ title, showBack = true }: HeaderProps) {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const { t } = useTranslation(["diagnose", "common"]);
 
   // single, simple formula:
   // - scale with screen width
@@ -41,7 +39,7 @@ export function HeaderHowToCoffee({ titleRes, showBack = true }: HeaderProps) {
           }}
           numberOfLines={2}
         >
-          {t(titleRes)}
+          {title}
         </Text>
       </View>
     </View>

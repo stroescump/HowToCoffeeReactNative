@@ -1,5 +1,6 @@
+import WonderingManSvg from '@/assets/images/wondering-man.svg'
 import React from 'react'
-import { Image, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import { PrimaryButton } from './buttons/PrimaryButton'
 
 type PopupProps = {
@@ -18,8 +19,8 @@ const Popup = ({ popupTitle, popupButtonDescription, onDismiss }: PopupProps) =>
             shadowRadius: 8,
             elevation: 4,
         }}>
-            <Image source={require('@/assets/images/error.png')} className='h-40 w-40 mb-4' resizeMode='contain' />
-            <Text className='font-[InterRegular] text-3xl m-4'>{popupTitle}</Text>
+            <WonderingManSvg className='h-40 w-40 mb-4 justify-center' resizeMode='contain' />
+            <Text className='font-[InterRegular] text-2xl my-4'>{popupTitle}</Text>
             <PrimaryButton text={popupButtonDescription} onPress={onDismiss} />
         </View>
     )
