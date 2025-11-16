@@ -1,23 +1,20 @@
+import { toNumber } from "@/src/shared/config/functions";
+import PrimaryButton from "@/src/shared/ui/components/buttons/Button";
 import { Spinner } from "@/src/shared/ui/components/features/diagnose/dosageSpinner/Spinner";
-import PrimaryButton from "@/src/shared/ui/components/PrimaryButton";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
-
-
 type ExtractionDurationProps = {
   extractionDuration?: number;
   hasScale?: boolean;
-  onSubmit: (extractionDuration: number, hasScale: boolean) => void;
-  onIdontKnow: () => void;
+  onSubmit: (extractionDuration: number) => void;
 };
 
 export const ExtractionDuration = ({
   extractionDuration,
   hasScale,
   onSubmit,
-  onIdontKnow,
 }: ExtractionDurationProps) => {
   const [extractionDurationInput, setExtractionDuration] = useState(
     extractionDuration != null ? String(extractionDuration) : "",
@@ -33,8 +30,9 @@ export const ExtractionDuration = ({
     setLocalHasScale(hasScale);
   }, [hasScale]);
 
-  const parsedExtractionDuration = useMemo(() => Number(extractionDurationInput), [extractionDurationInput]);
-  const canSubmit = !Number.isNaN(parsedExtractionDuration) && parsedExtractionDuration > 0;
+  const parsedExtractionDuration = useMemo(() => toNumber(extractionDurationInput), [extractionDurationInput]);
+
+  const canSubmit = !Number.isNaN(parsedExtractionDuration) && parsedExtractionDuration != null;
 
   //Generate an array of values from 3 to 60 for SecondsSpinner
   const EXTRACTION_TIME_VALUES = [...Array(60 - 3 + 1).keys()].map(i => i + 3);
@@ -70,8 +68,14 @@ export const ExtractionDuration = ({
       {/* ZONA BUTOANELOR – NU mai afectează matematică spinnerului */}
       <View className="absolute flex-row gap-2 justify-center bottom-5 left-0 right-0">
         {/* Poți stiliza cum vrei */}
-        <PrimaryButton title={t("diagnose:steps.extractionDuration.buttonIdontKnow")} onIdontKnow={onIdontKnow} />
-        <PrimaryButton title={t("common:buttons.continue")} onIdontKnow={onIdontKnow} />
+        <PrimaryButton titleRes={"diagnose:steps.extractionDuration.buttonIdontKnow"} onPress={() => { }} />
+        <PrimaryButton titleRes={"common:buttons.continue"} onPress={() => {
+          if (canSubmit) {
+            onSubmit(parsedExtractionDuration)
+          } else {
+            
+          }
+        }} />
       </View>
     </View>
   );

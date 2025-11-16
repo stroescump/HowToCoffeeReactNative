@@ -1,44 +1,22 @@
+import PrimaryButton from "@/src/shared/ui/components/buttons/Button";
 import { Spinner } from "@/src/shared/ui/components/features/diagnose/dosageSpinner/Spinner";
-import React, { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { usePopup } from "@/src/shared/ui/contextproviders/PopupContext";
+import React, { useState } from "react";
 import { View } from "react-native";
 
 type DoseStepProps = {
-    doseGrams?: number;
-    hasScale?: boolean;
-    onSubmit: (doseGrams: number, hasScale: boolean | undefined) => void;
-    onBack: () => void;
+    doseGrams: number
+    onSubmit: (doseGrams: number) => void
 };
 
 const SPINNER_DOSAGE_VALUES = [...Array(21 - 7 + 1).keys()].map(i => i + 7)
 
 export const DoseStep = ({
     doseGrams,
-    hasScale,
     onSubmit,
-    onBack,
 }: DoseStepProps) => {
-    const [doseInput, setDoseInput] = useState(
-        doseGrams != null ? String(doseGrams) : "",
-    );
-    const [localHasScale, setLocalHasScale] = useState(hasScale);
-    const { t } = useTranslation(["diagnose", "common"]);
-
-    useEffect(() => {
-        setDoseInput(doseGrams != null ? String(doseGrams) : "");
-    }, [doseGrams]);
-
-    useEffect(() => {
-        setLocalHasScale(hasScale);
-    }, [hasScale]);
-
-    const parsedDose = useMemo(() => Number(doseInput), [doseInput]);
-    const canSubmit = !Number.isNaN(parsedDose) && parsedDose > 0;
-
-    function handleSubmit() {
-        if (!canSubmit) return;
-        onSubmit(parsedDose, localHasScale);
-    }
+    const [doseInput, setDoseInput] = useState(doseGrams);
+    const { showError } = usePopup();
 
     return (
         <View className="flex-1 relative">
@@ -52,9 +30,16 @@ export const DoseStep = ({
                 <Spinner
                     values={SPINNER_DOSAGE_VALUES}
                     unitOfMeasurement="g"
-                    initialValue={parsedDose || doseGrams || 18}
-                    onChange={(value) => setDoseInput(String(value))}
+                    initialValue={doseGrams}
+                    onChange={(value) => setDoseInput(value)}
                 />
+            </View>
+
+            <View className="absolute flex-row justify-center left-0 right-0 bottom-5 gap-2">
+                <PrimaryButton titleRes="diagnose:steps.dose.buttonNoScale"
+                    onPress={() => { showError() }} />
+                <PrimaryButton titleRes="common:buttons.continue"
+                    onPress={() => { onSubmit(doseInput) }} />
             </View>
         </View>
     );

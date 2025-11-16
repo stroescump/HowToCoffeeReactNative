@@ -11,12 +11,12 @@ export function getPreviousStep(
       return DiagnoseStep.CoffeeType;
     case DiagnoseStep.Dose:
       return DiagnoseStep.CoffeeType;
-    case DiagnoseStep.Time:
+    case DiagnoseStep.ExtractionDuration:
       return DiagnoseStep.Dose;
-    case DiagnoseStep.Taste:
-      return DiagnoseStep.Time;
+    case DiagnoseStep.TasteFeedback:
+      return DiagnoseStep.ExtractionDuration;
     case DiagnoseStep.Recommendation:
-      return DiagnoseStep.Taste;
+      return DiagnoseStep.TasteFeedback;
     default:
       return assertNever(current);
   }

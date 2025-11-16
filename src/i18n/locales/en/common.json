@@ -7,5 +7,7 @@
     "recipeAgenda": "recipe\nagenda",
     "coffeePlacesNearby": "coffee\nplaces\nnearby",
     "continue": "Continue"
-  }
+  },
+  "defaultErrorTitle": "Oops, something is kaputt.",
+  "defaultErrorButtonText": "Try Again"
 }

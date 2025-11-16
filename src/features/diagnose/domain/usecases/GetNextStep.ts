@@ -12,10 +12,10 @@ export function getNextStep(
     case DiagnoseStep.Dose:
       // aici poți pune logica de skip în funcție de hasScale
       // if (answers.hasScale === false) return DiagnoseStep.Taste;
-      return DiagnoseStep.Time;
-    case DiagnoseStep.Time:
-      return DiagnoseStep.Taste;
-    case DiagnoseStep.Taste:
+      return DiagnoseStep.ExtractionDuration;
+    case DiagnoseStep.ExtractionDuration:
+      return DiagnoseStep.TasteFeedback;
+    case DiagnoseStep.TasteFeedback:
       return DiagnoseStep.Recommendation;
     case DiagnoseStep.Recommendation:
       return DiagnoseStep.Recommendation;

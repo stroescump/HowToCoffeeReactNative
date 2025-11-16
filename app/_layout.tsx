@@ -1,8 +1,8 @@
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../global.css";
 import "../src/i18n/i18n";
 
@@ -33,12 +33,12 @@ export default function RootLayout() {
       <Stack screenOptions={{
         headerShown: false
       }}>
-        {/* HomeScreen = app/home/index.tsx */}
+        /* HomeScreen = app/home/index.tsx */
         <Stack.Screen
           name="index"
         />
 
-        {/* restul screen-urilor pornite din HOME_ITEMS */}
+        /* restul screen-urilor pornite din HOME_ITEMS */
         <Stack.Screen
           name="findyourtaste/index"
         />
@@ -56,5 +56,6 @@ export default function RootLayout() {
         />
       </Stack>
     </SafeAreaProvider>
+    // <ErrorPopup errorMessage={"This is an error message"} />
   );
 }

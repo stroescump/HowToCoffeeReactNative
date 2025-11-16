@@ -12,41 +12,29 @@ import { DoseStep } from "./steps/DoseStep";
 import { ExtractionDuration } from "./steps/ExtractionDurationStep";
 
 type DiagnoseFlowViewProps = {
-    step: DiagnoseStep;
-    answers: DiagnoseAnswersDraft;
-    onUpdateAnswers: (patch: DiagnoseAnswersDraft) => void;
-    onNext: () => void;
-    onBack: () => void;
-    onReset: () => void;
-    gapCenter?: number | null;
+    step: DiagnoseStep
+    answers: DiagnoseAnswersDraft
+    onUpdateAnswers: (patch: DiagnoseAnswersDraft) => void
+    onNext: () => void
+    onBack: () => void
+    onReset: () => void
 };
 
 export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
-    const { step, answers, onUpdateAnswers, onNext, onBack, onReset, gapCenter } = props;
+    const { step, answers, onUpdateAnswers, onNext, onBack, onReset } = props
 
     const handleCoffeeTypeSubmit = (coffeeType: CoffeeType) => {
-        onUpdateAnswers({ coffeeType });
-        onNext();
+        onUpdateAnswers({ coffeeType })
+        onNext()
     };
 
-    const handleDoseSubmit = (doseGrams: number, hasScale: boolean) => {
-        onUpdateAnswers({ doseGrams, hasScale });
-        onNext();
+    const handleDoseSubmit = (doseGrams: number) => {
+        onUpdateAnswers({ doseGrams })
+        onNext()
     };
-
-    // TODO când implementezi restul:
-    // const handleTimeSubmit = (extractionDuration: number) => {
-    //   onUpdateAnswers({ extractionDuration });
-    //   onNext();
-    // };
-
-    // const handleTasteSubmit = (tasteFeedback: TasteFeedback) => {
-    //   onUpdateAnswers({ tasteFeedback });
-    //   onNext();
-    // };
 
     const handleRestart = () => {
-        onReset();
+        onReset()
     };
 
     switch (step) {
@@ -69,14 +57,14 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
             );
 
         case DiagnoseStep.ExtractionDuration:
-          return (
-            <ExtractionDuration
+            return (
+                <ExtractionDuration
                     extractionDuration={answers.extractionDuration}
                     hasScale={answers.hasScale}
                     onSubmit={handleDoseSubmit}
                     onBack={onBack}
-            />
-          );
+                />
+            );
 
         // case DiagnoseStep.Taste:
         //   return (

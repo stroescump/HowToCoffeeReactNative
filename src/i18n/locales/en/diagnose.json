@@ -4,7 +4,8 @@
             "title":"What kind of coffee?"
         },
         "dose": {
-            "title":"How much coffee?"
+            "title":"How much coffee?",
+            "buttonNoScale": "I don't have\na scale"
         },
         "extractionDuration": {
             "title":"Extraction duration",

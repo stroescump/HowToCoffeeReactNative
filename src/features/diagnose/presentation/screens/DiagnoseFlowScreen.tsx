@@ -3,6 +3,7 @@ import React from "react";
 import { DiagnoseRepositoryImpl } from "../../data/repositories/DiagnoseRepositoryImpl";
 
 import { DiagnoseStepConfigurator } from "@/src/features/diagnose/presentation/components/steps/utils/DiagnoseStepConfigurator";
+import { PopupProvider } from "@/src/shared/ui/contextproviders/PopupContext";
 import { DiagnoseFlowView } from "../components/DiagnoseFlowView";
 import { useDiagnoseFlow } from "../state/useDiagnoseFlow";
 
@@ -21,15 +22,17 @@ export function DiagnoseFlowScreen() {
     const diagnoseStep = DiagnoseStepConfigurator[step]
 
     return (
-        <BaseScreen safeAreaBgColor={diagnoseStep.safeAreaColor} titleRes={diagnoseStep.titleRes}>
-            <DiagnoseFlowView
-                step={step}
-                answers={answers}
-                onUpdateAnswers={updateAnswers}
-                onNext={nextStep}
-                onBack={prevStep}
-                onReset={reset}
-            />
-        </BaseScreen>
+        <PopupProvider>
+            <BaseScreen safeAreaBgColor={diagnoseStep.safeAreaColor} titleRes={diagnoseStep.titleRes}>
+                <DiagnoseFlowView
+                    step={step}
+                    answers={answers}
+                    onUpdateAnswers={updateAnswers}
+                    onNext={nextStep}
+                    onBack={prevStep}
+                    onReset={reset}
+                />
+            </BaseScreen>
+        </PopupProvider>
     );
 }
