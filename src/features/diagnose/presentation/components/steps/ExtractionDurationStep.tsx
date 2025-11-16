@@ -1,6 +1,10 @@
 import { Spinner } from "@/src/shared/ui/components/features/diagnose/dosageSpinner/Spinner";
+import PrimaryButton from "@/src/shared/ui/components/PrimaryButton";
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, View } from "react-native";
+import { useTranslation } from "react-i18next";
+import { View } from "react-native";
+
+
 
 type ExtractionDurationProps = {
   extractionDuration?: number;
@@ -19,6 +23,7 @@ export const ExtractionDuration = ({
     extractionDuration != null ? String(extractionDuration) : "",
   );
   const [localHasScale, setLocalHasScale] = useState(hasScale);
+  const { t } = useTranslation(["diagnose", "common"]);
 
   useEffect(() => {
     setExtractionDuration(extractionDuration != null ? String(extractionDuration) : "");
@@ -40,9 +45,9 @@ export const ExtractionDuration = ({
   }
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 bg-[#FC9401]">
       {/* ZONA SPINNER + BACKGROUND */}
-      <View className="flex-[0.85] relative">
+      <View className="flex-1 relative">
         {/* Background-ul, întins pe toată zona spinnerului */}
         <View className="absolute inset-0">
           <View className="flex-1 bg-[#F1E9DD] gap-2">
@@ -63,9 +68,10 @@ export const ExtractionDuration = ({
       </View>
 
       {/* ZONA BUTOANELOR – NU mai afectează matematică spinnerului */}
-      <View className="flex-row items-center justify-end px-6 py-4">
+      <View className="absolute flex-row gap-2 justify-center bottom-5 left-0 right-0">
         {/* Poți stiliza cum vrei */}
-        <Button title="Nu știu" onPress={onIdontKnow} color="#010101" />
+        <PrimaryButton title={t("diagnose:steps.extractionDuration.buttonIdontKnow")} onIdontKnow={onIdontKnow} />
+        <PrimaryButton title={t("common:buttons.continue")} onIdontKnow={onIdontKnow} />
       </View>
     </View>
   );

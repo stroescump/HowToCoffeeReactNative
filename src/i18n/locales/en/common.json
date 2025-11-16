@@ -5,6 +5,7 @@
     "marketplace": "buy\ncoffee",
     "diagnoseBrew": "diagnose\nbrew",
     "recipeAgenda": "recipe\nagenda",
-    "coffeePlacesNearby": "coffee\nplaces\nnearby"
+    "coffeePlacesNearby": "coffee\nplaces\nnearby",
+    "continue": "Continue"
   }
 }

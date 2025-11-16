@@ -1,9 +1,12 @@
 {
     "steps": {
-        "CoffeeType": {},
-        "Dose": {},
-        "ExtractionDuration": {},
-        "TasteFeedback": {},
-        "Recommendation": {}
+        "coffeeType": {},
+        "dose": {},
+        "extractionDuration": {
+            "title":"Extraction duration",
+            "buttonIdontKnow": "I don't know"
+        },
+        "tasteFeedback": {},
+        "recommendation": {}
     }
 }

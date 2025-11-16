@@ -1,9 +1,15 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-// JSON-urile de traducere
-import de from "../../src/i18n/locales/de/common.json";
-import en from "../../src/i18n/locales/en/common.json";
+//DE
+import de_common from "../../src/i18n/locales/de/common.json";
+import de_diagnose from "../../src/i18n/locales/de/diagnose.json";
+import de_home from "../../src/i18n/locales/de/home.json";
+
+//EN
+import en_common from "../../src/i18n/locales/en/common.json";
+import en_diagnose from "../../src/i18n/locales/en/diagnose.json";
+import en_home from "../../src/i18n/locales/en/home.json";
 
 if (!i18n.isInitialized) {
   i18n
@@ -11,10 +17,18 @@ if (!i18n.isInitialized) {
     .init({
       fallbackLng: "en",
       resources: {
-        en: { common: en },
-        de: { common: de }
+        en: {
+          common: en_common,
+          diagnose: en_diagnose,
+          home: en_home
+        },
+        de: {
+          common: de_common,
+          diagnose: de_diagnose,
+          home: de_home
+        }
       },
-      ns: ["common"],
+      ns: ["common", "diagnose", "home"],
       defaultNS: "common",
       interpolation: {
         escapeValue: false,

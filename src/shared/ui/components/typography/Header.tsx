@@ -1,35 +1,48 @@
 import { useRouter } from "expo-router";
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft } from "lucide-react-native";
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
+import { Pressable, Text, View, useWindowDimensions } from "react-native";
 
 type HeaderProps = {
-  title?: string;
+  title: string;
   showBack?: boolean;
 };
 
 export function HeaderHowToCoffee({ title, showBack = true }: HeaderProps) {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const { t } = useTranslation("diagnose");
+
+  // single, simple formula:
+  // - scale with screen width
+  // - clamp in a sane range so it never explodes
+  const fontSize = Math.min(40, Math.max(32, width / 12));
 
   return (
-    <View className="mt-4 px-6">
-      <View className="relative justify-start items-center">
-
-        {/* Title centered */}
-        <Text className="text-5xl font-semibold tracking-[-2px] text-center pb-2">
-          {title}
-        </Text>
-
-        {/* Back button aligned with middle of first line */}
+    <View className="px-6 mb-4">
+      <View className="flex-row items-center">
+        {/* Back button */}
         {showBack && (
           <Pressable
-            className="absolute left-0"
             onPress={() => router.back()}
             hitSlop={12}
           >
-            <ArrowLeft size={28} />
+            <ArrowLeft size={38} />
           </Pressable>
         )}
+
+        {/* Title */}
+        <Text
+          className="tracking-[-2px] font-[InterBold] ms-2"
+          style={{
+            fontSize,
+            includeFontPadding: false
+          }}
+          numberOfLines={2}
+        >
+          {t(title)}
+        </Text>
       </View>
     </View>
   );

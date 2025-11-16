@@ -24,7 +24,7 @@ export function BaseScreen({ children, showHeader = true, title, disablePadding,
     >
       <View className="flex-1 relative">       
         <View className={disablePadding ? "flex-1" : "flex-1"}>
-          {showHeader && <HeaderHowToCoffee title={title} />}
+          {showHeader && <HeaderHowToCoffee title={title ?? ""} />}
           {children}
         </View>
       </View>

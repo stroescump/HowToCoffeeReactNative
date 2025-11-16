@@ -10,7 +10,7 @@ export const DIAGNOSE_STEP_CONFIG: Record<DiagnoseStep, { title: string; safeAre
         safeAreaColor: "#FC9401",
     },
     [DiagnoseStep.ExtractionDuration]: {
-        title: "How long was the extraction?",
+        title: "diagnose:steps.extractionDuration.title",
         safeAreaColor: "#FF5210"
     },
     [DiagnoseStep.TasteFeedback]: {
