@@ -29,10 +29,11 @@ const DEFAULT_DOSAGE_VALUES = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 
 
 
 type SpinnerProps = {
-    values?: number[];
-    initialValue?: number;
+    values: number[];
+    initialValue: number;
     onChange?: (value: number) => void;
     gapCenter?: number | null;
+    unitOfMeasurement: number;
 };
 
 type SpinnerItemProps = {
@@ -45,6 +46,7 @@ type SpinnerItemProps = {
     selectedHorizontalOffset: number;
     itemHeight: number;
     onMeasuredWidth?: (width: number) => void;
+    unitOfMeasurement: number;
 };
 
 const SpinnerItem: React.FC<SpinnerItemProps> = ({
@@ -57,6 +59,7 @@ const SpinnerItem: React.FC<SpinnerItemProps> = ({
     selectedHorizontalOffset,
     itemHeight,
     onMeasuredWidth,
+    unitOfMeasurement
 }) => {
     const anim = React.useRef(new Animated.Value(isSelected ? 1 : 0)).current;
     const hasReportedWidthRef = React.useRef(false);
@@ -124,7 +127,7 @@ const SpinnerItem: React.FC<SpinnerItemProps> = ({
                     },
                 ]}
             >
-                g
+                {unitOfMeasurement}
             </Animated.Text>
         </View>
     );
@@ -135,6 +138,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
     initialValue = 10,
     onChange,
     gapCenter,
+    unitOfMeasurement
 }) => {
     const { height: screenHeight, width: screenWidth } = useWindowDimensions();
     const [containerHeight, setContainerHeight] = useState<number | null>(null);
@@ -479,6 +483,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
                                         selectedHorizontalOffset={selectedHorizontalOffset}
                                         itemHeight={itemHeight}
                                         onMeasuredWidth={handleItemWidthMeasured}
+                                        unitOfMeasurement={unitOfMeasurement}
                                     />
                                 );
                             }}
