@@ -15,7 +15,7 @@
       "title": "What kind of coffee?"
     },
     "dose": {
-      "title": "How much coffee?",
+      "title": "Wie viel Kaffee?",
       "buttonNoScale": "I don't have\na scale",
       "popupNoScaleMessage": "Without a scale it will be very difficult to ensure consistency or precise adjustments, so it's recommended to purchase a scale.",
       "popupNoScaleButtonText": "Okay, I understand"
