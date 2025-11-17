@@ -11,7 +11,7 @@ type BaseScreenProps = {
   titleRes?: string;
   background?: ReactNode;
   disablePadding?: boolean;
-  safeAreaBgColor?: string;
+  safeAreaBgColor?: string | undefined;
   onBack: () => void
 };
 

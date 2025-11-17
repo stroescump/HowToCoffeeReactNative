@@ -69,8 +69,10 @@ const DiagnoseStepConfigurator: Record<
     },
     [DiagnoseStep.TasteFeedback]: {
         titleRes: "steps.tasteFeedback.title",
+        safeAreaColor: "#FF5210",
     },
     [DiagnoseStep.Recommendation]: {
         titleRes: "steps.recommendation.title",
+        safeAreaColor: "#FF5210",
     },
 };
