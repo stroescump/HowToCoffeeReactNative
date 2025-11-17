@@ -1,4 +1,4 @@
-import PrimaryButton from "@/src/shared/ui/components/buttons/Button";
+import Button from "@/src/shared/ui/components/buttons/Button";
 import { Spinner } from "@/src/shared/ui/components/features/diagnose/dosageSpinner/Spinner";
 import { usePopup } from "@/src/shared/ui/contextproviders/PopupContext";
 import React, { useState } from "react";
@@ -37,14 +37,14 @@ export const DoseStep = ({
                 />
             </View>
 
-            <View className="absolute flex-row justify-center left-0 right-0 bottom-5 gap-2">
-                <PrimaryButton text={t("steps.dose.buttonNoScale")}
+            <View className="absolute flex-row justify-center left-0 right-0 bottom-5 mx-4 gap-2">
+                <Button className="flex-[0.4]" text={t("steps.dose.buttonNoScale")}
                     onPress={() => {
                         showPopup(
                             t("steps.dose.popupNoScaleMessage"),
                             t("steps.dose.popupNoScaleButtonText"))
                     }} />
-                <PrimaryButton text={t("buttons.continue")}
+                <Button className="flex-[0.6]" text={t("buttons.continue")}
                     onPress={() => { onSubmit(doseInput) }} />
             </View>
         </View>

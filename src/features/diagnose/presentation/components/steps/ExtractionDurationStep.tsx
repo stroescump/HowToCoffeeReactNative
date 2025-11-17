@@ -1,45 +1,31 @@
-import { toNumber } from "@/src/shared/config/functions";
-import PrimaryButton from "@/src/shared/ui/components/buttons/Button";
+import Button from "@/src/shared/ui/components/buttons/Button";
 import { Spinner } from "@/src/shared/ui/components/features/diagnose/dosageSpinner/Spinner";
-import React, { useEffect, useMemo, useState } from "react";
+import { usePopup } from "@/src/shared/ui/contextproviders/PopupContext";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 type ExtractionDurationProps = {
-  extractionDuration?: number;
-  hasScale?: boolean;
   onSubmit: (extractionDuration: number) => void;
 };
 
 export const ExtractionDuration = ({
-  extractionDuration,
-  hasScale,
   onSubmit,
 }: ExtractionDurationProps) => {
-  const [extractionDurationInput, setExtractionDuration] = useState(
-    extractionDuration != null ? String(extractionDuration) : "",
-  );
-  const [localHasScale, setLocalHasScale] = useState(hasScale);
-  const { t } = useTranslation();
-
-  useEffect(() => {
-    setExtractionDuration(extractionDuration != null ? String(extractionDuration) : "");
-  }, [extractionDuration]);
-
-  useEffect(() => {
-    setLocalHasScale(hasScale);
-  }, [hasScale]);
-
-  const parsedExtractionDuration = useMemo(() => toNumber(extractionDurationInput), [extractionDurationInput]);
-
-  const canSubmit = !Number.isNaN(parsedExtractionDuration) && parsedExtractionDuration != null;
+  const [extractionDurationInput, setExtractionDuration] = useState(19)
+  const { showPopup } = usePopup()
+  const { t } = useTranslation()
 
   //Generate an array of values from 3 to 60 for SecondsSpinner
   const EXTRACTION_TIME_VALUES = [...Array(60 - 3 + 1).keys()].map(i => i + 3);
+  const canSubmit = !Number.isNaN(extractionDurationInput)
 
   function handleSubmit() {
-    if (!canSubmit) return;
-    onSubmit(parsedExtractionDuration, localHasScale);
+    if (!canSubmit) {
+      showPopup("", "")
+    } else {
+      onSubmit(extractionDurationInput)
+    }
   }
 
   return (
@@ -59,23 +45,21 @@ export const ExtractionDuration = ({
           <Spinner
             values={EXTRACTION_TIME_VALUES}
             unitOfMeasurement="sec."
-            initialValue={parsedExtractionDuration || extractionDuration || 14}
-            onChange={(value) => setExtractionDuration(String(value))}
+            initialValue={extractionDurationInput}
+            onChange={(value) => setExtractionDuration(value)}
           />
         </View>
       </View>
 
       {/* ZONA BUTOANELOR – NU mai afectează matematică spinnerului */}
-      <View className="absolute flex-row gap-2 justify-center bottom-5 left-0 right-0">
+      <View className="absolute flex-row gap-2 mx-4 left-0 right-0 justify-center bottom-5">
         {/* Poți stiliza cum vrei */}
-        <PrimaryButton text={t("steps.extractionDuration.buttonIdontKnow")} onPress={() => { }} />
-        <PrimaryButton text={t("buttons.continue")} onPress={() => {
-          if (canSubmit) {
-            onSubmit(parsedExtractionDuration)
-          } else {
-
-          }
+        <Button className="flex-[0.4]" text={t("steps.extractionDuration.buttonIdontKnow")} onPress={() => {
+          const popupTitle = t("steps.extractionDuration.popupNoTimerMessage")
+          const popupButtonDescription = t("steps.extractionDuration.popupNoTimerButtonText")
+          showPopup(popupTitle, popupButtonDescription)
         }} />
+        <Button className="flex-[0.6]" text={t("buttons.continue")} onPress={() => handleSubmit()} />
       </View>
     </View>
   );

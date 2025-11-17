@@ -1,9 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, Text, View } from 'react-native'
-import { PrimaryButton } from '../buttons/PrimaryButton'
-
-
+import { Text, View } from 'react-native'
+import Button from '../buttons/Button'
 
 type ErrorPopupProps = {
     errorMessage?: string
@@ -21,10 +19,10 @@ const ErrorPopup = ({ errorMessage, onDismiss }: ErrorPopupProps) => {
             shadowRadius: 8,
             elevation: 4,
         }}>
-            <Image source={require('@/assets/images/error.png')} className='h-40 w-40 mb-4' resizeMode='contain' />
-            <Text className='font-[InterRegular] text-3xl m-4'>
-                {errorMessage ?? t('defaultErrorTitle')}</Text>
-            <PrimaryButton titleRes="defaultErrorButtonText" onPress={onDismiss} />
+            {/* <Image source={require('@/assets/images/error.png')} className='h-40 w-40 mb-4' resizeMode='contain' /> */}
+            <Text className='font-[InterRegular] text-2xl m-4'>
+                {errorMessage ?? t("defaultErrorTitle")}</Text>
+            <Button variant='primary' text={t("defaultErrorButtonText")} width="grow" onPress={onDismiss} />
         </View>
     )
 }

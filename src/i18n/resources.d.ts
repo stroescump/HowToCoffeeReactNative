@@ -18,11 +18,13 @@ interface Resources {
       "dose": {
         "buttonNoScale": "I don't have\na scale",
         "popupNoScaleButtonText": "Okay, I understand",
-        "popupNoScaleMessage": "Without a scale it will be very difficult to ensure consistency or precise adjustments, so it's recommended to purchase a scale.",
+        "popupNoScaleMessage": "**Without** a scale it will be very difficult to ensure consistency or precise adjustments, so it's recommended to purchase a scale.",
         "title": "How much coffee?"
       },
       "extractionDuration": {
         "buttonIdontKnow": "I don't know",
+        "popupNoTimerButtonText": "Okay, I understand",
+        "popupNoTimerMessage": "**Without** knowing the extraction time, it will be very difficult to offer accurate tips.\n**Try** using your phone. Start a stopwatch when you start the extraction.",
         "title": "Extraction duration"
       },
       "recommendation": {
