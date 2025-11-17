@@ -22,7 +22,7 @@ const renderMarkedText = (text: string) => {
             return (
                 <Text
                     key={index}
-                    className="font-[InterBold] tracking-tighter text-xl"
+                    className="font-[InterBold] tracking-[-0.6] text-xl"
                 >
                     {match[1]}
                 </Text>
@@ -35,7 +35,7 @@ const renderMarkedText = (text: string) => {
         return (
             <Text
                 key={index}
-                className="font-[InterRegular] tracking-tighter text-xl"
+                className="font-[InterRegular] tracking-[-0.6] text-xl"
             >
                 {part}
             </Text>
@@ -57,7 +57,7 @@ const Popup = ({ popupTitle, popupButtonDescription, onDismiss }: PopupProps) =>
             <WonderingManSvg className="h-40 w-40 mb-4 justify-center" resizeMode="contain" />
 
             {/* Outer Text wraps the inline pieces so it behaves as a single paragraph */}
-            <Text className="font-[InterRegular] tracking-tighter text-xl my-4">
+            <Text className="my-4">
                 {renderMarkedText(popupTitle)}
             </Text>
 
