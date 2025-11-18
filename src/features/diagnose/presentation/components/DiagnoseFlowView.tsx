@@ -11,7 +11,7 @@ import { CoffeeTypeStep } from "./steps/CoffeeTypeStep";
 import { DoseStep } from "./steps/DoseStep";
 import { ExtractionDuration } from "./steps/ExtractionDurationStep";
 import { RecommendationStep } from "./steps/RecommendationStep";
-import { TasteFeedbackStep } from "./steps/TasteFeedbackStep";
+import { TasteFeedbackStep } from "./steps/TasteFeedback/TasteFeedbackStep";
 
 type DiagnoseFlowViewProps = {
     step: DiagnoseStep

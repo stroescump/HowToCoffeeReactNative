@@ -1,0 +1,5 @@
+export const tasteTitleStyle = "flex-1 text-[64px] text-white font-[InterMedium] tracking-[-4]"
+export const tasteDescriptionStyle = "text-[32px] text-white font-[InterExtraLight] tracking-[-1] "
+export const containerTextStyle = "flex-[0.4] flex-row gap-2"
+export const containerArtworkStyle = "flex-[0.6]"
+export const outerContainerStyle = "flex-1 flex-col gap-2 mx-6"

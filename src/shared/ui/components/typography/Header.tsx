@@ -6,7 +6,7 @@ import { Pressable, Text, View, useWindowDimensions } from "react-native";
 type HeaderProps = {
   title: string | undefined
   showBack?: boolean
-  onBack?: () => void
+  onBack?: (() => void) | undefined
 };
 
 export function HeaderHowToCoffee({ title, showBack = true, onBack }: HeaderProps) {

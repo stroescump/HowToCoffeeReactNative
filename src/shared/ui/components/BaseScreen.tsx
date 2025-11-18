@@ -12,7 +12,7 @@ type BaseScreenProps = {
   background?: ReactNode;
   disablePadding?: boolean;
   safeAreaBgColor?: string | undefined;
-  onBack: () => void
+  onBack?: () => void
 };
 
 export function BaseScreen({ children, showHeader = true, title, disablePadding, safeAreaBgColor, onBack }: BaseScreenProps) {

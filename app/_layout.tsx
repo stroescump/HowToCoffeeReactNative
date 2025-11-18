@@ -11,6 +11,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded] = useFonts({
+    InterExtraLight: require("../assets/fonts/InterDisplay-ExtraLight.ttf"),
     InterMedium: require("../assets/fonts/InterDisplay-Medium.ttf"),
     InterBlack: require("../assets/fonts/InterDisplay-Black.ttf"),
     InterBold: require("../assets/fonts/InterDisplay-Bold.ttf"),
@@ -55,6 +56,6 @@ export default function RootLayout() {
           name="marketplace/index"
         />
       </Stack>
-    </SafeAreaProvider>    
+    </SafeAreaProvider>
   );
 }
