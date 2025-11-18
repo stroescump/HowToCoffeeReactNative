@@ -60,6 +60,6 @@ type LeafValues<T> = T extends string
 
 export type TranslationKey = LeafValues<typeof StringRes>;
 `;
-
+fs.rmSync(OUTPUT_FILE, { force: true });
 fs.writeFileSync(OUTPUT_FILE, fileContent, "utf8");
 console.log(`[generate-i18n-keys] Wrote: ${OUTPUT_FILE}`);
