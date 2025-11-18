@@ -1,5 +1,6 @@
 // app/index.tsx
 import { ButtonsSvg } from "@/src/features/homescreen/presentation/components/ButtonsSvg";
+import { StringRes } from "@/src/i18n/strings";
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,6 +9,7 @@ import { Text, View } from "react-native";
 export default function HomeScreen() {
   const [availableHeight, setAvailableHeight] = useState(0);
   const { t } = useTranslation();
+  const R = StringRes.buttons;
 
   return (
     <BaseScreen showHeader={false}>
@@ -21,31 +23,31 @@ export default function HomeScreen() {
             availableHeight={availableHeight}
             labels={{
               findYourTaste: {
-                label: t("buttons.findYourTaste"),
+                label: t(R.findYourTaste),
                 fontSize: 32,
                 fontFamily: "InterBold",
                 fill: "#010101",
               },
               marketplace: {
-                label: t("buttons.marketplace"),
+                label: t(R.marketplace),
                 fontSize: 32,
                 fontFamily: "InterBold",
                 fill: "#010101",
               },
               diagnoseBrew: {
-                label: t("buttons.diagnoseBrew"),
+                label: t(R.diagnoseBrew),
                 fontSize: 32,
                 fontFamily: "InterBold",
                 fill: "#FFFFFF",
               },
               recipeAgenda: {
-                label: t("buttons.recipeAgenda"),
+                label: t(R.recipeAgenda),
                 fontSize: 32,
                 fontFamily: "InterBold",
                 fill: "#FFFFFF",
               },
               coffeePlacesNearby: {
-                label: t("buttons.coffeePlacesNearby"),
+                label: t(R.coffeePlacesNearby),
                 fontSize: 32,
                 fontFamily: "InterBold",
                 fill: "#010101",
