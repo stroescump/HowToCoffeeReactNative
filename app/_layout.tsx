@@ -29,7 +29,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="dark" backgroundColor="#F1E9DD" />
+      <StatusBar backgroundColor="#F1E9DD" />
       <Stack screenOptions={{
         headerShown: false
       }}>
@@ -55,7 +55,6 @@ export default function RootLayout() {
           name="marketplace/index"
         />
       </Stack>
-    </SafeAreaProvider>
-    // <ErrorPopup errorMessage={"This is an error message"} />
+    </SafeAreaProvider>    
   );
 }

@@ -4,7 +4,7 @@ import React from "react";
 import { Pressable, Text, View, useWindowDimensions } from "react-native";
 
 type HeaderProps = {
-  title: string
+  title: string | undefined
   showBack?: boolean
   onBack?: () => void
 };

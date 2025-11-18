@@ -6,8 +6,8 @@ import { initReactI18next } from "react-i18next";
 import de_common from "./locales/de/common.json";
 import en_common from "./locales/en/common.json";
 
-// Merge into one namespace
-const resources = {
+// 🔹 Exportă direct, să ne fie simplu în .d.ts
+export const resources = {
   en: {
     common: en_common,
   },
@@ -16,13 +16,13 @@ const resources = {
   },
 } as const;
 
-const defaultNS = "common" as const;
+export const defaultNS = "common" as const;
 
 i18n
   .use(initReactI18next)
   .init({
     resources,
-    // lng:"de",
+    // lng: "de",
     fallbackLng: "en",
     ns: [defaultNS],
     defaultNS,
@@ -32,5 +32,4 @@ i18n
   })
   .catch((err) => console.error("i18n init error:", err));
 
-export { defaultNS, resources };
 export default i18n;

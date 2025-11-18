@@ -1,3 +1,4 @@
+import { StringRes } from "@/src/i18n/strings";
 import Button from "@/src/shared/ui/components/buttons/Button";
 import { Spinner } from "@/src/shared/ui/components/features/diagnose/dosageSpinner/Spinner";
 import { usePopup } from "@/src/shared/ui/contextproviders/PopupContext";
@@ -10,6 +11,7 @@ type DoseStepProps = {
     onSubmit: (doseGrams: number) => void
 };
 
+const R = StringRes.steps.dose
 const SPINNER_DOSAGE_VALUES = [...Array(21 - 7 + 1).keys()].map(i => i + 7)
 
 export const DoseStep = ({
@@ -38,13 +40,13 @@ export const DoseStep = ({
             </View>
 
             <View className="absolute flex-row justify-center left-0 right-0 bottom-5 mx-4 gap-2">
-                <Button className="flex-[0.4]" text={t("steps.dose.buttonNoScale")}
+                <Button className="flex-[0.4]" text={t(R.buttonNoScale)}
                     onPress={() => {
                         showPopup(
-                            t("steps.dose.popupNoScaleMessage"),
-                            t("steps.dose.popupNoScaleButtonText"))
+                            t(R.popupNoScaleMessage),
+                            t(R.popupNoScaleButtonText))
                     }} />
-                <Button className="flex-[0.6]" text={t("buttons.continue")}
+                <Button className="flex-[0.6]" text={t(StringRes.buttons.continue)}
                     onPress={() => { onSubmit(doseInput) }} />
             </View>
         </View>

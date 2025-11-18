@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 18,
-    fontFamily: "InterRegular",
+    fontFamily: "InterSemiBold",
     textAlign: "center",
   },
   pressed: {

@@ -15,7 +15,7 @@ function useRecommendation(answersDraft: DiagnoseAnswersDraft) {
   // answers.coffeeType, answers.doseGrams, etc → toate non-null
 }
 
-const RecommendationStep = () => {
+export function RecommendationStep() {
   return (
     <View>
       <Text>RecommendationStep</Text>

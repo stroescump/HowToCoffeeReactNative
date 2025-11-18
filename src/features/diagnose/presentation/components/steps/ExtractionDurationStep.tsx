@@ -1,9 +1,12 @@
+import { StringRes } from "@/src/i18n/strings";
 import Button from "@/src/shared/ui/components/buttons/Button";
 import { Spinner } from "@/src/shared/ui/components/features/diagnose/dosageSpinner/Spinner";
 import { usePopup } from "@/src/shared/ui/contextproviders/PopupContext";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
+
+const R = StringRes.steps.extractionDuration
 
 type ExtractionDurationProps = {
   onSubmit: (extractionDuration: number) => void;
@@ -54,12 +57,12 @@ export const ExtractionDuration = ({
       {/* ZONA BUTOANELOR – NU mai afectează matematică spinnerului */}
       <View className="absolute flex-row gap-2 mx-4 left-0 right-0 justify-center bottom-5">
         {/* Poți stiliza cum vrei */}
-        <Button className="flex-[0.4]" text={t("steps.extractionDuration.buttonIdontKnow")} onPress={() => {
-          const popupTitle = t("steps.extractionDuration.popupNoTimerMessage")
-          const popupButtonDescription = t("steps.extractionDuration.popupNoTimerButtonText")
+        <Button className="flex-[0.4]" text={t(R.buttonIdontKnow)} onPress={() => {
+          const popupTitle = t(R.popupNoTimerMessage)
+          const popupButtonDescription = t(R.popupNoTimerButtonText)
           showPopup(popupTitle, popupButtonDescription)
         }} />
-        <Button className="flex-[0.6]" text={t("buttons.continue")} onPress={() => handleSubmit()} />
+        <Button className="flex-[0.6]" text={t(StringRes.buttons.continue)} onPress={() => handleSubmit()} />
       </View>
     </View>
   );

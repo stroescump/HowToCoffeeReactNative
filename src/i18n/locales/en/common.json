@@ -27,7 +27,16 @@
       "popupNoTimerButtonText": "Okay, I understand"
     },
     "tasteFeedback": {
-      "title": "How did it taste?"
+      "title": "How did it taste?",
+      "buttonText": "Yes, like this!",
+      "sour": "Sour",
+      "sourDescription": "lemon, green, currants, yogurt, rhubarb",
+      "bitter": "Bitter",
+      "bitterDescription": "burnt toast, green banana peel, dark IPA",
+      "acidic": "Acidic",
+      "acidicDescription": "balsamic vinegar, green apple, kombucha",
+      "watery": "Too\nWatery",
+      "wateryDescription": "lacks sirup aspect, no powerful taste"
     },
     "recommendation": {
       "title": "Brew advice 4 you"

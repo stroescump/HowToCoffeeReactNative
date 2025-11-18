@@ -9,7 +9,14 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "generate-i18n-types": "i18next-resources-for-ts interface -i src/i18n/locales -o src/i18n/resources.d.ts --flatten"
+    "gen:i18n:keys": "node src/scripts/generate-i18n-keys.mjs",
+    "gen:i18n": "npm run gen:i18n:keys"
+  },
+  "expo": {
+    "lint": {
+      "extensions": ["js", "jsx", "ts", "tsx"],
+      "directories": ["src", "app"]
+    }
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -31,6 +38,7 @@
     "expo-system-ui": "~6.0.8",
     "expo-web-browser": "~15.0.9",
     "i18next": "^25.6.2",
+    "install": "^0.13.0",
     "nativewind": "^4.2.1",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "react": "19.1.0",
@@ -40,6 +48,7 @@
     "react-native-gesture-handler": "~2.28.0",
     "react-native-localize": "^3.6.0",
     "react-native-reanimated": "~4.1.1",
+    "react-native-reanimated-carousel": "^4.0.3",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
     "react-native-svg": "15.12.1",
@@ -51,7 +60,6 @@
     "@types/react": "~19.1.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
-    "i18next-resources-for-ts": "^1.7.4",
     "lucide-react-native": "^0.553.0",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "react-native-svg-transformer": "^1.5.2",

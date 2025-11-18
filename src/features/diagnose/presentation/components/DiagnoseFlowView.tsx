@@ -10,8 +10,8 @@ import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
 import { CoffeeTypeStep } from "./steps/CoffeeTypeStep";
 import { DoseStep } from "./steps/DoseStep";
 import { ExtractionDuration } from "./steps/ExtractionDurationStep";
-import RecommendationStep from "./steps/RecommendationStep";
-import TasteFeedbackStep from "./steps/TasteFeedbackStep";
+import { RecommendationStep } from "./steps/RecommendationStep";
+import { TasteFeedbackStep } from "./steps/TasteFeedbackStep";
 
 type DiagnoseFlowViewProps = {
     step: DiagnoseStep
