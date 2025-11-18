@@ -44,7 +44,8 @@ export const StringRes = {
     "recommendation": {
       "title": "steps.recommendation.title"
     }
-  }
+  },
+  "testkey": "testkey"
 } as const;
 
 // Deep type helper to extract all string values from nested objects
