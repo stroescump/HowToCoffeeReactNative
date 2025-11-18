@@ -43,10 +43,10 @@ const TooWatery = ({ tooWateryDetails }: TooWateryProps) => {
       </View>
       <View className={containerTextStyle}>
         <View className='flex-1 flex-col'>
-          <Text className={tasteTitleStyle} adjustsFontSizeToFit minimumFontScale={0.5} numberOfLines={2}>{t(tasteTitleRes)}</Text>
-          <Text className={tasteDescriptionStyle} adjustsFontSizeToFit minimumFontScale={0.4} numberOfLines={2}>{t(tasteDescriptionRes)}</Text>
+          <Text className={tasteTitleStyle}>{t(tasteTitleRes)}</Text>
+          <Text className={tasteDescriptionStyle}>{t(tasteDescriptionRes)}</Text>
         </View>
-        <View className='flex-1 bg-[#00FFF7] rounded-tl-full'></View>
+        <View className='w-[45%] h-[100%] bg-[#00FFF7] rounded-tl-full'></View>
       </View>
     </View>
   )

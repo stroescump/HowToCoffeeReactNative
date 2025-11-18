@@ -19,7 +19,10 @@ const Sour = ({ sourDetails }: SourProps) => {
                         <View className=' flex-1 bg-[#FFD700] rounded-t-full rounded-bl-full' />
                         <View className=' flex-1 bg-[#FFD700] rounded-b-full rounded-tl-full' />
                     </View>
-                    <View className='flex-1 bg-[#FFD700] rounded-full' />
+                    <View className='flex-1 flex-col gap-2'>
+                        <View className=' flex-1 bg-[#FFD700] rounded-t-full rounded-br-full' />
+                        <View className=' flex-1 bg-[#FFD700] rounded-b-full rounded-tr-full' />
+                    </View>
                 </View>
             </View>
             <View className={containerTextStyle}>
@@ -27,7 +30,7 @@ const Sour = ({ sourDetails }: SourProps) => {
                     <Text className={tasteTitleStyle} adjustsFontSizeToFit minimumFontScale={0.6}>{t(tasteTitleRes)}</Text>
                     <Text className={tasteDescriptionStyle} adjustsFontSizeToFit minimumFontScale={0.6}>{t(tasteDescriptionRes)}</Text>
                 </View>
-                <View className='flex-1 bg-[#FFD700] rounded-br-full' />
+                <View className='flex-1 bg-[#FFD700] rounded-tl-full' />
             </View>
         </View>
     )
