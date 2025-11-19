@@ -44,7 +44,7 @@ export const CoffeeTypeStep = ({ value, onSubmit }: CoffeeTypeStepProps) => {
       </View>
       <View className="mt-6 mb-6">
         <Button text={t(R.buttonText)} onPress={() => {
-          showPopup(t(R.popupDescription), t(StringRes.buttonOkIUnderstand))
+          showPopup(t(R.popupDescription), t(R.popupButtonText))
         }} />
       </View>
     </View>
