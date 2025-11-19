@@ -2,10 +2,10 @@ import MaskedView from '@react-native-masked-view/masked-view'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, Text, View } from 'react-native'
-import { TastePageOf } from './TasteFeedbackSubpage'
+import { TasteFeedbackSubpageType } from './TasteFeedbackSubpage'
 import { containerArtworkStyle, containerTextStyle, outerContainerStyle, tasteDescriptionStyle, tasteTitleStyle } from './styles/constants'
 
-type BitterType = TastePageOf<"bitter">
+type BitterType = TasteFeedbackSubpageType<"bitter">
 type BitterProps = {
   bitterDetails: BitterType
 }

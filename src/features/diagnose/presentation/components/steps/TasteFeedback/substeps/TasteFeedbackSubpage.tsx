@@ -8,7 +8,7 @@ export type TasteFeedbackSubpage = (typeof PAGES)[number];
 
 export type TasteKind = TasteFeedbackSubpage["kind"];
 
-export type TastePageOf<K extends TasteKind> = Extract<
+export type TasteFeedbackSubpageType<K extends TasteKind> = Extract<
   TasteFeedbackSubpage,
   { kind: K }
 >;
@@ -45,5 +45,12 @@ export const PAGES = [
     tasteTitleRes: R.watery,
     tasteDescriptionRes: R.wateryDescription,
     image: TasteFeedbackTooWateryImage,
+  },
+  {
+    kind: "noCoffee",
+    safeAreaColor: "#FF0033",
+    tasteTitleRes: "",
+    tasteDescriptionRes: "",
+    image: undefined,
   },
 ] as const;

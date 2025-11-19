@@ -5,9 +5,11 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useWindowDimensions, View } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
+import NoCoffeeExtracted from "./NoCoffeeExtracted";
 import Acidic from "./substeps/Acidic";
 import Bitter from "./substeps/Bitter";
 import Sour from "./substeps/Sour";
+import type { TasteFeedbackSubpage } from "./substeps/TasteFeedbackSubpage";
 import { assertNever, PAGES, R, TasteKind } from "./substeps/TasteFeedbackSubpage";
 import TooWatery from "./substeps/TooWatery";
 
@@ -16,11 +18,11 @@ export function TasteFeedbackStep({ onSubmit }: { onSubmit: (tasteFeedback: Tast
   const { width } = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [carouselHeight, setCarouselHeight] = useState(0);
-  const [backgroundColor, setBackgroundColor] = useState(PAGES[0]?.safeAreaColor ?? "#3B55FF");
+  const [backgroundColor, setBackgroundColor] = useState<string>(PAGES[0]?.safeAreaColor ?? "#3B55FF");
   const { t } = useTranslation();
   const { showPopup } = usePopup();
 
-  const CAROUSEL_DATA = PAGES;
+  const CAROUSEL_DATA: TasteFeedbackSubpage[] = [...PAGES];
 
   const applyPageIndex = (idx: number) => {
     const page = PAGES[idx];
@@ -59,7 +61,7 @@ export function TasteFeedbackStep({ onSubmit }: { onSubmit: (tasteFeedback: Tast
         }}
       >
         {carouselHeight > 0 && (
-          <Carousel
+          <Carousel<TasteFeedbackSubpage>
             style={{ width: "100%", height: carouselHeight, justifyContent: "center" }}
             width={width}
             height={carouselHeight}
@@ -107,8 +109,11 @@ export function TasteFeedbackStep({ onSubmit }: { onSubmit: (tasteFeedback: Tast
                 case "watery": {
                   return <TooWatery tooWateryDetails={item} />;
                 }
+                case "noCoffee": {
+                  return <NoCoffeeExtracted noCoffeeDetails={item} />
+                }
                 default: {
-                  return assertNever(item as never);
+                  return assertNever(item);
                 }
               }
             }}

@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
-import { TastePageOf } from './TasteFeedbackSubpage';
+import { TasteFeedbackSubpageType } from './TasteFeedbackSubpage';
 import { containerArtworkStyle, containerTextStyle, outerContainerStyle, tasteDescriptionStyle, tasteTitleStyle } from './styles/constants';
 
 type SourProps = {
-    sourDetails: TastePageOf<"sour">
+    sourDetails: TasteFeedbackSubpageType<"sour">
 }
 
 const Sour = ({ sourDetails }: SourProps) => {
