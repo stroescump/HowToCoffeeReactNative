@@ -38,7 +38,9 @@
       "acidic": "Acidic",
       "acidicDescription": "balsamic vinegar, green apple, kombucha",
       "watery": "Watery",
-      "wateryDescription": "lacks sirup aspect, no powerful taste"
+      "wateryDescription": "lacks sirup aspect, no powerful taste",
+      "noCoffeeExtracted": "No Coffee",
+      "noCoffeeExtractedDescription": "Well...hard to describe the absence of something"
     },
     "recommendation": {
       "title": "Brew advice 4 you"

@@ -41,7 +41,9 @@ export const StringRes = {
       "acidic": "steps.tasteFeedback.acidic",
       "acidicDescription": "steps.tasteFeedback.acidicDescription",
       "watery": "steps.tasteFeedback.watery",
-      "wateryDescription": "steps.tasteFeedback.wateryDescription"
+      "wateryDescription": "steps.tasteFeedback.wateryDescription",
+      "noCoffeeExtracted": "steps.tasteFeedback.noCoffeeExtracted",
+      "noCoffeeExtractedDescription": "steps.tasteFeedback.noCoffeeExtractedDescription"
     },
     "recommendation": {
       "title": "steps.recommendation.title"

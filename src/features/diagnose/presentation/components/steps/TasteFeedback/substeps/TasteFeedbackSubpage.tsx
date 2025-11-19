@@ -49,8 +49,8 @@ export const PAGES = [
   {
     kind: "noCoffee",
     safeAreaColor: "#FF0033",
-    tasteTitleRes: "",
-    tasteDescriptionRes: "",
+    tasteTitleRes: R.noCoffeeExtracted,
+    tasteDescriptionRes: R.noCoffeeExtractedDescription,
     image: undefined,
   },
 ] as const;
