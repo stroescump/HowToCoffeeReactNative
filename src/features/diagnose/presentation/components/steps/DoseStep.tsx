@@ -6,8 +6,10 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
+const DEFAULT_DOSE = 18
+
 type DoseStepProps = {
-    doseGrams: number
+    doseGrams?: number
     onSubmit: (doseGrams: number) => void
 };
 
@@ -18,7 +20,7 @@ export const DoseStep = ({
     doseGrams,
     onSubmit,
 }: DoseStepProps) => {
-    const [doseInput, setDoseInput] = useState(doseGrams);
+    const [doseInput, setDoseInput] = useState(doseGrams ?? DEFAULT_DOSE);
     const { showPopup } = usePopup();
     const { t } = useTranslation();
 
@@ -34,7 +36,7 @@ export const DoseStep = ({
                 <Spinner
                     values={SPINNER_DOSAGE_VALUES}
                     unitOfMeasurement="g"
-                    initialValue={doseGrams}
+                    initialValue={doseInput}
                     onChange={(value) => setDoseInput(value)}
                 />
             </View>

@@ -1,4 +1,5 @@
 import Button from "@/src/shared/ui/components/buttons/Button";
+import { usePopup } from "@/src/shared/ui/contextproviders/PopupContext";
 import { useSafeAreaColor } from "@/src/shared/ui/contextproviders/SafeAreaColorContext";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -7,16 +8,17 @@ import Carousel from "react-native-reanimated-carousel";
 import Acidic from "./substeps/Acidic";
 import Bitter from "./substeps/Bitter";
 import Sour from "./substeps/Sour";
-import { assertNever, PAGES, R } from "./substeps/TasteFeedbackSubpage";
+import { assertNever, PAGES, R, TasteKind } from "./substeps/TasteFeedbackSubpage";
 import TooWatery from "./substeps/TooWatery";
 
-export function TasteFeedbackStep({ onSubmit }: { onSubmit: () => void }) {
+export function TasteFeedbackStep({ onSubmit }: { onSubmit: (tasteFeedback: TasteKind) => void }) {
   const { setColor } = useSafeAreaColor();
   const { width } = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [carouselHeight, setCarouselHeight] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState(PAGES[0]?.safeAreaColor ?? "#3B55FF");
   const { t } = useTranslation();
+  const { showPopup } = usePopup();
 
   const CAROUSEL_DATA = PAGES;
 
@@ -35,6 +37,15 @@ export function TasteFeedbackStep({ onSubmit }: { onSubmit: () => void }) {
   const handleSnapToItem = (idx: number) => {
     applyPageIndex(idx);
   };
+
+  const handleOnSubmit = () => {
+    const currentTasteFeedback = PAGES[index]?.kind
+    if (currentTasteFeedback === undefined) {
+      showPopup("Error", "Okay")
+      return
+    }
+    onSubmit(currentTasteFeedback)
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor }}>
@@ -109,14 +120,13 @@ export function TasteFeedbackStep({ onSubmit }: { onSubmit: () => void }) {
         <View className="flex-row justify-center py-3">
           {PAGES.map((_, i) => (
             <View
-              className={`rounded-md mx-1 ${
-                i === index ? "bg-[#010101] w-3 h-3" : "bg-[#CCCCCC] w-2 h-2"
-              }`}
+              className={`rounded-md mx-1 ${i === index ? "bg-[#010101] w-3 h-3" : "bg-[#CCCCCC] w-2 h-2"
+                }`}
               key={i}
             />
           ))}
         </View>
-        <Button text={t(R.buttonText)} onPress={onSubmit} />
+        <Button text={t(R.buttonText)} onPress={handleOnSubmit} />
       </View>
     </View>
   );

@@ -7,15 +7,18 @@ import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 const R = StringRes.steps.extractionDuration
+const DEFAULT_EXTRACTION_DURATION = 23
 
 type ExtractionDurationProps = {
+  extractionDuration?: number
   onSubmit: (extractionDuration: number) => void;
 };
 
 export const ExtractionDuration = ({
+  extractionDuration,
   onSubmit,
 }: ExtractionDurationProps) => {
-  const [extractionDurationInput, setExtractionDuration] = useState(19)
+  const [extractionDurationInput, setExtractionDuration] = useState(extractionDuration ?? DEFAULT_EXTRACTION_DURATION)
   const { showPopup } = usePopup()
   const { t } = useTranslation()
 
@@ -25,7 +28,7 @@ export const ExtractionDuration = ({
 
   function handleSubmit() {
     if (!canSubmit) {
-      showPopup("", "")
+      showPopup("Error!", "Okay")
     } else {
       onSubmit(extractionDurationInput)
     }

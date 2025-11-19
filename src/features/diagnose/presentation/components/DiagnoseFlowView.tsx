@@ -12,6 +12,7 @@ import { DoseStep } from "./steps/DoseStep";
 import { ExtractionDuration } from "./steps/ExtractionDurationStep";
 import { RecommendationStep } from "./steps/RecommendationStep";
 import { TasteFeedbackStep } from "./steps/TasteFeedback/TasteFeedbackStep";
+import { TasteKind } from "./steps/TasteFeedback/substeps/TasteFeedbackSubpage";
 
 type DiagnoseFlowViewProps = {
     step: DiagnoseStep
@@ -32,6 +33,16 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
         onUpdateAnswers({ doseGrams })
         onNext()
     };
+
+    const handleExtractionDurationSubmit = (extractionDuration: number) => {
+        onUpdateAnswers({ extractionDuration })
+        onNext()
+    }
+
+    const handleTasteFeedbackSubmit = (tasteFeedback: TasteKind) => {
+        onUpdateAnswers({ tasteFeedback })
+        onNext()
+    }
 
     switch (step) {
         case DiagnoseStep.CoffeeType:
@@ -54,14 +65,14 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
             return (
                 <ExtractionDuration
                     extractionDuration={answers.extractionDuration}
-                    onSubmit={handleDoseSubmit}
+                    onSubmit={handleExtractionDurationSubmit}
                 />
             );
 
         case DiagnoseStep.TasteFeedback:
             return (
                 <TasteFeedbackStep
-                    onSubmit={() => { }}
+                    onSubmit={handleTasteFeedbackSubmit}
                 />
             );
 
