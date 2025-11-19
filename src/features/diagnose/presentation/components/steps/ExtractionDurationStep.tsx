@@ -59,10 +59,10 @@ export const ExtractionDuration = ({
         {/* Poți stiliza cum vrei */}
         <Button className="flex-[0.4]" text={t(R.buttonIdontKnow)} onPress={() => {
           const popupTitle = t(R.popupNoTimerMessage)
-          const popupButtonDescription = t(R.popupNoTimerButtonText)
+          const popupButtonDescription = t(StringRes.buttonOkIUnderstand)
           showPopup(popupTitle, popupButtonDescription)
         }} />
-        <Button className="flex-[0.6]" text={t(StringRes.buttons.continue)} onPress={() => handleSubmit()} />
+        <Button className="flex-[0.6]" text={t(StringRes.buttonContinue)} onPress={() => handleSubmit()} />
       </View>
     </View>
   );

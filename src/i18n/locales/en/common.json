@@ -1,30 +1,32 @@
 {
   "appTitle": "?ToCoffee",
-  "buttons": {
+  "homescreen": {
     "findYourTaste": "find\nyour\ntaste",
     "marketplace": "buy\ncoffee",
     "diagnoseBrew": "diagnose\nbrew",
     "recipeAgenda": "recipe\nagenda",
-    "coffeePlacesNearby": "coffee\nplaces\nnearby",
-    "continue": "Continue"
+    "coffeePlacesNearby": "coffee\nplaces\nnearby"
   },
-  "defaultErrorTitle": "Oops, something is kaputt.",
-  "defaultErrorButtonText": "Try Again",
+  "titleDefaultError": "Oops, something is kaputt.",
+  "buttonDefaultError": "Try Again",
+  "buttonOkIUnderstand": "Okay, I understand",
+  "buttonContinue": "Continue",
   "steps": {
     "coffeeType": {
-      "title": "What kind of coffee?"
+      "title": "What kind of coffee?",
+      "buttonText": "I have no idea",
+      "popupDescription": "**Let's** figure it out together!\n**Here's** the 3 types of coffee roast available",
+      "popupButtonText": "Thanks!"
     },
     "dose": {
       "title": "How much coffee?",
       "buttonNoScale": "I don't have\na scale",
-      "popupNoScaleMessage": "**Without** a scale it will be very difficult to ensure consistency or precise adjustments, so it's recommended to purchase a scale.",
-      "popupNoScaleButtonText": "Okay, I understand"
+      "popupNoScaleMessage": "**Without** a scale it will be very difficult to ensure consistency or precise adjustments, so it's recommended to purchase a scale."
     },
     "extractionDuration": {
       "title": "Extraction duration",
       "buttonIdontKnow": "I don't know",
-      "popupNoTimerMessage": "**Without** knowing the extraction time, it will be very difficult to offer accurate tips.\n**Try** using your phone. Start a stopwatch when you start the extraction.",
-      "popupNoTimerButtonText": "Okay, I understand"
+      "popupNoTimerMessage": "**Without** knowing the extraction time, it will be very difficult to offer accurate tips.\n**Try** using your phone. Start a stopwatch when you start the extraction."
     },
     "tasteFeedback": {
       "title": "How did it taste?",

@@ -3,31 +3,33 @@
 
 export const StringRes = {
   "appTitle": "appTitle",
-  "buttons": {
-    "findYourTaste": "buttons.findYourTaste",
-    "marketplace": "buttons.marketplace",
-    "diagnoseBrew": "buttons.diagnoseBrew",
-    "recipeAgenda": "buttons.recipeAgenda",
-    "coffeePlacesNearby": "buttons.coffeePlacesNearby",
-    "continue": "buttons.continue"
+  "homescreen": {
+    "findYourTaste": "homescreen.findYourTaste",
+    "marketplace": "homescreen.marketplace",
+    "diagnoseBrew": "homescreen.diagnoseBrew",
+    "recipeAgenda": "homescreen.recipeAgenda",
+    "coffeePlacesNearby": "homescreen.coffeePlacesNearby"
   },
-  "defaultErrorTitle": "defaultErrorTitle",
-  "defaultErrorButtonText": "defaultErrorButtonText",
+  "titleDefaultError": "titleDefaultError",
+  "buttonDefaultError": "buttonDefaultError",
+  "buttonOkIUnderstand": "buttonOkIUnderstand",
+  "buttonContinue": "buttonContinue",
   "steps": {
     "coffeeType": {
-      "title": "steps.coffeeType.title"
+      "title": "steps.coffeeType.title",
+      "buttonText": "steps.coffeeType.buttonText",
+      "popupDescription": "steps.coffeeType.popupDescription",
+      "popupButtonText": "steps.coffeeType.popupButtonText"
     },
     "dose": {
       "title": "steps.dose.title",
       "buttonNoScale": "steps.dose.buttonNoScale",
-      "popupNoScaleMessage": "steps.dose.popupNoScaleMessage",
-      "popupNoScaleButtonText": "steps.dose.popupNoScaleButtonText"
+      "popupNoScaleMessage": "steps.dose.popupNoScaleMessage"
     },
     "extractionDuration": {
       "title": "steps.extractionDuration.title",
       "buttonIdontKnow": "steps.extractionDuration.buttonIdontKnow",
-      "popupNoTimerMessage": "steps.extractionDuration.popupNoTimerMessage",
-      "popupNoTimerButtonText": "steps.extractionDuration.popupNoTimerButtonText"
+      "popupNoTimerMessage": "steps.extractionDuration.popupNoTimerMessage"
     },
     "tasteFeedback": {
       "title": "steps.tasteFeedback.title",

@@ -9,7 +9,7 @@ import { Text, View } from "react-native";
 export default function HomeScreen() {
   const [availableHeight, setAvailableHeight] = useState(0);
   const { t } = useTranslation();
-  const R = StringRes.buttons;
+  const R = StringRes.homescreen;
 
   return (
     <BaseScreen showHeader={false}>

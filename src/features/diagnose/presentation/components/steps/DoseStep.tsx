@@ -44,9 +44,9 @@ export const DoseStep = ({
                     onPress={() => {
                         showPopup(
                             t(R.popupNoScaleMessage),
-                            t(R.popupNoScaleButtonText))
+                            t(StringRes.buttonOkIUnderstand))
                     }} />
-                <Button className="flex-[0.6]" text={t(StringRes.buttons.continue)}
+                <Button className="flex-[0.6]" text={t(StringRes.buttonContinue)}
                     onPress={() => { onSubmit(doseInput) }} />
             </View>
         </View>
