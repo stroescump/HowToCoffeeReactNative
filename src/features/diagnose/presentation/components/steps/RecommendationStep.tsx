@@ -1,26 +1,190 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import { DiagnoseAnswersDraft } from '../../../domain/entities/DiagnoseAnswers';
-import { isCompleteDiagnoseAnswers } from "../../../domain/usecases/AreAnswersCompleted";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { BrewDiagnosis } from "../../../domain/entities/BrewDiagnosis";
+import { DiagnoseAnswers } from "../../../domain/entities/DiagnoseAnswers";
+import { Recommendation } from "../../../domain/entities/Recommendation";
+// import { useTranslation } from "react-i18next"; // if you already use it
 
-function useRecommendation(answersDraft: DiagnoseAnswersDraft) {
-  if (!isCompleteDiagnoseAnswers(answersDraft)) {
-    // aici TS știe că answersDraft E INCOMPLET
-    throw new Error("Cannot compute recommendation from incomplete answers.");
-  }
+type Props = {
+  answers: DiagnoseAnswers;
+};
 
-  // 🔥 de aici încolo answersDraft e smart-cast la DiagnoseAnswers (non-nullable)
-  const answers = answersDraft;
+export const RecommendationStep: React.FC<Props> = ({ answers }) => {
+  // const { t } = useTranslation();
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // answers.coffeeType, answers.doseGrams, etc → toate non-null
-}
+  const fetchRecommendations = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
 
-export function RecommendationStep() {
+      const response = await fetch("http://localhost:8080/diagnose/espresso", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          doseGrams: answers.doseGrams,
+          extractionDuration: answers.extractionDuration,
+          coffeeType: answers.coffeeType,
+          tasteFeedback: answers.tasteFeedback,
+          yield: answers.yield,
+          origin: answers.origin,
+          process: answers.process,
+          brewStyle: answers.brewStyle,
+          machineHasTempControl: answers.machineHasTempControl,
+          grinderType: answers.grinderType,
+          tasteDescription: answers.tasteDescription,
+          experienceLevel: answers.experienceLevel ?? "beginner",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      const brewDiagnosis: BrewDiagnosis = await response.json();
+      // sort by priority just in case
+      brewDiagnosis.recommendations.sort((a, b) => a.priority - b.priority);
+      setRecommendations(brewDiagnosis.recommendations);
+    } catch (err: any) {
+      setError(err.message ?? "Unexpected error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecommendations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(answers)]); // cheap-ish way to retrigger when answers change
+
   return (
-    <View>
-      <Text>RecommendationStep</Text>
-    </View>
-  )
-}
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 24 }}
+    >
+      {/* Shot summary */}
+      <View style={{ marginBottom: 24 }}>
+        <Text style={{ fontSize: 24, fontWeight: "700", marginBottom: 4 }}>
+          Your shot
+        </Text>
+        <Text style={{ fontSize: 14, opacity: 0.8 }}>
+          {answers.doseGrams}g in → {answers.yield}g out, {answers.extractionDuration}s,{" "}
+          {answers.coffeeType} roast
+        </Text>
+        {answers.tasteDescription ? (
+          <Text style={{ fontSize: 14, marginTop: 4, opacity: 0.9 }}>
+            You said: “{answers.tasteDescription}”
+          </Text>
+        ) : null}
+      </View>
 
-export default RecommendationStep
+      {/* Loading */}
+      {isLoading && (
+        <View style={{ alignItems: "center", marginTop: 32 }}>
+          <ActivityIndicator />
+          <Text style={{ marginTop: 12, fontSize: 14 }}>
+            Analyzing your extraction…
+          </Text>
+        </View>
+      )}
+
+      {/* Error state */}
+      {!isLoading && error && (
+        <View style={{ marginTop: 16 }}>
+          <Text style={{ color: "red", fontSize: 14, marginBottom: 8 }}>
+            Something went wrong: {error}
+          </Text>
+          <TouchableOpacity
+            onPress={fetchRecommendations}
+            style={{
+              alignSelf: "flex-start",
+              paddingHorizontal: 16,
+              paddingVertical: 10,
+              borderRadius: 999,
+              borderWidth: 1,
+              borderColor: "#333",
+            }}
+          >
+            <Text style={{ fontSize: 14, fontWeight: "600" }}>Try again</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* Recommendations list */}
+      {!isLoading && !error && recommendations.length > 0 && (
+        <View style={{ marginTop: 8 }}>
+          <Text style={{ fontSize: 20, fontWeight: "700", marginBottom: 12 }}>
+            Coach’s suggestion
+          </Text>
+
+          <FlatList
+            data={recommendations}
+            keyExtractor={(item) => item.id}
+            scrollEnabled={false}
+            renderItem={({ item, index }) => (
+              <RecommendationCard
+                recommendation={item}
+                isPrimary={index === 0}
+              />
+            )}
+          />
+        </View>
+      )}
+
+      {!isLoading && !error && recommendations.length === 0 && (
+        <Text style={{ marginTop: 16, fontSize: 14, opacity: 0.8 }}>
+          No recommendations yet. Adjust your inputs and try again.
+        </Text>
+      )}
+    </ScrollView>
+  );
+};
+
+type CardProps = {
+  recommendation: Recommendation;
+  isPrimary?: boolean;
+};
+
+const RecommendationCard: React.FC<CardProps> = ({ recommendation, isPrimary }) => {
+  return (
+    <View
+      style={{
+        marginBottom: 16,
+        padding: 16,
+        borderRadius: 16,
+        borderWidth: 1,
+        borderColor: "#111",
+        backgroundColor: isPrimary ? "#FFF7E6" : "#FFFFFF",
+        shadowColor: "#000",
+        shadowOpacity: 0.08,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 8,
+        elevation: 2,
+      }}
+    >
+      {isPrimary && (
+        <Text
+          style={{
+            fontSize: 12,
+            fontWeight: "600",
+            marginBottom: 6,
+            textTransform: "uppercase",
+            letterSpacing: 1,
+          }}
+        >
+          Most impactful change
+        </Text>
+      )}
+      <Text style={{ fontSize: 18, fontWeight: "700", marginBottom: 4 }}>
+        {recommendation.title}
+      </Text>
+      <Text style={{ fontSize: 14, lineHeight: 20 }}>
+        {recommendation.description}
+      </Text>
+    </View>
+  );
+};

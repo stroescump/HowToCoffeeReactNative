@@ -2,8 +2,7 @@
 import React from "react";
 import { Text } from "react-native";
 import {
-    DiagnoseAnswersDraft,
-    isDiagnoseAnswersComplete
+    DiagnoseAnswersDraft
 } from "../../domain/entities/DiagnoseAnswers";
 import { CoffeeType } from "../../domain/valueObjects/CoffeeType";
 import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
@@ -77,16 +76,17 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
             );
 
         case DiagnoseStep.Recommendation:
-            if (!isDiagnoseAnswersComplete(answers)) {
-                return (
-                    <Text>
-                        Something went wrong – answers incomplete. Please restart diagnose.
-                    </Text>
-                );
-            }
+            // TODO: Handle case where diagnose is incomplete
+            // if (!isDiagnoseAnswersComplete(answers)) {
+            //     return (
+            //         <Text>
+            //             Something went wrong – answers incomplete. Please restart diagnose.
+            //         </Text>
+            //     );
+            // }
 
             return (
-                <RecommendationStep />
+                <RecommendationStep answers={answers} />
             );
 
         default:

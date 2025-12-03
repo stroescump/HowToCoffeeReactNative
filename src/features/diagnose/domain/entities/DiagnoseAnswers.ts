@@ -3,6 +3,14 @@ import { TasteFeedback } from "../valueObjects/TasteFeedback";
 
 
 export interface DiagnoseAnswers {
+    yield: number;
+    origin: string;
+    process: string;
+    brewStyle: string;
+    machineHasTempControl: boolean;
+    grinderType: string;
+    tasteDescription: string;
+    experienceLevel: string;
     coffeeType: CoffeeType;
     doseGrams: number;
     hasScale: boolean;
