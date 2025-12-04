@@ -24,6 +24,9 @@ export const RecommendationStep: React.FC<Props> = ({ answers }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept": "application/json",
+          // TODO: replace this with a real per-device or per-user id from AsyncStorage or auth
+          "X-Device-Id": "howtocoffee-dev-anonymous",
         },
         body: JSON.stringify({
           doseGrams: answers.doseGrams,
