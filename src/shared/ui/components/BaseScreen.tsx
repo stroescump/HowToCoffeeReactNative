@@ -4,7 +4,6 @@ import React, { ReactNode } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSafeAreaColorOptional } from "../contextproviders/SafeAreaColorContext";
-import { TasteProfileProvider } from "../contextproviders/TasteProfilContext";
 
 type BaseScreenProps = {
   children: ReactNode;
@@ -28,14 +27,12 @@ export function BaseScreen({ children, showHeader = true, title, disablePadding,
         backgroundColor: backgroundColor,
       }}
     >
-      <TasteProfileProvider>
         <View className="flex-1 relative">
           <View className={disablePadding ? "flex-1" : "flex-1"}>
             {showHeader && <HeaderHowToCoffee title={title} onBack={onBack} />}
             {children}
           </View>
         </View>
-      </TasteProfileProvider>
     </SafeAreaView>
   );
 }
