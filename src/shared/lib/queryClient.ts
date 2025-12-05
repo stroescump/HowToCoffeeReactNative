@@ -1,6 +1,6 @@
+import { BrewDiagnosis } from "@/src/features/diagnose/domain/models/BrewDiagnosis";
+import { DiagnoseAnswers } from "@/src/features/diagnose/domain/models/DiagnoseAnswers";
 import { http } from './httpClient';
-import {BrewDiagnosis} from "@/src/features/diagnose/domain/entities/BrewDiagnosis";
-import {DiagnoseAnswers} from "@/src/features/diagnose/domain/entities/DiagnoseAnswers";
 
 // Types imported from your existing DTO folder:
 

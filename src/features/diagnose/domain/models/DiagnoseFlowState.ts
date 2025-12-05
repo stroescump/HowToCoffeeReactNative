@@ -1,5 +1,5 @@
-import { DiagnoseStep } from '../valueObjects/DiagnoseStep';
 import { DiagnoseAnswersDraft } from './DiagnoseAnswers';
+import { DiagnoseStep } from './DiagnoseStep';
 
 
 export interface DiagnoseFlowState {

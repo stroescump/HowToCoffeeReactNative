@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useState } from "react";
-import type { DiagnoseAnswersDraft } from "../../domain/entities/DiagnoseAnswers";
-import { INITIAL_DIAGNOSE_STATE } from "../../domain/entities/DiagnoseFlowState";
+import type { DiagnoseAnswersDraft } from "../../domain/models/DiagnoseAnswers";
+import { INITIAL_DIAGNOSE_STATE } from "../../domain/models/DiagnoseFlowState";
 import type { DiagnoseRepository } from "../../domain/repositories/DiagnoseRepository";
 import { diagnoseReducer } from '../state/diagnoseBrewReducer';
 

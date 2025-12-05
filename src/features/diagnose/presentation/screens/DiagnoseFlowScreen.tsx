@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { DiagnoseRepositoryImpl } from "../../data/repositories/DiagnoseRepositoryImpl";
-import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
+import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import { DiagnoseFlowView } from "../components/DiagnoseFlowView";
 import { useDiagnoseFlow } from "../hooks/useDiagnoseFlow";
 

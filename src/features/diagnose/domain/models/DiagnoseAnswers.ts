@@ -1,5 +1,5 @@
-import { CoffeeType } from '../valueObjects/CoffeeType';
-import { TasteFeedback } from "../valueObjects/TasteFeedback";
+import { CoffeeType } from './CoffeeType';
+import { TasteFeedback } from "./TasteFeedback";
 
 
 export interface DiagnoseAnswers {

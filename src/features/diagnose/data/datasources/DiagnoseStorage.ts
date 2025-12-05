@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import type { DiagnoseFlowState } from "../../domain/entities/DiagnoseFlowState";
+import type { DiagnoseFlowState } from "../../domain/models/DiagnoseFlowState";
 
 const STORAGE_KEY = "diagnose_flow_draft_v1";
 

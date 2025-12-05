@@ -4,7 +4,7 @@ import { usePopup } from "@/src/shared/ui/contextproviders/PopupContext";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, View } from "react-native";
-import { CoffeeType } from "../../../domain/valueObjects/CoffeeType";
+import { CoffeeType } from "../../../domain/models/CoffeeType";
 
 type CoffeeTypeStepProps = {
   value?: CoffeeType;

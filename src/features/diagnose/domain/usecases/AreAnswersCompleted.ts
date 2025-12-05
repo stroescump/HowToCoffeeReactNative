@@ -1,4 +1,4 @@
-import type { DiagnoseAnswers, DiagnoseAnswersDraft } from "../entities/DiagnoseAnswers";
+import type { DiagnoseAnswers, DiagnoseAnswersDraft } from "../models/DiagnoseAnswers";
 
 export function isCompleteDiagnoseAnswers(
   answers: DiagnoseAnswersDraft

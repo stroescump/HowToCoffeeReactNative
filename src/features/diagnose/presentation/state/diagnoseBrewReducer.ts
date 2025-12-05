@@ -1,6 +1,6 @@
 import { assertNever } from "../../../../shared/config/functions";
-import { DiagnoseAnswersDraft } from "../../domain/entities/DiagnoseAnswers";
-import { DiagnoseFlowState, INITIAL_DIAGNOSE_STATE } from "../../domain/entities/DiagnoseFlowState";
+import { DiagnoseAnswersDraft } from "../../domain/models/DiagnoseAnswers";
+import { DiagnoseFlowState, INITIAL_DIAGNOSE_STATE } from "../../domain/models/DiagnoseFlowState";
 import { getNextStep } from "../../domain/usecases/GetNextStep";
 import { getPreviousStep } from "../../domain/usecases/GetPreviousStep";
 

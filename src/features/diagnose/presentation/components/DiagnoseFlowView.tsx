@@ -1,11 +1,11 @@
 // src/features/diagnose/presentation/components/DiagnoseFlowView.tsx
 import React from "react";
 import { Text } from "react-native";
+import { CoffeeType } from "../../domain/models/CoffeeType";
 import {
     DiagnoseAnswersDraft
-} from "../../domain/entities/DiagnoseAnswers";
-import { CoffeeType } from "../../domain/valueObjects/CoffeeType";
-import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
+} from "../../domain/models/DiagnoseAnswers";
+import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import { CoffeeTypeStep } from "./steps/CoffeeTypeStep";
 import { DoseStep } from "./steps/DoseStep";
 import { ExtractionDuration } from "./steps/ExtractionDurationStep";

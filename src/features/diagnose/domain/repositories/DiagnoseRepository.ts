@@ -1,4 +1,4 @@
-import type { DiagnoseFlowState } from "../entities/DiagnoseFlowState";
+import type { DiagnoseFlowState } from "../models/DiagnoseFlowState";
 
 export interface DiagnoseRepository {
     loadDraft(): Promise<DiagnoseFlowState | null>;

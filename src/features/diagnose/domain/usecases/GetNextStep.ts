@@ -1,6 +1,6 @@
 import { assertNever } from "../../../../shared/config/functions";
-import type { DiagnoseAnswersDraft } from "../entities/DiagnoseAnswers";
-import { DiagnoseStep, type DiagnoseStep as DiagnoseStepType } from "../valueObjects/DiagnoseStep";
+import type { DiagnoseAnswersDraft } from "../models/DiagnoseAnswers";
+import { DiagnoseStep, type DiagnoseStep as DiagnoseStepType } from "../models/DiagnoseStep";
 
 export function getNextStep(
   current: DiagnoseStepType,

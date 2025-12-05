@@ -1,4 +1,4 @@
-import type { DiagnoseFlowState } from "../../domain/entities/DiagnoseFlowState";
+import type { DiagnoseFlowState } from "../../domain/models/DiagnoseFlowState";
 import type { DiagnoseRepository } from "../../domain/repositories/DiagnoseRepository";
 import {
     clearDiagnoseDraft,
