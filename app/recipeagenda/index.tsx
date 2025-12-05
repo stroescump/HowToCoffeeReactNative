@@ -1,8 +1,8 @@
-import RecipeAgendaScreen from "@/src/features/recipeagenda/presentation/screens/RecipeAgendaScreen";
+import RecipeAgendaContainer from "@/src/features/recipeagenda/presentation/screens/RecipeAgendaContainer";
 import React from "react";
 
 export default function RecipesAgendaRoute() {
   return (
-    <RecipeAgendaScreen />
+    <RecipeAgendaContainer />
   );
 }

@@ -1,29 +1,42 @@
-import { StringRes } from '@/src/i18n/strings'
-import { BaseScreen } from '@/src/shared/ui/components/BaseScreen'
-import { PopupProvider } from '@/src/shared/ui/contextproviders/PopupContext'
-import { useRouter } from 'expo-router'
-import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { Text } from 'react-native'
+import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
+import { useRouter } from "expo-router";
+import React from "react";
+import {
+    FlatList,
+    StatusBar,
+    View
+} from "react-native";
+import { EspressoRecipe } from "../../domain/models/recipeAgenda";
+import { RecipeCard } from "../components/RecipeCard";
+import { PALETTE, SPACING, styles } from "./RecipeAgendaStyles";
 
-const RecipeAgendaScreen = () => {
-    const { t } = useTranslation();
+type Props = {
+    recipes: EspressoRecipe[];
+    onSelectRecipe?: (recipe: EspressoRecipe) => void;
+};
+
+const RecipeAgendaScreen: React.FC<Props> = ({ recipes, onSelectRecipe }) => {
     const router = useRouter();
-
-    function handleBack() {
-        router.back()
-    }
-
     return (
-        <PopupProvider>
-            <BaseScreen
-                title={t(StringRes.recipeAgenda.title)}
-                onBack={handleBack}
-            >
-                <Text>Placeholder</Text>
-            </BaseScreen>
-        </PopupProvider >
-    )
-}
+        <BaseScreen safeAreaBgColor={PALETTE.background} onBack={() => { router.back() }}>
+            <StatusBar barStyle="light-content" />
+            <View style={styles.container}>
+                <FlatList
+                    data={recipes}
+                    keyExtractor={(item) => item.id}
+                    contentContainerStyle={styles.listContent}
+                    ItemSeparatorComponent={() => <View style={{ height: SPACING * 2 }} />}
+                    renderItem={({ item, index }) => (
+                        <RecipeCard
+                            recipe={item}
+                            accentIndex={index}
+                            onPress={() => onSelectRecipe && onSelectRecipe(item)}
+                        />
+                    )}
+                />
+            </View>
+        </BaseScreen>
+    );
+};
 
-export default RecipeAgendaScreen
+export default RecipeAgendaScreen;

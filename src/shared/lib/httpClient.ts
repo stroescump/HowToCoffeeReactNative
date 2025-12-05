@@ -21,15 +21,15 @@ export async function http<TResponse = any, TBody = any>(
     path: string,
     options: HttpOptions<TBody> = {}
 ): Promise<TResponse> {
-    const deviceId = await getDeviceId();
+    const userId = await getDeviceId();
 
     const url = `${resolveBaseUrl()}${path}`;
-    console.log(url)
+    console.log(userId)
 
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'X-Device-Id': deviceId,
+        'X-User-Id': userId,
         ...(options.headers || {}),
     };
 
