@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { DiagnoseRepositoryImpl } from "../../data/repositories/DiagnoseRepositoryImpl";
 import { DiagnoseStep } from "../../domain/valueObjects/DiagnoseStep";
 import { DiagnoseFlowView } from "../components/DiagnoseFlowView";
-import { useDiagnoseFlow } from "../state/useDiagnoseFlow";
+import { useDiagnoseFlow } from "../hooks/useDiagnoseFlow";
 
 const draftRepo = new DiagnoseRepositoryImpl(); // DI super simplu pentru MVP
 const { t } = useTranslation();

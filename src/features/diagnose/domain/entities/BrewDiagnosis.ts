@@ -1,5 +1,5 @@
-import { TasteArchetype } from "@/src/shared/domain/taste/tasteArchetype";
-import { TasteProfile } from "@/src/shared/domain/taste/tasteProfile";
+import { TasteArchetype } from "@/src/shared/domain/models/taste/tasteArchetype";
+import { TasteProfile } from "@/src/shared/domain/models/taste/tasteProfile";
 import { DiagnosisBlock } from "./DiagnosisBlock";
 import { Recommendation } from "./Recommendation";
 

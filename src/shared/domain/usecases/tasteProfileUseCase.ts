@@ -1,7 +1,7 @@
 // src/services/tasteProfileStorage.ts
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { EMPTY_TASTE_PROFILE, TasteProfile } from '../domain/taste/tasteProfile';
+import { EMPTY_TASTE_PROFILE, TasteProfile } from '../models/taste/tasteProfile';
 
 const STORAGE_KEY = 'howtocoffee:tasteProfile:v1';
 

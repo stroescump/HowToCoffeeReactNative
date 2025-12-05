@@ -2,7 +2,7 @@ import { useEffect, useReducer, useState } from "react";
 import type { DiagnoseAnswersDraft } from "../../domain/entities/DiagnoseAnswers";
 import { INITIAL_DIAGNOSE_STATE } from "../../domain/entities/DiagnoseFlowState";
 import type { DiagnoseRepository } from "../../domain/repositories/DiagnoseRepository";
-import { diagnoseReducer } from './diagnoseBrewReducer';
+import { diagnoseReducer } from '../state/diagnoseBrewReducer';
 
 interface UseDiagnoseFlowDeps {
     draftRepository: DiagnoseRepository;

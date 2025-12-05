@@ -2,9 +2,9 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const STORAGE_KEY = 'howtocoffee:device-id:v1';
+const STORAGE_KEY = 'howtocoffee:user-id:v1';
 
-let inMemoryDeviceId: string | null = null;
+let inMemoryUserId: string | null = null;
 
 /**
  * Simple, deterministic-enough ID for MVP:
@@ -13,7 +13,7 @@ let inMemoryDeviceId: string | null = null;
  *
  * If you later add a proper UUID library / auth, you can swap this out.
  */
-function generateDeviceId(): string {
+function generateUserId(): string {
     const timestamp = Date.now().toString(36);
     const random = Math.random().toString(36).slice(2);
     return `dev_${timestamp}_${random}`;
@@ -25,24 +25,25 @@ function generateDeviceId(): string {
  * - Then AsyncStorage
  * - If nothing there, generates + saves a new one
  */
-export async function getDeviceId(): Promise<string> {
-    if (inMemoryDeviceId) {
-        return inMemoryDeviceId;
+export async function getUserId(): Promise<string> {
+    if (inMemoryUserId) {
+        return inMemoryUserId;
     }
 
     try {
         const stored = await AsyncStorage.getItem(STORAGE_KEY);
         if (stored) {
-            inMemoryDeviceId = stored;
+            inMemoryUserId = stored;
             return stored;
         }
     } catch {
         // If storage fails, we still want a usable id for this session
     }
 
-    const newId = generateDeviceId();
+    const newId = generateUserId
+();
 
-    inMemoryDeviceId = newId;
+    inMemoryUserId = newId;
 
     try {
         await AsyncStorage.setItem(STORAGE_KEY, newId);
@@ -57,8 +58,8 @@ export async function getDeviceId(): Promise<string> {
  * Optional: for debugging / QA – clears the stored device id
  * so a new one will be generated next time.
  */
-export async function resetDeviceId(): Promise<void> {
-    inMemoryDeviceId = null;
+export async function resetUserId(): Promise<void> {
+    inMemoryUserId = null;
     try {
         await AsyncStorage.removeItem(STORAGE_KEY);
     } catch {

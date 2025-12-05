@@ -1,9 +1,7 @@
-import { getDeviceId } from "@/src/shared/services/deviceIdService";
+import { getUserId } from "@/src/shared/domain/usecases/userIdUseCase";
 import { API_BASE_URL } from "../config/config";
 
-// Optional: detect whether you're on Android emulator
 function resolveBaseUrl() {
-    // Android emulator cannot access localhost directly
     return API_BASE_URL;
     // return BASE_URL.replace('localhost', '10.0.2.2');
 }
@@ -21,7 +19,7 @@ export async function http<TResponse = any, TBody = any>(
     path: string,
     options: HttpOptions<TBody> = {}
 ): Promise<TResponse> {
-    const userId = await getDeviceId();
+    const userId = await getUserId();
 
     const url = `${resolveBaseUrl()}${path}`;
     console.log(userId)
