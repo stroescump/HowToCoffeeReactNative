@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mariusstroescu.howtocoffee"
+      "bundleIdentifier": "com.mariusstroescu.howtocoffee",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.mariusstroescu.howtocoffee",
@@ -45,6 +48,18 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "23ffe581-d6b9-4542-9e8a-f796dd370321"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/23ffe581-d6b9-4542-9e8a-f796dd370321"
     }
   }
 }

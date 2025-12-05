@@ -4,5 +4,5 @@
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
   },
-  "chatgpt.commentCodeLensEnabled": false
+  "chatgpt.commentCodeLensEnabled": false,
 }

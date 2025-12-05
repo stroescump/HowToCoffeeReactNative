@@ -1,0 +1,15 @@
+{
+  "build": {
+    "qa": {
+      "releaseChannel": "qa",
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "@env:EXPO_PUBLIC_API_BASE_URL"
+      }
+    },
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "production": {}
+  }
+}

@@ -45,5 +45,8 @@
     "recommendation": {
       "title": "Brew advice"
     }
+  },
+  "recipeAgenda": {
+    "title": "Your recipes"
   }
 }

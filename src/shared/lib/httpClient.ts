@@ -1,12 +1,10 @@
-import {getDeviceId} from "@/src/shared/services/deviceIdService";
-
-
-const BASE_URL = 'http://localhost:8080'; // later replace with env config
+import { getDeviceId } from "@/src/shared/services/deviceIdService";
+import { API_BASE_URL } from "../config/config";
 
 // Optional: detect whether you're on Android emulator
 function resolveBaseUrl() {
     // Android emulator cannot access localhost directly
-    return BASE_URL;
+    return API_BASE_URL;
     // return BASE_URL.replace('localhost', '10.0.2.2');
 }
 
@@ -26,6 +24,7 @@ export async function http<TResponse = any, TBody = any>(
     const deviceId = await getDeviceId();
 
     const url = `${resolveBaseUrl()}${path}`;
+    console.log(url)
 
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',

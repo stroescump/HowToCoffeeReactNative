@@ -1,10 +1,8 @@
-import React, {useEffect, useState} from "react";
-import {ActivityIndicator, FlatList, ScrollView, Text, TouchableOpacity, View} from "react-native";
-import {BrewDiagnosis} from "../../../domain/entities/BrewDiagnosis";
-import {DiagnoseAnswers} from "../../../domain/entities/DiagnoseAnswers";
-import {Recommendation} from "../../../domain/entities/Recommendation";
-import {getDeviceId} from "@/src/shared/services/deviceIdService";
-import {queryClient} from "@/src/shared/lib/queryClient";
+import { queryClient } from "@/src/shared/lib/queryClient";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { DiagnoseAnswers } from "../../../domain/entities/DiagnoseAnswers";
+import { Recommendation } from "../../../domain/entities/Recommendation";
 // import { useTranslation } from "react-i18next"; // if you already use it
 
 type Props = {

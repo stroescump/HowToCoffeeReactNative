@@ -48,6 +48,9 @@ export const StringRes = {
     "recommendation": {
       "title": "steps.recommendation.title"
     }
+  },
+  "recipeAgenda": {
+    "title": "recipeAgenda.title"
   }
 } as const;
 
