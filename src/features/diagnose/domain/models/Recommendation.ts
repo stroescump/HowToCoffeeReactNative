@@ -3,4 +3,6 @@ export type Recommendation = {
   title: string;
   description: string;
   priority: number; // 0 = most important
+  variableToChange: string;
+  adjustmentDirection: string;
 };

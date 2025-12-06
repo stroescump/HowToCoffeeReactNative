@@ -7,7 +7,7 @@ import { http } from './httpClient';
 
 export const queryClient = {
     diagnoseShot(input: DiagnoseAnswers): Promise<BrewDiagnosis> {
-        return http<BrewDiagnosis>('/diagnose/espresso', {
+        return http<BrewDiagnosis>('/diagnose/brew', {
             method: 'POST',
             body: input,
         });

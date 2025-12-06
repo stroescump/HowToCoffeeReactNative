@@ -1,4 +1,3 @@
-
 export const DiagnoseStep = {
     CoffeeType: "coffeeType",
     Dose: "dose",

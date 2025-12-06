@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Pressable, View } from "react-native";
 import { CoffeeType } from "../../../domain/models/CoffeeType";
 
+
 type CoffeeTypeStepProps = {
   value?: CoffeeType;
   onSubmit: (coffeeType: CoffeeType) => void;

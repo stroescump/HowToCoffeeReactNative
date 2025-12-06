@@ -22,8 +22,8 @@ export const RecommendationStep: React.FC<Props> = ({answers}) => {
 
             const brewDiagnosis = await queryClient.diagnoseShot(answers);
             // sort by priority just in case
-            brewDiagnosis.coreDiagnosis.recommendations.sort((a, b) => a.priority - b.priority);
-            setRecommendations(brewDiagnosis.coreDiagnosis.recommendations);
+            brewDiagnosis.recommendations.sort((a, b) => a.priority - b.priority);
+            setRecommendations(brewDiagnosis.recommendations);
         } catch (err: any) {
             setError(err.message ?? "Unexpected error");
         } finally {
