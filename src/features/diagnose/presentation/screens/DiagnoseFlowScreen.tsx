@@ -105,6 +105,10 @@ const DiagnoseStepConfigurator: Record<
         titleRes: StringRes.steps.extractionDuration.title,
         safeAreaColor: "#FF5210",
     },
+    [DiagnoseStep.Yield]: {
+        titleRes: StringRes.steps.yield.title,
+        safeAreaColor: "#FF5210",
+    },
     /** TasteFeedback controls its own safeAreaColor via SafeAreaColorProvider because
      * we have 4 steps and each of them has a different color
      */

@@ -13,8 +13,10 @@ export function getPreviousStep(
       return DiagnoseStep.CoffeeType;
     case DiagnoseStep.ExtractionDuration:
       return DiagnoseStep.Dose;
-    case DiagnoseStep.TasteFeedback:
+    case DiagnoseStep.Yield:
       return DiagnoseStep.ExtractionDuration;
+    case DiagnoseStep.TasteFeedback:
+      return DiagnoseStep.Yield;
     case DiagnoseStep.Recommendation:
       return DiagnoseStep.TasteFeedback;
     default:

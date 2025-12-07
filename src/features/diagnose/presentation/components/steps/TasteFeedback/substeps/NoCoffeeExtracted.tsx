@@ -3,8 +3,8 @@ import MaskedView from '@react-native-masked-view/masked-view';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, Text, View } from 'react-native';
-import { containerArtworkStyle, containerTextStyle, outerContainerStyle, tasteDescriptionStyle, tasteTitleStyle } from './substeps/styles/constants';
-import { TasteFeedbackSubpageType } from './substeps/TasteFeedbackSubpage';
+import { containerArtworkStyle, containerTextStyle, outerContainerStyle, tasteDescriptionStyle, tasteTitleStyle } from './styles/constants';
+import { TasteFeedbackSubpageType } from './TasteFeedbackSubpage';
 
 type NoCoffeeDetails = TasteFeedbackSubpageType<"NO_COFFEE">
 

@@ -31,6 +31,9 @@ export const StringRes = {
       "buttonIdontKnow": "steps.extractionDuration.buttonIdontKnow",
       "popupNoTimerMessage": "steps.extractionDuration.popupNoTimerMessage"
     },
+    "yield": {
+      "title": "steps.yield.title"
+    },
     "tasteFeedback": {
       "title": "steps.tasteFeedback.title",
       "buttonText": "steps.tasteFeedback.buttonText",

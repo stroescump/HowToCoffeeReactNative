@@ -1,7 +1,7 @@
 import { assertNever } from "../../../../shared/config/functions";
+import { BrewDiagnoseSession } from "../../domain/models/BrewDiagnoseSession";
 import { createInitialDiagnoseState, DiagnoseFlowState } from "../../domain/models/DiagnoseFlowState";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
-import { BrewDiagnoseSession } from "../../domain/models/BrewDiagnoseSession";
 import { getNextStep } from "../../domain/usecases/GetNextStep";
 import { getPreviousStep } from "../../domain/usecases/GetPreviousStep";
 

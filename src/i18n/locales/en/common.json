@@ -19,7 +19,7 @@
       "popupButtonText": "Thanks!"
     },
     "dose": {
-      "title": "How much coffee?",
+      "title": "How much coffee in?",
       "buttonNoScale": "I don't have\na scale",
       "popupNoScaleMessage": "**Without** a scale it will be very difficult to ensure consistency or precise adjustments, so it's recommended to purchase a scale."
     },
@@ -27,6 +27,9 @@
       "title": "Extraction duration",
       "buttonIdontKnow": "I don't know",
       "popupNoTimerMessage": "**Without** knowing the extraction time, it will be very difficult to offer accurate tips.\n**Try** using your phone. Start a stopwatch when you start the extraction."
+    },
+    "yield": {
+      "title": "How much coffee out?"
     },
     "tasteFeedback": {
       "title": "How did it taste?",

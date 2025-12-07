@@ -1,8 +1,8 @@
 // src/features/diagnose/presentation/components/DiagnoseFlowView.tsx
 import React from "react";
 import { Text } from "react-native";
-import { CoffeeType } from "../../domain/models/CoffeeType";
 import { BrewDiagnoseSession } from "../../domain/models/BrewDiagnoseSession";
+import { CoffeeType } from "../../domain/models/CoffeeType";
 import { BrewDiagnoseSessionDraft } from "../../domain/models/DiagnoseFlowState";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import { CoffeeTypeStep } from "./steps/CoffeeTypeStep";
@@ -11,6 +11,7 @@ import { ExtractionDuration } from "./steps/ExtractionDurationStep";
 import { RecommendationStep } from "./steps/RecommendationStep";
 import { TasteFeedbackStep } from "./steps/TasteFeedback/TasteFeedbackStep";
 import { TasteKind } from "./steps/TasteFeedback/substeps/TasteFeedbackSubpage";
+import { YieldStep } from "./steps/YieldStep";
 
 type DiagnoseFlowViewProps = {
     step: DiagnoseStep
@@ -36,6 +37,11 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
 
     const handleExtractionDurationSubmit = (extractionDuration: number) => {
         onUpdateSession({ brewTimeSeconds: extractionDuration })
+        onNext()
+    }
+
+    const handleYieldGramsSubmit = (yieldGrams: number) => {
+        onUpdateSession({ yieldGrams: yieldGrams })
         onNext()
     }
 
@@ -91,13 +97,19 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
                 />
             );
 
-        case DiagnoseStep.TasteFeedback:
+        case DiagnoseStep.Yield:
             return (
-                <TasteFeedbackStep
-                    onSubmit={handleTasteFeedbackSubmit}
-                    onMarkSuccessful={onMarkSuccessful}
+                <YieldStep yieldGrams={session.yieldGrams}
+                    onSubmit={handleYieldGramsSubmit}
                 />
             );
+
+        case DiagnoseStep.TasteFeedback: return (
+            <TasteFeedbackStep
+                onSubmit={handleTasteFeedbackSubmit}
+                onMarkSuccessful={onMarkSuccessful}
+            />
+        );
 
         case DiagnoseStep.Recommendation:
             return (

@@ -14,6 +14,8 @@ export function getNextStep(
       // if (answers.hasScale === false) return DiagnoseStep.Taste;
       return DiagnoseStep.ExtractionDuration;
     case DiagnoseStep.ExtractionDuration:
+      return DiagnoseStep.Yield;
+    case DiagnoseStep.Yield:
       return DiagnoseStep.TasteFeedback;
     case DiagnoseStep.TasteFeedback:
       return DiagnoseStep.Recommendation;
