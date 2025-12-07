@@ -5,7 +5,7 @@ import { Image, Text, View } from 'react-native'
 import { TasteFeedbackSubpageType } from './TasteFeedbackSubpage'
 import { containerArtworkStyle, containerTextStyle, outerContainerStyle, tasteDescriptionStyle, tasteTitleStyle } from './styles/constants'
 
-type AcidicDetails = TasteFeedbackSubpageType<"acidic">
+type AcidicDetails = TasteFeedbackSubpageType<"ACIDIC">
 type AcidicProps = {
   acidicDetails: AcidicDetails
 }

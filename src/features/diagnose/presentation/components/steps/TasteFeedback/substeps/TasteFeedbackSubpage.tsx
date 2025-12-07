@@ -20,34 +20,34 @@ export function assertNever(x: never): never {
 
 export const PAGES = [
   {
-    kind: "sour",
+    kind: "SOUR",
     safeAreaColor: "#3B55FF",
     tasteTitleRes: R.sour,
     tasteDescriptionRes: R.sourDescription,
   },
   {
-    kind: "bitter",
+    kind: "BITTER",
     safeAreaColor: "#E54817",
     tasteTitleRes: R.bitter,
     tasteDescriptionRes: R.bitterDescription,
     image: TasteFeedbackBitterImage,
   },
   {
-    kind: "acidic",
+    kind: "ACIDIC",
     safeAreaColor: "#A117E5",
     tasteTitleRes: R.acidic,
     tasteDescriptionRes: R.acidicDescription,
     image: TasteFeedbackAcidicImage,
   },
   {
-    kind: "watery",
+    kind: "WATERY",
     safeAreaColor: "#FF0033",
     tasteTitleRes: R.watery,
     tasteDescriptionRes: R.wateryDescription,
     image: TasteFeedbackTooWateryImage,
   },
   {
-    kind: "noCoffee",
+    kind: "NO_COFFEE",
     safeAreaColor: "#FF0033",
     tasteTitleRes: R.noCoffeeExtracted,
     tasteDescriptionRes: R.noCoffeeExtractedDescription,

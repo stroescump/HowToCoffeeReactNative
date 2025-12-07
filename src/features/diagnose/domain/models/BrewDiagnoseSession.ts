@@ -43,3 +43,12 @@ export type BrewDiagnoseSession = {
     temperatureCelsius?: number;
   }>;
 };
+
+export type BrewDiagnoseSessionSummary = {
+  id: string;
+  coffeeProductId?: string;
+  coffeeDisplayName?: string;
+  shotCount: number;
+  markedAsSuccessful: boolean;
+  updatedAtMillis: number;
+}

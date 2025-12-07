@@ -102,19 +102,19 @@ export function TasteFeedbackStep({ onSubmit, onMarkSuccessful }: TasteFeedbackS
             }}
             renderItem={({ item }) => {
               switch (item.kind) {
-                case "sour": {
+                case "SOUR": {
                   return <Sour sourDetails={item} />;
                 }
-                case "bitter": {
+                case "BITTER": {
                   return <Bitter bitterDetails={item} />;
                 }
-                case "acidic": {
+                case "ACIDIC": {
                   return <Acidic acidicDetails={item} />;
                 }
-                case "watery": {
+                case "WATERY": {
                   return <TooWatery tooWateryDetails={item} />;
                 }
-                case "noCoffee": {
+                case "NO_COFFEE": {
                   return <NoCoffeeExtracted noCoffeeDetails={item} />
                 }
                 default: {

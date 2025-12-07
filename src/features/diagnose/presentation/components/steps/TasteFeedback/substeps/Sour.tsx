@@ -5,7 +5,7 @@ import { TasteFeedbackSubpageType } from './TasteFeedbackSubpage';
 import { containerArtworkStyle, containerTextStyle, outerContainerStyle, tasteDescriptionStyle, tasteTitleStyle } from './styles/constants';
 
 type SourProps = {
-    sourDetails: TasteFeedbackSubpageType<"sour">
+    sourDetails: TasteFeedbackSubpageType<"SOUR">
 }
 
 const Sour = ({ sourDetails }: SourProps) => {

@@ -1,10 +1,10 @@
 import { useEffect, useReducer, useState } from "react";
+import type { BrewDiagnoseSession } from "../../domain/models/BrewDiagnoseSession";
 import {
   createInitialDiagnoseState,
   DiagnoseFlowState,
 } from "../../domain/models/DiagnoseFlowState";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
-import type { BrewDiagnoseSession } from "../../domain/models/BrewDiagnoseSession";
 import type { DiagnoseRepository } from "../../domain/repositories/DiagnoseRepository";
 import { diagnoseReducer } from "../state/diagnoseBrewReducer";
 
@@ -81,7 +81,6 @@ function ensureSessionDraft(draft: DiagnoseFlowState): DiagnoseFlowState {
   return {
     ...draft,
     session: {
-      id: `diagnose-${Date.now()}-${Math.random().toString(16).slice(2)}`,
       ...(draft.session ?? {}),
     },
   };

@@ -5,7 +5,7 @@ import { Image, Text, View } from 'react-native'
 import { TasteFeedbackSubpageType } from './TasteFeedbackSubpage'
 import { containerArtworkStyle, containerTextStyle, outerContainerStyle, tasteDescriptionStyle, tasteTitleStyle } from './styles/constants'
 
-type TooWateryDetails = TasteFeedbackSubpageType<"watery">
+type TooWateryDetails = TasteFeedbackSubpageType<"WATERY">
 type TooWateryProps = {
   tooWateryDetails: TooWateryDetails
 }

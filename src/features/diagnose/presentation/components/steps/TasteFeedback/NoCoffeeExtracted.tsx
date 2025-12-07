@@ -6,7 +6,7 @@ import { Image, Text, View } from 'react-native';
 import { containerArtworkStyle, containerTextStyle, outerContainerStyle, tasteDescriptionStyle, tasteTitleStyle } from './substeps/styles/constants';
 import { TasteFeedbackSubpageType } from './substeps/TasteFeedbackSubpage';
 
-type NoCoffeeDetails = TasteFeedbackSubpageType<"noCoffee">
+type NoCoffeeDetails = TasteFeedbackSubpageType<"NO_COFFEE">
 
 type NoCoffeeExtractedProps = {
     noCoffeeDetails: NoCoffeeDetails

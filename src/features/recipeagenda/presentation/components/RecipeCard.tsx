@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { EspressoRecipe } from "../../domain/models/recipeAgenda";
+import { BrewRecipe } from "../../domain/models/recipeAgenda";
 import { ACCENT_COLORS, PALETTE, styles } from "../screens/RecipeAgendaStyles";
 
 type CardProps = {
-    recipe: EspressoRecipe;
+    recipe: BrewRecipe;
     accentIndex: number;
     onPress?: () => void;
 };

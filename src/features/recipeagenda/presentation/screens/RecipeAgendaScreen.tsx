@@ -6,13 +6,13 @@ import {
     StatusBar,
     View
 } from "react-native";
-import { EspressoRecipe } from "../../domain/models/recipeAgenda";
+import { BrewRecipe } from "../../domain/models/recipeAgenda";
 import { RecipeCard } from "../components/RecipeCard";
 import { PALETTE, SPACING, styles } from "./RecipeAgendaStyles";
 
 type Props = {
-    recipes: EspressoRecipe[];
-    onSelectRecipe?: (recipe: EspressoRecipe) => void;
+    recipes: BrewRecipe[];
+    onSelectRecipe?: (recipe: BrewRecipe) => void;
 };
 
 const RecipeAgendaScreen: React.FC<Props> = ({ recipes, onSelectRecipe }) => {

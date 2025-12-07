@@ -1,4 +1,4 @@
-export type EspressoRecipe = {
+export type BrewRecipe = {
     id: string;
     name: string;
     coffeeProductId?: string | null;

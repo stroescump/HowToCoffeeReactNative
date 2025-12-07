@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { fetchEspressoRecipes } from "../../data/espressoRecipeApi";
-import { EspressoRecipe } from "../../domain/models/recipeAgenda";
+import { fetchBrewRecipes } from "../../data/brewRecipeApi";
+import { BrewRecipe } from "../../domain/models/recipeAgenda";
 
-type UseEspressoRecipesResult = {
-  data: EspressoRecipe[] | null;
+type UseBrewRecipesResult = {
+  data: BrewRecipe[] | null;
   isLoading: boolean;
   error: Error | null;
   refetch: () => void;
@@ -13,11 +13,11 @@ type UseEspressoRecipesResult = {
  * ViewModel-style hook for the Recipe Agenda.
  *
  * - lives on the "presentation" side conceptually
- * - talks to the data layer via `fetchEspressoRecipes`
+ * - talks to the data layer via `fetchBrewRecipes`
  * - exposes UI-friendly state (loading, error, data, refetch)
  */
-export function useEspressoRecipes(): UseEspressoRecipesResult {
-  const [data, setData] = useState<EspressoRecipe[] | null>(null);
+export function useBrewRecipes(): UseBrewRecipesResult {
+  const [data, setData] = useState<BrewRecipe[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -26,7 +26,7 @@ export function useEspressoRecipes(): UseEspressoRecipesResult {
     setError(null);
 
     try {
-      const recipes = await fetchEspressoRecipes();
+      const recipes = await fetchBrewRecipes();
       setData(recipes);
     } catch (e) {
       setError(e instanceof Error ? e : new Error("Failed to load recipes"));

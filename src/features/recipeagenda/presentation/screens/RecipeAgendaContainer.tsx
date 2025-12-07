@@ -1,13 +1,13 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import { ActivityIndicator, Text, View } from "react-native";
-import { useEspressoRecipes } from "../hooks/useEspressoRecipes";
+import { useBrewRecipes } from "../hooks/useEspressoRecipes";
 import RecipeAgendaScreen from "./RecipeAgendaScreen";
 import { PALETTE } from "./RecipeAgendaStyles";
 
 const RecipeAgendaContainer: React.FC = () => {
     const router = useRouter();
-    const { data, isLoading, error, refetch } = useEspressoRecipes();
+    const { data, isLoading, error, refetch } = useBrewRecipes();
 
     if (isLoading) {
         return (
