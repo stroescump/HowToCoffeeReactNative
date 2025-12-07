@@ -1,8 +1,8 @@
 import { getUserId } from "@/src/shared/domain/usecases/userIdUseCase";
-import { API_BASE_URL } from "../config/config";
+import { getApiBaseUrl } from "../config/config";
 
 function resolveBaseUrl() {
-    return API_BASE_URL;
+    return getApiBaseUrl();
     // return BASE_URL.replace('localhost', '10.0.2.2');
 }
 

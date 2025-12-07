@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import { ActivityIndicator, Text, View } from "react-native";
-import { useBrewRecipes } from "../hooks/useEspressoRecipes";
+import { useBrewRecipes } from "../hooks/useBrewRecipes";
 import RecipeAgendaScreen from "./RecipeAgendaScreen";
 import { PALETTE } from "./RecipeAgendaStyles";
 
