@@ -27,10 +27,22 @@
       "popupNoTimerButtonText": "Okay, I understand"
     },
     "tasteFeedback": {
-      "title": "How did it taste?"
+      "title": "How did it taste?",
+      "happyWithResultButton": "Tastes good now"
     },
     "recommendation": {
-      "title": "Brew advice 4 you"
+      "title": "Brew advice 4 you",
+      "applyAdvice": "Apply advice"
     }
+  },
+  "recipeAgenda": {
+    "title": "Your recipes"
+  },
+  "diagnoseSuccess": {
+    "title": "Recipe saved",
+    "subtitle": "Added to your Recipe Agenda",
+    "description": "We saved your latest dial-in so you can repeat it anytime. You can find it in Recipe Agenda.",
+    "primaryCta": "Open Recipe Agenda",
+    "secondaryCta": "Back to home"
   }
 }

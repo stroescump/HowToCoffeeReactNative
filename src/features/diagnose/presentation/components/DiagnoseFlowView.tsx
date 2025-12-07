@@ -2,9 +2,8 @@
 import React from "react";
 import { Text } from "react-native";
 import { CoffeeType } from "../../domain/models/CoffeeType";
-import {
-    DiagnoseAnswersDraft
-} from "../../domain/models/DiagnoseAnswers";
+import { BrewDiagnoseSession } from "../../domain/models/BrewDiagnoseSession";
+import { BrewDiagnoseSessionDraft } from "../../domain/models/DiagnoseFlowState";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import { CoffeeTypeStep } from "./steps/CoffeeTypeStep";
 import { DoseStep } from "./steps/DoseStep";
@@ -15,39 +14,63 @@ import { TasteKind } from "./steps/TasteFeedback/substeps/TasteFeedbackSubpage";
 
 type DiagnoseFlowViewProps = {
     step: DiagnoseStep
-    answers: DiagnoseAnswersDraft
-    onUpdateAnswers: (patch: DiagnoseAnswersDraft) => void
+    session: BrewDiagnoseSessionDraft
+    onUpdateSession: (patch: Partial<BrewDiagnoseSession>) => void
     onNext: () => void
+    onGoToStep: (step: DiagnoseStep) => void
+    onMarkSuccessful?: () => Promise<void> | void
 };
 
 export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
-    const { step, answers, onUpdateAnswers, onNext } = props
+    const { step, session, onUpdateSession, onNext, onGoToStep, onMarkSuccessful } = props
 
     const handleCoffeeTypeSubmit = (coffeeType: CoffeeType) => {
-        onUpdateAnswers({ coffeeType })
+        onUpdateSession({ coffeeType })
         onNext()
     };
 
     const handleDoseSubmit = (doseGrams: number) => {
-        onUpdateAnswers({ doseGrams })
+        onUpdateSession({ doseGrams })
         onNext()
     };
 
     const handleExtractionDurationSubmit = (extractionDuration: number) => {
-        onUpdateAnswers({ extractionDuration })
+        onUpdateSession({ brewTimeSeconds: extractionDuration })
         onNext()
     }
 
     const handleTasteFeedbackSubmit = (tasteFeedback: TasteKind) => {
-        onUpdateAnswers({ tasteFeedback })
+        onUpdateSession({ tasteFeedback })
         onNext()
     }
+
+    const handleApplyAdvice = () => {
+        if (
+            session.doseGrams !== undefined &&
+            session.yieldGrams !== undefined &&
+            session.brewTimeSeconds !== undefined
+        ) {
+            onUpdateSession({
+                history: [
+                    ...(session.history ?? []),
+                    {
+                        timestamp: Date.now(),
+                        doseGrams: session.doseGrams,
+                        yieldGrams: session.yieldGrams,
+                        brewTimeSeconds: session.brewTimeSeconds,
+                        temperatureCelsius: session.temperatureCelsius,
+                    },
+                ],
+            });
+        }
+        onGoToStep(DiagnoseStep.Dose);
+    };
 
     switch (step) {
         case DiagnoseStep.CoffeeType:
             return (
                 <CoffeeTypeStep
-                    value={answers.coffeeType}
+                    value={session.coffeeType}
                     onSubmit={handleCoffeeTypeSubmit}
                 />
             );
@@ -55,7 +78,7 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
         case DiagnoseStep.Dose:
             return (
                 <DoseStep
-                    doseGrams={answers.doseGrams}
+                    doseGrams={session.doseGrams}
                     onSubmit={handleDoseSubmit}
                 />
             );
@@ -63,7 +86,7 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
         case DiagnoseStep.ExtractionDuration:
             return (
                 <ExtractionDuration
-                    extractionDuration={answers.extractionDuration}
+                    extractionDuration={session.brewTimeSeconds}
                     onSubmit={handleExtractionDurationSubmit}
                 />
             );
@@ -72,21 +95,16 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
             return (
                 <TasteFeedbackStep
                     onSubmit={handleTasteFeedbackSubmit}
+                    onMarkSuccessful={onMarkSuccessful}
                 />
             );
 
         case DiagnoseStep.Recommendation:
-            // TODO: Handle case where diagnose is incomplete
-            // if (!isDiagnoseAnswersComplete(answers)) {
-            //     return (
-            //         <Text>
-            //             Something went wrong – answers incomplete. Please restart diagnose.
-            //         </Text>
-            //     );
-            // }
-
             return (
-                <RecommendationStep answers={answers} />
+                <RecommendationStep
+                    session={session}
+                    onApplyAdvice={handleApplyAdvice}
+                />
             );
 
         default:

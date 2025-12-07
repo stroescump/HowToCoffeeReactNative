@@ -31,6 +31,7 @@
     "tasteFeedback": {
       "title": "How did it taste?",
       "buttonText": "Yes, like this!",
+      "happyWithResultButton": "Tastes good now",
       "sour": "Sour",
       "sourDescription": "lemon, green, currants, yogurt, rhubarb",
       "bitter": "Bitter",
@@ -43,10 +44,18 @@
       "noCoffeeExtractedDescription": "Well...hard to describe the absence of something"
     },
     "recommendation": {
-      "title": "Brew advice"
+      "title": "Brew advice",
+      "applyAdvice": "Apply advice"
     }
   },
   "recipeAgenda": {
     "title": "Your recipes"
+  },
+  "diagnoseSuccess": {
+    "title": "Recipe saved",
+    "subtitle": "Added to your Recipe Agenda",
+    "description": "We saved your latest dial-in so you can repeat it anytime. You can find it in Recipe Agenda.",
+    "primaryCta": "Open Recipe Agenda",
+    "secondaryCta": "Back to home"
   }
 }

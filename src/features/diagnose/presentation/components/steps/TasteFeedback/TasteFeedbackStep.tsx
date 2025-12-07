@@ -13,7 +13,12 @@ import type { TasteFeedbackSubpage } from "./substeps/TasteFeedbackSubpage";
 import { assertNever, PAGES, R, TasteKind } from "./substeps/TasteFeedbackSubpage";
 import TooWatery from "./substeps/TooWatery";
 
-export function TasteFeedbackStep({ onSubmit }: { onSubmit: (tasteFeedback: TasteKind) => void }) {
+type TasteFeedbackStepProps = {
+  onSubmit: (tasteFeedback: TasteKind) => void;
+  onMarkSuccessful?: () => void | Promise<void>;
+};
+
+export function TasteFeedbackStep({ onSubmit, onMarkSuccessful }: TasteFeedbackStepProps) {
   const { setColor } = useSafeAreaColor();
   const { width } = useWindowDimensions();
   const [index, setIndex] = useState(0);
@@ -132,6 +137,14 @@ export function TasteFeedbackStep({ onSubmit }: { onSubmit: (tasteFeedback: Tast
           ))}
         </View>
         <Button text={t(R.buttonText)} onPress={handleOnSubmit} />
+        {onMarkSuccessful && (
+          <Button
+            className="mt-3"
+            variant="ghost"
+            text={t(R.happyWithResultButton)}
+            onPress={onMarkSuccessful}
+          />
+        )}
       </View>
     </View>
   );

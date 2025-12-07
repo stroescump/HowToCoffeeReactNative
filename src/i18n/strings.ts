@@ -34,6 +34,7 @@ export const StringRes = {
     "tasteFeedback": {
       "title": "steps.tasteFeedback.title",
       "buttonText": "steps.tasteFeedback.buttonText",
+      "happyWithResultButton": "steps.tasteFeedback.happyWithResultButton",
       "sour": "steps.tasteFeedback.sour",
       "sourDescription": "steps.tasteFeedback.sourDescription",
       "bitter": "steps.tasteFeedback.bitter",
@@ -46,11 +47,19 @@ export const StringRes = {
       "noCoffeeExtractedDescription": "steps.tasteFeedback.noCoffeeExtractedDescription"
     },
     "recommendation": {
-      "title": "steps.recommendation.title"
+      "title": "steps.recommendation.title",
+      "applyAdvice": "steps.recommendation.applyAdvice"
     }
   },
   "recipeAgenda": {
     "title": "recipeAgenda.title"
+  },
+  "diagnoseSuccess": {
+    "title": "diagnoseSuccess.title",
+    "subtitle": "diagnoseSuccess.subtitle",
+    "description": "diagnoseSuccess.description",
+    "primaryCta": "diagnoseSuccess.primaryCta",
+    "secondaryCta": "diagnoseSuccess.secondaryCta"
   }
 } as const;
 

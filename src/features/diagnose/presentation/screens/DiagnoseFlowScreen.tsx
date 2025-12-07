@@ -3,25 +3,30 @@ import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import { PopupProvider } from "@/src/shared/ui/contextproviders/PopupContext";
 import { SafeAreaColorProvider } from "@/src/shared/ui/contextproviders/SafeAreaColorContext";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Alert } from "react-native";
 import { DiagnoseRepositoryImpl } from "../../data/repositories/DiagnoseRepositoryImpl";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
+import { saveRecipeFromSession } from "../../domain/usecases/SaveRecipeFromDiagnoseFlow";
 import { DiagnoseFlowView } from "../components/DiagnoseFlowView";
 import { useDiagnoseFlow } from "../hooks/useDiagnoseFlow";
 
 const draftRepo = new DiagnoseRepositoryImpl(); // DI super simplu pentru MVP
-const { t } = useTranslation();
 
 export function DiagnoseFlowScreen() {
     const router = useRouter();
+    const { t } = useTranslation();
+    const [isSaving, setIsSaving] = useState(false);
 
     const {
         step,
-        answers,
-        updateAnswers,
+        session,
+        updateSession,
         nextStep,
         prevStep,
+        goToStep,
+        reset,
     } = useDiagnoseFlow({ draftRepository: draftRepo });
 
     const diagnoseStep = DiagnoseStepConfigurator[step];
@@ -37,6 +42,32 @@ export function DiagnoseFlowScreen() {
         prevStep();
     }
 
+    const sessionForSaving = useMemo(() => {
+        return {
+            ...session,
+            doseGrams: session.doseGrams,
+            brewTimeSeconds: session.brewTimeSeconds,
+            yieldGrams: session.yieldGrams,
+        };
+    }, [session]);
+
+    const handleMarkSuccessful = async () => {
+        if (isSaving) return;
+        setIsSaving(true);
+        try {
+            await saveRecipeFromSession(sessionForSaving);
+            await reset();
+            router.replace("/diagnose/success");
+        } catch (err: any) {
+            Alert.alert(
+                t(StringRes.titleDefaultError),
+                err?.message ?? t(StringRes.buttonDefaultError),
+            );
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     return (
         <PopupProvider>
             <SafeAreaColorProvider initialColor={diagnoseStep.safeAreaColor}>
@@ -46,9 +77,11 @@ export function DiagnoseFlowScreen() {
                 >
                     <DiagnoseFlowView
                         step={step}
-                        answers={answers}
-                        onUpdateAnswers={updateAnswers}
+                        session={session}
+                        onUpdateSession={updateSession}
                         onNext={nextStep}
+                        onGoToStep={goToStep}
+                        onMarkSuccessful={handleMarkSuccessful}
                     />
                 </BaseScreen>
             </SafeAreaColorProvider>

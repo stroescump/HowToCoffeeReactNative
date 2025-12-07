@@ -1,12 +1,12 @@
 import { BrewDiagnosis } from "@/src/features/diagnose/domain/models/BrewDiagnosis";
-import { DiagnoseAnswers } from "@/src/features/diagnose/domain/models/DiagnoseAnswers";
+import { BrewDiagnoseSession } from "@/src/features/diagnose/domain/models/BrewDiagnoseSession";
 import { http } from './httpClient';
 
 // Types imported from your existing DTO folder:
 
 
 export const queryClient = {
-    diagnoseShot(input: DiagnoseAnswers): Promise<BrewDiagnosis> {
+    diagnoseShot(input: BrewDiagnoseSession): Promise<BrewDiagnosis> {
         return http<BrewDiagnosis>('/diagnose/brew', {
             method: 'POST',
             body: input,

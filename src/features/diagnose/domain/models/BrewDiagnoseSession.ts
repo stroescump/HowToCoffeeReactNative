@@ -1,15 +1,20 @@
+import { CoffeeType } from "./CoffeeType";
+import { TasteFeedback } from "./TasteFeedback";
+
 export type BrewDiagnoseSession = {
-  id: string; // local UUID, helps debugging + persistence later
+  sessionId?: string;
 
   // What coffee is being dialed in
   coffeeProductId?: string;   // If linked to a known product (marketplace or saved)
   coffeeDisplayName?: string; // If user picked a coffee manually (“El Paraiso Pink Bourbon”)
   shopName?: string;          // Optional, for future crawling / metadata extraction
+  coffeeType?: CoffeeType;
+  tasteFeedback?: TasteFeedback;
 
   // Current brew parameters (the ones user changes as they iterate)
-  doseGrams: number;
-  yieldGrams: number;
-  brewTimeSeconds: number;
+  doseGrams?: number;
+  yieldGrams?: number;
+  brewTimeSeconds?: number;
   temperatureCelsius?: number;
 
   grinderModel?: string;

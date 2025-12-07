@@ -1,16 +1,21 @@
+import { StringRes } from "@/src/i18n/strings";
 import { queryClient } from "@/src/shared/lib/queryClient";
+import Button from "@/src/shared/ui/components/buttons/Button";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { DiagnoseAnswers } from "../../../domain/models/DiagnoseAnswers";
+import { useTranslation } from "react-i18next";
+import { BrewDiagnoseSession } from "../../../domain/models/BrewDiagnoseSession";
 import { Recommendation } from "../../../domain/models/Recommendation";
 // import { useTranslation } from "react-i18next"; // if you already use it
 
 type Props = {
-    answers: DiagnoseAnswers;
+    session: BrewDiagnoseSession;
+    onApplyAdvice: () => void;
 };
 
-export const RecommendationStep: React.FC<Props> = ({answers}) => {
+export const RecommendationStep: React.FC<Props> = ({session, onApplyAdvice}) => {
     // const { t } = useTranslation();
+    const { t } = useTranslation();
     const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -20,7 +25,7 @@ export const RecommendationStep: React.FC<Props> = ({answers}) => {
             setIsLoading(true);
             setError(null);
 
-            const brewDiagnosis = await queryClient.diagnoseShot(answers);
+            const brewDiagnosis = await queryClient.diagnoseShot(session);
             // sort by priority just in case
             brewDiagnosis.recommendations.sort((a, b) => a.priority - b.priority);
             setRecommendations(brewDiagnosis.recommendations);
@@ -34,7 +39,7 @@ export const RecommendationStep: React.FC<Props> = ({answers}) => {
     useEffect(() => {
         fetchRecommendations();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(answers)]); // cheap-ish way to retrigger when answers change
+    }, [JSON.stringify(session)]); // cheap-ish way to retrigger when session changes
 
     return (
         <ScrollView
@@ -47,12 +52,12 @@ export const RecommendationStep: React.FC<Props> = ({answers}) => {
                     Your shot
                 </Text>
                 <Text style={{fontSize: 14, opacity: 0.8}}>
-                    {answers.doseGrams}g in → {answers.yield}g out, {answers.extractionDuration}s,{" "}
-                    {answers.coffeeType} roast
+                    {session.doseGrams ?? "?"}g in → {session.yieldGrams ?? "?"}g out, {session.brewTimeSeconds ?? "?"}s,{" "}
+                    {session.coffeeType ?? "unknown"} roast
                 </Text>
-                {answers.tasteDescription ? (
+                {session.tasteFeedback ? (
                     <Text style={{fontSize: 14, marginTop: 4, opacity: 0.9}}>
-                        You said: “{answers.tasteDescription}”
+                        Taste feedback: “{session.tasteFeedback}”
                     </Text>
                 ) : null}
             </View>
@@ -106,6 +111,11 @@ export const RecommendationStep: React.FC<Props> = ({answers}) => {
                                 isPrimary={index === 0}
                             />
                         )}
+                    />
+                    <Button
+                        className="mt-4"
+                        text={t(StringRes.steps.recommendation.applyAdvice)}
+                        onPress={onApplyAdvice}
                     />
                 </View>
             )}

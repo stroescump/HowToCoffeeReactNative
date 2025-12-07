@@ -47,6 +47,9 @@ export default function RootLayout() {
           name="diagnose/index"
         />
         <Stack.Screen
+          name="diagnose/success"
+        />
+        <Stack.Screen
           name="recipeagenda/index"
         />
         <Stack.Screen
