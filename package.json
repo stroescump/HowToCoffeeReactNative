@@ -9,7 +9,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "gen:i18n": "node ./src/scripts/generate-i18n-keys.mjs",
+    "gen:i18n": "node ./src/shared/scripts/generate-i18n-keys.mjs",
     "prepare": "husky"
   },
   "expo": {

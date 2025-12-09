@@ -10,8 +10,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Adjust these if your structure changes
-const LOCALES_DIR = path.resolve(__dirname, "../i18n/locales");
-const OUTPUT_FILE = path.resolve(__dirname, "../i18n/strings.ts");
+const LOCALES_DIR = path.resolve(__dirname, "../../i18n/locales");
+const OUTPUT_FILE = path.resolve(__dirname, "../../i18n/strings.ts");
 const BASE_LANG = "en";           // we use "en" as the source of truth for keys
 
 const jsonPath = path.join(LOCALES_DIR, BASE_LANG, "common.json");
