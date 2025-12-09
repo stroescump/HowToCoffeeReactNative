@@ -18,7 +18,13 @@ export type ButtonProps = {
 
 const VARIANT_STYLES: Record<
   ButtonVariant,
-  { backgroundColor: string; textColor: string; hasShadow: boolean }
+  {
+    backgroundColor: string;
+    textColor: string;
+    hasShadow: boolean;
+    borderWidth?: number;
+    borderColor?: string;
+  }
 > = {
   primary: {
     backgroundColor: "#010101",
@@ -26,9 +32,11 @@ const VARIANT_STYLES: Record<
     hasShadow: true,
   },
   secondary: {
-    backgroundColor: "#010101",
+    backgroundColor: "transparent",
     textColor: "#FFFFFF",
     hasShadow: false,
+    borderWidth: 2,
+    borderColor: "#FFFFFF",
   },
   ghost: {
     backgroundColor: "transparent",
@@ -58,7 +66,11 @@ export default function Button({
       className={`${className}`} 
       style={[
         styles.base,
-        { backgroundColor: theme.backgroundColor },
+        {
+          backgroundColor: theme.backgroundColor,
+          borderWidth: theme.borderWidth,
+          borderColor: theme.borderColor,
+        },
         pressed && styles.pressed,
       ]}
     >

@@ -42,7 +42,7 @@
     "title": "Recipe saved",
     "subtitle": "Added to your Recipe Agenda",
     "description": "We saved your latest dial-in so you can repeat it anytime. You can find it in Recipe Agenda.",
-    "primaryCta": "Open Recipe Agenda",
+    "primaryCta": "Save recipe",
     "secondaryCta": "Back to home"
   }
 }

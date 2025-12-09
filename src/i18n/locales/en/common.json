@@ -11,6 +11,9 @@
   "buttonDefaultError": "Try Again",
   "buttonOkIUnderstand": "Okay, I understand",
   "buttonContinue": "Continue",
+  "popupDetails": {
+    "areYouSure": "Are you sure?"
+  },
   "steps": {
     "coffeeType": {
       "title": "What kind of coffee?",
@@ -55,10 +58,10 @@
     "title": "Your recipes"
   },
   "diagnoseSuccess": {
-    "title": "Recipe saved",
-    "subtitle": "Added to your Recipe Agenda",
-    "description": "We saved your latest dial-in so you can repeat it anytime. You can find it in Recipe Agenda.",
-    "primaryCta": "Open Recipe Agenda",
+    "title": "Your new recipe",
+    "subtitle": "Recipe summary",
+    "description": "Save your latest dial-in so you can repeat it anytime. You can find it in Recipe Agenda.",
+    "primaryCta": "Save recipe",
     "secondaryCta": "Back to home"
   }
 }

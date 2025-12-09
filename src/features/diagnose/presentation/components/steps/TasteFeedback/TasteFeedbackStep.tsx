@@ -16,9 +16,10 @@ import TooWatery from "./substeps/TooWatery";
 type TasteFeedbackStepProps = {
   onSubmit: (tasteFeedback: TasteKind) => void;
   onMarkSuccessful?: () => void | Promise<void>;
+  showEndBrewSession: boolean;
 };
 
-export function TasteFeedbackStep({ onSubmit, onMarkSuccessful }: TasteFeedbackStepProps) {
+export function TasteFeedbackStep({ onSubmit, onMarkSuccessful, showEndBrewSession }: TasteFeedbackStepProps) {
   const { setColor } = useSafeAreaColor();
   const { width } = useWindowDimensions();
   const [index, setIndex] = useState(0);
@@ -136,15 +137,16 @@ export function TasteFeedbackStep({ onSubmit, onMarkSuccessful }: TasteFeedbackS
             />
           ))}
         </View>
-        <Button text={t(R.buttonText)} onPress={handleOnSubmit} />
-        {onMarkSuccessful && (
-          <Button
-            className="mt-3"
-            variant="ghost"
-            text={t(R.happyWithResultButton)}
-            onPress={onMarkSuccessful}
-          />
-        )}
+        <View className="flex-row gap-2 justify-center">
+          <Button className={`${showEndBrewSession ?? "flex-1"}`} text={t(R.buttonText)} onPress={handleOnSubmit} />
+          {showEndBrewSession && onMarkSuccessful && (
+            <Button
+              variant="secondary"
+              text={t(R.happyWithResultButton)}
+              onPress={onMarkSuccessful}
+            />
+          )}
+        </View>
       </View>
     </View>
   );

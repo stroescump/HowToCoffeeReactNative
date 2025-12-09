@@ -57,7 +57,16 @@ export async function http<TResponse = any, TBody = any>(
         return response;
     }
 
-    const json = (await response.json()) as TResponse;
+    const text = await safeReadText(response);
+
+    // If there's no body (e.g., 204 No Content or empty response),
+    // just return undefined so callers using `void` or similar don't blow up.
+    if (text == null || text.trim().length === 0) {
+        return undefined as TResponse;
+    }
+
+    const json = JSON.parse(text) as TResponse;
+    console.log(json);
     return json;
 }
 

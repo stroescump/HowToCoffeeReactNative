@@ -1,12 +1,11 @@
 import { assertNever } from "../../../../shared/config/functions";
-import { BrewDiagnoseSession } from "../../domain/models/BrewDiagnoseSession";
-import { createInitialDiagnoseState, DiagnoseFlowState } from "../../domain/models/DiagnoseFlowState";
+import { BrewDiagnoseSessionDraft, createInitialDiagnoseState, DiagnoseFlowState } from "../../domain/models/DiagnoseFlowState";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import { getNextStep } from "../../domain/usecases/GetNextStep";
 import { getPreviousStep } from "../../domain/usecases/GetPreviousStep";
 
 type DiagnoseEvent =
-  | { type: "UPDATE_SESSION"; patch: Partial<BrewDiagnoseSession> }
+  | { type: "UPDATE_SESSION"; patch: BrewDiagnoseSessionDraft }
   | { type: "NEXT_STEP" }
   | { type: "PREV_STEP" }
   | { type: "SET_STEP"; step: DiagnoseStep }

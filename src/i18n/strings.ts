@@ -14,6 +14,9 @@ export const StringRes = {
   "buttonDefaultError": "buttonDefaultError",
   "buttonOkIUnderstand": "buttonOkIUnderstand",
   "buttonContinue": "buttonContinue",
+  "popupDetails": {
+    "areYouSure": "popupDetails.areYouSure"
+  },
   "steps": {
     "coffeeType": {
       "title": "steps.coffeeType.title",

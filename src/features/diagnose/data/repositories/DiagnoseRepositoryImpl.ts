@@ -19,3 +19,5 @@ export class DiagnoseRepositoryImpl implements DiagnoseRepository {
         return clearDiagnoseDraft();
     }
 }
+
+export const draftRepo = new DiagnoseRepositoryImpl(); // DI super simplu pentru MVP

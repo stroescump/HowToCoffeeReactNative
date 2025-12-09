@@ -1,23 +1,19 @@
 import { StringRes } from "@/src/i18n/strings";
+import { queryClient } from "@/src/shared/lib/queryClient";
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import { PopupProvider } from "@/src/shared/ui/contextproviders/PopupContext";
 import { SafeAreaColorProvider } from "@/src/shared/ui/contextproviders/SafeAreaColorContext";
 import { useRouter } from "expo-router";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert } from "react-native";
-import { DiagnoseRepositoryImpl } from "../../data/repositories/DiagnoseRepositoryImpl";
+import { draftRepo } from "../../data/repositories/DiagnoseRepositoryImpl";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
-import { saveRecipeFromSession } from "../../domain/usecases/SaveRecipeFromDiagnoseFlow";
 import { DiagnoseFlowView } from "../components/DiagnoseFlowView";
 import { useDiagnoseFlow } from "../hooks/useDiagnoseFlow";
-
-const draftRepo = new DiagnoseRepositoryImpl(); // DI super simplu pentru MVP
 
 export function DiagnoseFlowScreen() {
     const router = useRouter();
     const { t } = useTranslation();
-    const [isSaving, setIsSaving] = useState(false);
 
     const {
         step,
@@ -34,6 +30,7 @@ export function DiagnoseFlowScreen() {
     function handleBack() {
         if (step === DiagnoseStep.CoffeeType) {
             // suntem în primul step din flow → ieșim din flow
+            draftRepo.clearDraft();
             router.back();
             return;
         }
@@ -52,21 +49,14 @@ export function DiagnoseFlowScreen() {
     }, [session]);
 
     const handleMarkSuccessful = async () => {
-        if (isSaving) return;
-        setIsSaving(true);
-        try {
-            await saveRecipeFromSession(sessionForSaving);
-            await reset();
-            router.replace("/diagnose/success");
-        } catch (err: any) {
-            Alert.alert(
-                t(StringRes.titleDefaultError),
-                err?.message ?? t(StringRes.buttonDefaultError),
-            );
-        } finally {
-            setIsSaving(false);
+        if (session.id != null) {
+            queryClient.markSessionSuccessful(session.id)
         }
-    };
+
+        router.replace({
+            pathname: "/diagnose/success",
+        });
+    }
 
     return (
         <PopupProvider>

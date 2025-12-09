@@ -250,17 +250,6 @@ export const Spinner: React.FC<SpinnerProps> = ({
 
         const selectedHorizontalOffset = Math.min(desiredOffsetPx, maxAllowedOffsetPx);
 
-        console.log('[Spinner] layout', {
-            baseFontSize,
-            selectedFontSize,
-            unitFontSize,
-            itemHeight,
-            wheelHeight,
-            wheelWidth,
-            scaleWidth,
-            selectedHorizontalOffset,
-        });
-
         return {
             scaleWidth,
             wheelWidth,
@@ -301,18 +290,10 @@ export const Spinner: React.FC<SpinnerProps> = ({
         if (!listRef.current) return;
         if (!itemHeight || !Number.isFinite(itemHeight)) return;
         if (containerHeight == null) {
-            console.log('[Spinner] initialScroll: waiting for containerHeight');
             return;
         }
 
         const offset = itemHeight * initialIndex;
-
-        console.log('[Spinner] initialScroll', {
-            initialIndex,
-            itemHeight,
-            offset,
-            containerHeight,
-        });
 
         listRef.current.scrollToOffset({
             offset,
@@ -388,15 +369,6 @@ export const Spinner: React.FC<SpinnerProps> = ({
 
         gradationMarginTop =
             wheelHeight * (lineFractionInWheelComputed - linePosInSvg);
-
-        console.log(
-            '🎯 localGapCenter =',
-            localGapCenter,
-            'gapFraction =',
-            gapFraction,
-            'gradationMarginTop =',
-            gradationMarginTop
-        );
     }
 
     return (
@@ -408,13 +380,11 @@ export const Spinner: React.FC<SpinnerProps> = ({
                 // 1️⃣ Lock-uim containerHeight la PRIMA valoare non-zero
                 if (height > 0 && containerHeight == null) {
                     setContainerHeight(height);
-                    console.log('📏 Spinner containerHeight (locked):', height, 'screenHeight:', screenHeight);
                 }
 
                 // 2️⃣ Lock-uim și Y-ul
                 if (containerY == null) {
                     setContainerY(y);
-                    console.log('📍 Spinner containerY (locked):', y);
                 }
             }}
         >

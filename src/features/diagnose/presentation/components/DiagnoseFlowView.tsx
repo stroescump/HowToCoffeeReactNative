@@ -1,9 +1,8 @@
 // src/features/diagnose/presentation/components/DiagnoseFlowView.tsx
 import React from "react";
 import { Text } from "react-native";
-import { BrewDiagnoseSession } from "../../domain/models/BrewDiagnoseSession";
+import { BrewDiagnoseSessionDraft } from "../../domain/models/BrewDiagnoseSessionDraft";
 import { CoffeeType } from "../../domain/models/CoffeeType";
-import { BrewDiagnoseSessionDraft } from "../../domain/models/DiagnoseFlowState";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import { CoffeeTypeStep } from "./steps/CoffeeTypeStep";
 import { DoseStep } from "./steps/DoseStep";
@@ -16,10 +15,10 @@ import { YieldStep } from "./steps/YieldStep";
 type DiagnoseFlowViewProps = {
     step: DiagnoseStep
     session: BrewDiagnoseSessionDraft
-    onUpdateSession: (patch: Partial<BrewDiagnoseSession>) => void
+    onUpdateSession: (patch: BrewDiagnoseSessionDraft) => void
     onNext: () => void
     onGoToStep: (step: DiagnoseStep) => void
-    onMarkSuccessful?: () => Promise<void> | void
+    onMarkSuccessful: () => Promise<void> | void
 };
 
 export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
@@ -49,6 +48,11 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
         onUpdateSession({ tasteFeedback })
         onNext()
     }
+
+    const handleOnSessionIdResolved = (sessionId: string) => {
+        if (session.id === sessionId) return;
+        onUpdateSession({ id: sessionId });
+    };
 
     const handleApplyAdvice = () => {
         if (
@@ -108,7 +112,7 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
             <TasteFeedbackStep
                 onSubmit={handleTasteFeedbackSubmit}
                 onMarkSuccessful={onMarkSuccessful}
-            />
+                showEndBrewSession={(session.history?.length ?? 0) > 0} />
         );
 
         case DiagnoseStep.Recommendation:
@@ -116,6 +120,7 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
                 <RecommendationStep
                     session={session}
                     onApplyAdvice={handleApplyAdvice}
+                    onSessionIdResolved={handleOnSessionIdResolved}
                 />
             );
 

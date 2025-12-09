@@ -1,5 +1,6 @@
+import { BrewMethod } from "@/src/shared/domain/models/BrewMethod";
 import { useEffect, useReducer, useState } from "react";
-import type { BrewDiagnoseSession } from "../../domain/models/BrewDiagnoseSession";
+import { BrewDiagnoseSessionDraft } from "../../domain/models/BrewDiagnoseSessionDraft";
 import {
   createInitialDiagnoseState,
   DiagnoseFlowState,
@@ -40,7 +41,7 @@ export function useDiagnoseFlow({ draftRepository }: UseDiagnoseFlowDeps) {
     draftRepository.saveDraft(state).catch(() => {});
   }, [state, hydrated, draftRepository]);
 
-  function updateSession(patch: Partial<BrewDiagnoseSession>) {
+  function updateSession(patch: BrewDiagnoseSessionDraft) {
     dispatch({ type: "UPDATE_SESSION", patch });
   }
 
@@ -74,14 +75,11 @@ export function useDiagnoseFlow({ draftRepository }: UseDiagnoseFlowDeps) {
 }
 
 function ensureSessionDraft(draft: DiagnoseFlowState): DiagnoseFlowState {
-  if (draft.session?.id) {
-    return draft;
-  }
-
   return {
     ...draft,
     session: {
       ...(draft.session ?? {}),
+      brewMethod: draft.session?.brewMethod ?? BrewMethod.ESPRESSO,
     },
   };
 }

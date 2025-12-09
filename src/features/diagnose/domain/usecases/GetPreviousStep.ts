@@ -1,5 +1,5 @@
 import { assertNever } from "../../../../shared/config/functions";
-import type { BrewDiagnoseSession } from "../models/BrewDiagnoseSession";
+import type { BrewDiagnoseSession } from "../models/BrewDiagnoseSessionDraft";
 import { DiagnoseStep, type DiagnoseStep as DiagnoseStepType } from "../models/DiagnoseStep";
 
 export function getPreviousStep(
