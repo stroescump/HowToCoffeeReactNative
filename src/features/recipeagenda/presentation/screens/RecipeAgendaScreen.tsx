@@ -6,6 +6,7 @@ import {
     FlatList,
     StatusBar,
     Text,
+    TouchableOpacity,
     View
 } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
@@ -34,7 +35,7 @@ const RecipeAgendaScreen: React.FC<Props> = ({ recipes, onSelectRecipe, onDelete
                     renderItem={({ item, index }) => (
                         <Swipeable
                             renderRightActions={() => (
-                                <View
+                                <TouchableOpacity
                                     style={{
                                         width: 140,
                                         backgroundColor: "#DC2626",
@@ -43,19 +44,16 @@ const RecipeAgendaScreen: React.FC<Props> = ({ recipes, onSelectRecipe, onDelete
                                         borderTopRightRadius: 24,
                                         borderBottomRightRadius: 24,
                                     }}
+                                    activeOpacity={0.85}
+                                    onPress={() => onDeleteRecipe?.(item.id)}
                                 >
                                     <Trash2 color="white" size={28} />
                                     <Text style={{ color: "white", marginTop: 6, fontWeight: "700" }}>
                                         {deletingIds?.has(item.id) ? "Deleting..." : "Delete"}
                                     </Text>
-                                </View>
+                                </TouchableOpacity>
                             )}
                             rightThreshold={80}
-                            onSwipeableOpen={(direction) => {
-                                if (direction === "right") {
-                                    onDeleteRecipe?.(item.id);
-                                }
-                            }}
                         >
                             <RecipeCard
                                 recipe={item}

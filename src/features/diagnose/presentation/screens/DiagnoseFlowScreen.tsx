@@ -40,8 +40,8 @@ export function DiagnoseFlowScreen() {
     }
 
     const handleMarkSuccessful = async () => {
-        if (session.sessionId != null) {
-            queryClient.markSessionSuccessful(session.sessionId);
+        if (session.id != null) {
+            queryClient.markSessionSuccessful(session.id);
         }
 
         router.replace({
