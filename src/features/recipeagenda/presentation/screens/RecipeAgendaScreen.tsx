@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     View
 } from "react-native";
-import { Swipeable } from "react-native-gesture-handler";
+import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import { BrewRecipe } from "../../domain/models/recipeAgenda";
 import { RecipeCard } from "../components/RecipeCard";
 import { PALETTE, SPACING, styles } from "./RecipeAgendaStyles";
