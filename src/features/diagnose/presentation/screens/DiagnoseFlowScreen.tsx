@@ -4,7 +4,7 @@ import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import { PopupProvider } from "@/src/shared/ui/contextproviders/PopupContext";
 import { SafeAreaColorProvider } from "@/src/shared/ui/contextproviders/SafeAreaColorContext";
 import { useRouter } from "expo-router";
-import React, { useMemo } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { draftRepo } from "../../data/repositories/DiagnoseRepositoryImpl";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
@@ -39,18 +39,9 @@ export function DiagnoseFlowScreen() {
         prevStep();
     }
 
-    const sessionForSaving = useMemo(() => {
-        return {
-            ...session,
-            doseGrams: session.doseGrams,
-            brewTimeSeconds: session.brewTimeSeconds,
-            yieldGrams: session.yieldGrams,
-        };
-    }, [session]);
-
     const handleMarkSuccessful = async () => {
-        if (session.id != null) {
-            queryClient.markSessionSuccessful(session.id)
+        if (session.sessionId != null) {
+            queryClient.markSessionSuccessful(session.sessionId);
         }
 
         router.replace({

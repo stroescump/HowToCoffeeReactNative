@@ -23,12 +23,6 @@ export function isSessionCompleteOrThrow(
     grindSetting,
   } = draft;
 
-  if (!id) {
-    throw new BrewDiagnoseSessionError("Missing session id");
-  }
-  if (!coffeeDisplayName) {
-    throw new BrewDiagnoseSessionError("Missing coffeeDisplayName");
-  }
   if (!coffeeType) {
     throw new BrewDiagnoseSessionError("Missing coffeeType");
   }
@@ -47,12 +41,8 @@ export function isSessionCompleteOrThrow(
   if (brewTimeSeconds == null) {
     throw new BrewDiagnoseSessionError("Missing brewTimeSeconds");
   }
-  if (!grindSetting) {
-    throw new BrewDiagnoseSessionError("Missing grindSetting");
-  }
 
   const result: BrewDiagnoseSession = {
-    id,
     coffeeDisplayName,
     coffeeType,
     tasteFeedback,
@@ -63,6 +53,7 @@ export function isSessionCompleteOrThrow(
     grindSetting,
     markedAsSuccessful: draft.markedAsSuccessful ?? false,
     history: draft.history ?? [],
+    id: id
   };
 
   if (draft.coffeeProductId != null) {
@@ -86,4 +77,13 @@ export function isSessionCompleteOrThrow(
   }
 
   return result;
+}
+
+export function hasValidIdOrThrow(
+  session: BrewDiagnoseSession
+): string {
+  if (!session.id) {
+    throw new BrewDiagnoseSessionError("Missing session id");
+  }
+  return session.id;
 }

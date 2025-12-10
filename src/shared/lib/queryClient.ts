@@ -8,7 +8,7 @@ import { http } from './httpClient';
 
 export const queryClient = {
     async diagnoseShot(session: BrewDiagnoseSession): Promise<{ sessionId: string, brewDiagnosis: BrewDiagnosis }> {
-        let sessionId = session.id; // assuming this is the backend session id
+        let sessionId = session.sessionId; // backend-provided session id
         console.log("Initial sessionId:" + sessionId)
         if (!sessionId) {
             const sessionSummary = await http<BrewDiagnoseSessionSummary>("/brew-sessions", {

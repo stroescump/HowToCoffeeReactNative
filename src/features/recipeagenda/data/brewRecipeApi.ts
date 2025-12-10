@@ -7,3 +7,7 @@ export async function fetchBrewRecipes(): Promise<BrewRecipe[]> {
     method: "GET"
   });
 }
+
+export async function deleteBrewRecipe(recipeId: string): Promise<void> {
+  await http(`/recipes/${recipeId}`, { method: "DELETE" });
+}

@@ -50,8 +50,8 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
     }
 
     const handleOnSessionIdResolved = (sessionId: string) => {
-        if (session.id === sessionId) return;
-        onUpdateSession({ id: sessionId });
+        if (session.sessionId === sessionId) return;
+        onUpdateSession({ sessionId: sessionId });
     };
 
     const handleApplyAdvice = () => {

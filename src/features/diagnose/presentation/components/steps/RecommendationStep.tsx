@@ -41,7 +41,7 @@ export const RecommendationStep: React.FC<Props> = ({ session, onApplyAdvice, on
     useEffect(() => {
         fetchRecommendations();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(session)]); // cheap-ish way to retrigger when session changes
+    }, []);
 
     return (
         <ScrollView

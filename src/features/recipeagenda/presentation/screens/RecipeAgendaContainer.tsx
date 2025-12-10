@@ -1,13 +1,38 @@
-import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
+import { deleteBrewRecipe } from "../../data/brewRecipeApi";
+import { BrewRecipe } from "../../domain/models/recipeAgenda";
 import { useBrewRecipes } from "../hooks/useBrewRecipes";
 import RecipeAgendaScreen from "./RecipeAgendaScreen";
 import { PALETTE } from "./RecipeAgendaStyles";
 
 const RecipeAgendaContainer: React.FC = () => {
-    const router = useRouter();
-    const { data, isLoading, error, refetch } = useBrewRecipes();
+    const { data, isLoading, error } = useBrewRecipes();
+    const [recipes, setRecipes] = useState<BrewRecipe[]>([]);
+    const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
+
+    useEffect(() => {
+        if (data) {
+            setRecipes(data);
+        }
+    }, [data]);
+
+    const handleDelete = async (recipeId: string) => {
+        if (deletingIds.has(recipeId)) return;
+        setDeletingIds((prev) => new Set(prev).add(recipeId));
+        try {
+            await deleteBrewRecipe(recipeId);
+            setRecipes((prev) => prev.filter((r) => r.id !== recipeId));
+        } catch (err) {
+            // optional: surface error to user; noop for now
+        } finally {
+            setDeletingIds((prev) => {
+                const next = new Set(prev);
+                next.delete(recipeId);
+                return next;
+            });
+        }
+    };
 
     if (isLoading) {
         return (
@@ -44,11 +69,11 @@ const RecipeAgendaContainer: React.FC = () => {
         );
     }
 
-    const recipes = data ?? [];
-
     return (
         <RecipeAgendaScreen
             recipes={recipes}
+            deletingIds={deletingIds}
+            onDeleteRecipe={handleDelete}
             onSelectRecipe={(recipe) => {
                 // router.push({
                 //   pathname: "/recipeAgenda/detail",

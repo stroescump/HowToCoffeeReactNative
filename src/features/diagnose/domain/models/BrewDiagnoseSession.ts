@@ -3,7 +3,7 @@ import { CoffeeType } from "./CoffeeType";
 import { TasteFeedback } from "./TasteFeedback";
 
 export type BrewDiagnoseSession = {
-  id: string;
+  id?: string;
 
   coffeeProductId?: string;   // If linked to a known product (marketplace or saved)
   coffeeDisplayName: string; // If user picked a coffee manually (“El Paraiso Pink Bourbon”)
