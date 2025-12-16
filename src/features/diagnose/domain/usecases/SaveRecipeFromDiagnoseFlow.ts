@@ -1,6 +1,6 @@
 import { http } from "@/src/shared/lib/httpClient";
 import { BrewDiagnoseSessionDraft } from "../models/BrewDiagnoseSessionDraft";
-import { isSessionCompleteOrThrow } from "../models/BrewDiagnoseSessionMapper";
+import { hasValidIdOrThrow, isSessionCompleteOrThrow } from "../models/BrewDiagnoseSessionMapper";
 import { CreateBrewRecipeRequest } from "../models/CreateBrewRecipeRequest";
 
 export async function saveRecipeFromSession(
@@ -9,6 +9,7 @@ export async function saveRecipeFromSession(
   const sessionComplete = isSessionCompleteOrThrow(session);
 
   const payload: CreateBrewRecipeRequest = {
+    sourceSessionId: hasValidIdOrThrow(sessionComplete),
     coffeeDisplayName: sessionComplete.coffeeDisplayName,
     brewMethod: sessionComplete.brewMethod,
     doseGrams: sessionComplete.doseGrams,

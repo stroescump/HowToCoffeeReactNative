@@ -8,8 +8,9 @@ import { http } from './httpClient';
 
 export const queryClient = {
     async diagnoseShot(session: BrewDiagnoseSession): Promise<{ sessionId: string, brewDiagnosis: BrewDiagnosis }> {
-        let sessionId = session.sessionId; // backend-provided session id
-        console.log("Initial sessionId:" + sessionId)
+        // Prefer an existing session id to avoid creating duplicate backend sessions.
+        let sessionId = session.id;
+
         if (!sessionId) {
             const sessionSummary = await http<BrewDiagnoseSessionSummary>("/brew-sessions", {
                 method: "POST",
@@ -19,18 +20,22 @@ export const queryClient = {
                     shopName: session.shopName,
                 },
             });
-            sessionId = sessionSummary.id;
-            // caller MUST persist this id back into its BrewDiagnoseSession state
+
+            sessionId = sessionSummary.id ?? sessionSummary.sessionId;
+            if (!sessionId) {
+                throw new Error("Backend did not return a session id when creating the brew session");
+            }
         }
-        console.log("Updated sessionId:" + sessionId)
+
         const brewDiagnosis = await http<BrewDiagnosis>(`/brew-sessions/${sessionId}/diagnose-shot`, {
             method: "POST",
-            body: session
-        })
+            body: { ...session, id: sessionId },
+        });
+
         return {
             sessionId,
-            brewDiagnosis
-        }
+            brewDiagnosis,
+        };
     },
 
     markSessionSuccessful(sessionId: string): Promise<void> {

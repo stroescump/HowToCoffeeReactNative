@@ -46,7 +46,8 @@ export type BrewDiagnoseSessionDraft = {
 };
 
 export type BrewDiagnoseSessionSummary = {
-  id: string;
+  id?: string;
+  sessionId?: string;
   coffeeProductId?: string;
   coffeeDisplayName?: string;
   shotCount: number;

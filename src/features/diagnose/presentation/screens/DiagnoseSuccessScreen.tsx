@@ -13,7 +13,7 @@ export function DiagnoseSuccessScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const [isSaving, setIsSaving] = useState(false);
-  const { session, reset } = useDiagnoseFlow({ draftRepository: draftRepo });
+  const { session, clearAndReset } = useDiagnoseFlow({ draftRepository: draftRepo });
   const [coffeeName, setCoffeeName] = useState(session.coffeeDisplayName ?? "");
   const [grindSetting, setGrindSetting] = useState(session.grindSetting ?? "");
   const [hasSaved, setHasSaved] = useState(false);
@@ -38,7 +38,7 @@ export function DiagnoseSuccessScreen() {
         grindSetting,
       });
       setHasSaved(true);
-      await reset();
+      await clearAndReset();
       // After saving, go to recipe agenda
       router.replace("/recipeagenda");
     } catch (err: any) {
@@ -154,11 +154,11 @@ export function DiagnoseSuccessScreen() {
                   text="I understand"
                   onPress={() => {
                     setShowLeaveWarning(false);
-                    if (pendingNavigation === "home") {
-                      router.replace("/");
-                    } else if (pendingNavigation === "agenda") {
-                      router.replace("/recipeagenda");
-                    }
+                    const destination = pendingNavigation ?? "home";
+                    setPendingNavigation(null);
+                    void clearAndReset().finally(() => {
+                      router.replace(destination === "home" ? "/" : "/recipeagenda");
+                    });
                   }}
                 />
                 <Button

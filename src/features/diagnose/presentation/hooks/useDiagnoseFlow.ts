@@ -1,5 +1,5 @@
 import { BrewMethod } from "@/src/shared/domain/models/BrewMethod";
-import { useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BrewDiagnoseSessionDraft } from "../../domain/models/BrewDiagnoseSessionDraft";
 import {
   createInitialDiagnoseState,
@@ -7,70 +7,98 @@ import {
 } from "../../domain/models/DiagnoseFlowState";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import type { DiagnoseRepository } from "../../domain/repositories/DiagnoseRepository";
-import { diagnoseReducer } from "../state/diagnoseBrewReducer";
+import { DiagnoseEvent, diagnoseReducer } from "../state/diagnoseBrewReducer";
 
 interface UseDiagnoseFlowDeps {
   draftRepository: DiagnoseRepository;
 }
 
 export function useDiagnoseFlow({ draftRepository }: UseDiagnoseFlowDeps) {
-  const [state, dispatch] = useReducer(
-    diagnoseReducer,
-    undefined,
-    createInitialDiagnoseState,
-  );
+  const [state, setState] = useState<DiagnoseFlowState>(createInitialDiagnoseState());
+  const stateRef = useRef(state);
+  const hydratedRef = useRef(false);
   const { step, session } = state;
 
-  const [hydrated, setHydrated] = useState(false);
+  const persistByEvent = useCallback(
+    async (event: DiagnoseEvent, nextState: DiagnoseFlowState) => {
+      switch (event.type) {
+        case "HYDRATE":
+          return;
+        case "RESET":
+          return draftRepository.clearDraft();
+        default:
+          return draftRepository.saveDraft(nextState);
+      }
+    },
+    [draftRepository],
+  );
+
+  const dispatchEvent = useCallback(
+    async (event: DiagnoseEvent) => {
+      const nextState = diagnoseReducer(stateRef.current, event);
+      stateRef.current = nextState;
+      setState(nextState);
+      await persistByEvent(event, nextState);
+      return nextState;
+    },
+    [persistByEvent],
+  );
 
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       const draft = await draftRepository.loadDraft();
+      if (cancelled) return;
       if (draft) {
-        const normalized = ensureSessionDraft(draft);
-        dispatch({ type: "HYDRATE", state: normalized });
+        await dispatchEvent({ type: "HYDRATE", state: ensureSessionDraft(draft) });
       } else {
-        dispatch({ type: "RESET" });
+        await dispatchEvent({ type: "RESET" });
       }
-      setHydrated(true);
+      hydratedRef.current = true;
     })();
-  }, [draftRepository]);
+    return () => {
+      cancelled = true;
+    };
+  }, [draftRepository, dispatchEvent]);
 
-  useEffect(() => {
-    if (!hydrated) return;
-    draftRepository.saveDraft(state).catch(() => {});
-  }, [state, hydrated, draftRepository]);
+  const updateSession = useCallback(
+    (patch: BrewDiagnoseSessionDraft) => dispatchEvent({ type: "UPDATE_SESSION", patch }),
+    [dispatchEvent],
+  );
 
-  function updateSession(patch: BrewDiagnoseSessionDraft) {
-    dispatch({ type: "UPDATE_SESSION", patch });
-  }
+  const nextStep = useCallback(
+    () => dispatchEvent({ type: "NEXT_STEP" }),
+    [dispatchEvent],
+  );
 
-  function nextStep() {
-    dispatch({ type: "NEXT_STEP" });
-  }
+  const prevStep = useCallback(
+    () => dispatchEvent({ type: "PREV_STEP" }),
+    [dispatchEvent],
+  );
 
-  function prevStep() {
-    dispatch({ type: "PREV_STEP" });
-  }
+  const goToStep = useCallback(
+    (step: DiagnoseStep) => dispatchEvent({ type: "SET_STEP", step }),
+    [dispatchEvent],
+  );
 
-  function goToStep(step: DiagnoseStep) {
-    dispatch({ type: "SET_STEP", step });
-  }
-
-  async function reset() {
-    dispatch({ type: "RESET" });
-    await draftRepository.clearDraft();
-  }
+  const clearAndReset = useCallback(
+    async () => {
+      await dispatchEvent({ type: "RESET" });
+    },
+    [dispatchEvent],
+  );
 
   return {
     step,
     session,
     state,
+    hydrated: hydratedRef.current,
     updateSession,
     nextStep,
     prevStep,
     goToStep,
-    reset,
+    clearAndReset,
+    dispatchEvent,
   };
 }
 

@@ -38,7 +38,7 @@ const RecipeAgendaScreen: React.FC<Props> = ({ recipes, onSelectRecipe, onDelete
                                 <TouchableOpacity
                                     style={{
                                         width: 140,
-                                        backgroundColor: "#DC2626",
+                                         backgroundColor: "#DC2626",
                                         justifyContent: "center",
                                         alignItems: "center",
                                         borderTopRightRadius: 24,

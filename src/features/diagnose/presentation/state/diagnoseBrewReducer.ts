@@ -4,14 +4,13 @@ import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import { getNextStep } from "../../domain/usecases/GetNextStep";
 import { getPreviousStep } from "../../domain/usecases/GetPreviousStep";
 
-type DiagnoseEvent =
+export type DiagnoseEvent =
   | { type: "UPDATE_SESSION"; patch: BrewDiagnoseSessionDraft }
   | { type: "NEXT_STEP" }
   | { type: "PREV_STEP" }
   | { type: "SET_STEP"; step: DiagnoseStep }
   | { type: "HYDRATE"; state: DiagnoseFlowState }
-  | { type: "RESET" }
-  ;
+  | { type: "RESET" };
 
 export function diagnoseReducer(
   state: DiagnoseFlowState,

@@ -22,7 +22,7 @@ export function DiagnoseFlowScreen() {
         nextStep,
         prevStep,
         goToStep,
-        reset,
+        clearAndReset,
     } = useDiagnoseFlow({ draftRepository: draftRepo });
 
     const diagnoseStep = DiagnoseStepConfigurator[step];
@@ -30,8 +30,9 @@ export function DiagnoseFlowScreen() {
     function handleBack() {
         if (step === DiagnoseStep.CoffeeType) {
             // suntem în primul step din flow → ieșim din flow
-            draftRepo.clearDraft();
-            router.back();
+            void clearAndReset().finally(() => {
+                router.back();
+            });
             return;
         }
 
@@ -40,14 +41,22 @@ export function DiagnoseFlowScreen() {
     }
 
     const handleMarkSuccessful = async () => {
-        if (session.id != null) {
-            queryClient.markSessionSuccessful(session.id);
+        try {
+            if (session.id != null) {
+                // Ensure the mutation finishes before leaving the screen;
+                // navigation can unmount components and cancel in-flight requests.
+                await queryClient.markSessionSuccessful(session.id);
+            } else {
+                console.warn("[DiagnoseFlow] Tried to mark successful but session.id is null");
+            }
+        } catch (e) {
+            console.error("[DiagnoseFlow] Failed to mark session successful", e);
         }
 
         router.replace({
             pathname: "/diagnose/success",
         });
-    }
+    };
 
     return (
         <PopupProvider>

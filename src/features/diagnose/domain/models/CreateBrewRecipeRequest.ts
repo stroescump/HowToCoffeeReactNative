@@ -1,6 +1,7 @@
 import { BrewMethod } from "@/src/shared/domain/models/BrewMethod";
 
 export type CreateBrewRecipeRequest = {
+    sourceSessionId: string;
     recipeName?: string;
     coffeeProductId?: string;     // Known coffee id (marketplace or user-added)
     coffeeDisplayName: string;   // Free text if no product id available
