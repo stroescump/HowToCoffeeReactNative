@@ -137,10 +137,15 @@ export function TasteFeedbackStep({ onSubmit, onMarkSuccessful, showEndBrewSessi
             />
           ))}
         </View>
-        <View className="flex-row gap-2 justify-center">
-          <Button className={`${showEndBrewSession ?? "flex-1"}`} text={t(R.buttonText)} onPress={handleOnSubmit} />
+        <View className="flex-row gap-2 w-full">
+          <Button
+            className="flex-1"
+            text={t(R.buttonText)}
+            onPress={handleOnSubmit}
+          />
           {showEndBrewSession && onMarkSuccessful && (
             <Button
+              className="flex-1"
               variant="secondary"
               text={t(R.happyWithResultButton)}
               onPress={onMarkSuccessful}

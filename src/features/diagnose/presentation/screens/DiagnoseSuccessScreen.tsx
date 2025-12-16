@@ -1,62 +1,25 @@
 import { StringRes } from "@/src/i18n/strings";
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import Button from "@/src/shared/ui/components/buttons/Button";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Modal, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Modal, Text, TextInput, View } from "react-native";
 import { draftRepo } from "../../data/repositories/DiagnoseRepositoryImpl";
-import { saveRecipeFromSession } from "../../domain/usecases/SaveRecipeFromDiagnoseFlow";
-import { useDiagnoseFlow } from "../hooks/useDiagnoseFlow";
+import { useDiagnoseSuccess } from "../hooks/useDiagnoseSuccess";
+import { GrindSettingSpinner } from "./components/GrindSettingSpinner";
 
 export function DiagnoseSuccessScreen() {
-  const router = useRouter();
   const { t } = useTranslation();
-  const [isSaving, setIsSaving] = useState(false);
-  const { session, clearAndReset } = useDiagnoseFlow({ draftRepository: draftRepo });
-  const [coffeeName, setCoffeeName] = useState(session.coffeeDisplayName ?? "");
-  const [grindSetting, setGrindSetting] = useState(session.grindSetting ?? "");
-  const [hasSaved, setHasSaved] = useState(false);
-  const [showLeaveWarning, setShowLeaveWarning] = useState(false);
-  const [pendingNavigation, setPendingNavigation] = useState<"home" | "agenda" | null>(null);
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSave = async () => {
-    if (isSaving) return;
-    if (!coffeeName.trim()) {
-      setErrorMessage("Please enter a coffee name before saving.");
-      setShowErrorModal(true);
-      return;
-    }
+  const { uiState, actions } = useDiagnoseSuccess({ draftRepository: draftRepo });
+  const goHome = () => actions.requestLeave("home");
 
-    setIsSaving(true);
-    try {
-      await saveRecipeFromSession({
-        ...session,
-        coffeeDisplayName: coffeeName.trim(),
-        grindSetting,
-      });
-      setHasSaved(true);
-      await clearAndReset();
-      // After saving, go to recipe agenda
-      router.replace("/recipeagenda");
-    } catch (err: any) {
-      setErrorMessage(err?.message ?? t(StringRes.buttonDefaultError));
-      setShowErrorModal(true);
-    } finally {
-      setIsSaving(false);
-    }
-  };
+  useEffect(() => {
+    const { coffeeDisplayName, grindSetting } = uiState.session
 
-  const goHome = () => {
-    if (!hasSaved) {
-      setPendingNavigation("home");
-      setShowLeaveWarning(true);
-      return;
-    }
-    router.replace("/");
-  };
+    if (coffeeDisplayName) actions.setCoffeeName(coffeeDisplayName)
+    if (grindSetting) actions.setGrindSetting(grindSetting)
+  }, [uiState.session.id])
 
   return (
     <BaseScreen
@@ -89,8 +52,8 @@ export function DiagnoseSuccessScreen() {
                 Coffee name
               </Text>
               <TextInput
-                value={coffeeName}
-                onChangeText={setCoffeeName}
+                value={uiState.coffeeName}
+                onChangeText={actions.setCoffeeName}
                 placeholder="Enter coffee name"
                 className="border border-black/20 rounded-xl px-3 py-2 text-base text-black"
                 placeholderTextColor="rgba(0,0,0,0.4)"
@@ -100,24 +63,24 @@ export function DiagnoseSuccessScreen() {
                 Recipe parameters
               </Text>
               <Text className="text-lg text-black/70">
-                Dose: {session.doseGrams ?? "-"} g
+                Dose: {uiState.session.doseGrams ?? "-"} g
               </Text>
               <Text className="text-lg text-black/70">
-                Yield: {session.yieldGrams ?? "-"} g
+                Yield: {uiState.session.yieldGrams ?? "-"} g
               </Text>
               <Text className="text-lg text-black/70">
-                Time: {session.brewTimeSeconds ?? "-"} s
+                Time: {uiState.session.brewTimeSeconds ?? "-"} s
               </Text>
               <Text className="text-lg font-[InterBold] text-black/70 mb-1">
                 Grind setting
               </Text>
-              <GrindSettingSpinner value={grindSetting} onChange={setGrindSetting} />
+              <GrindSettingSpinner value={uiState.grindSetting} onChange={actions.setGrindSetting} />
             </View>
           </View>
         </View>
 
         <View className="gap-3">
-          <Button text={t(StringRes.diagnoseSuccess.primaryCta)} onPress={handleSave} />
+          <Button text={t(StringRes.diagnoseSuccess.primaryCta)} onPress={actions.handleSave} />
           <Button
             variant="ghost"
             text={t(StringRes.diagnoseSuccess.secondaryCta)}
@@ -125,12 +88,12 @@ export function DiagnoseSuccessScreen() {
           />
         </View>
       </View>
-      {showLeaveWarning && (
+      {uiState.showLeaveWarning && (
         <Modal
           transparent
           animationType="fade"
-          visible={showLeaveWarning}
-          onRequestClose={() => setShowLeaveWarning(false)}
+          visible={uiState.showLeaveWarning}
+          onRequestClose={actions.dismissLeaveWarning}
         >
           <View className="flex-1 justify-center items-center bg-black/50">
             <View
@@ -152,31 +115,24 @@ export function DiagnoseSuccessScreen() {
               <View className="gap-3">
                 <Button
                   text="I understand"
-                  onPress={() => {
-                    setShowLeaveWarning(false);
-                    const destination = pendingNavigation ?? "home";
-                    setPendingNavigation(null);
-                    void clearAndReset().finally(() => {
-                      router.replace(destination === "home" ? "/" : "/recipeagenda");
-                    });
-                  }}
+                  onPress={actions.confirmLeave}
                 />
                 <Button
                   variant="ghost"
                   text="Close Popup"
-                  onPress={() => setShowLeaveWarning(false)}
+                  onPress={actions.dismissLeaveWarning}
                 />
               </View>
             </View>
           </View>
         </Modal>
       )}
-      {showErrorModal && (
+      {uiState.errorModal.visible && (
         <Modal
           transparent
           animationType="fade"
-          visible={showErrorModal}
-          onRequestClose={() => setShowErrorModal(false)}
+          visible={uiState.errorModal.visible}
+          onRequestClose={actions.dismissError}
         >
           <View className="flex-1 justify-center items-center bg-black/50">
             <View
@@ -193,11 +149,11 @@ export function DiagnoseSuccessScreen() {
                 {t(StringRes.titleDefaultError)}
               </Text>
               <Text className="text-base leading-6 text-black/80 mb-4">
-                {errorMessage}
+                {uiState.errorModal.message}
               </Text>
               <Button
                 text="Close"
-                onPress={() => setShowErrorModal(false)}
+                onPress={actions.dismissError}
               />
             </View>
           </View>
@@ -206,73 +162,3 @@ export function DiagnoseSuccessScreen() {
     </BaseScreen>
   );
 }
-
-type GrindSettingSpinnerProps = {
-  value?: string;
-  onChange: (value: string) => void;
-  min?: number;
-  max?: number;
-};
-
-const GrindSettingSpinner: React.FC<GrindSettingSpinnerProps> = ({
-  value,
-  onChange,
-  min = 0,
-  max = 20,
-}) => {
-  // Generate values from min → max in 0.1 increments
-  const options = [];
-  for (let v = min; v <= max; v += 0.1) {
-    options.push(v.toFixed(1));
-  }
-
-  return (
-    <View style={{ position: "relative", marginTop: 4 }}>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-          paddingVertical: 12,
-          alignItems: "flex-end",
-        }}
-      >
-        {options.map((option) => {
-          const isSelected = option === value;
-          return (
-            <Pressable
-              key={option}
-              onPress={() => onChange(option)}
-              style={{
-                alignItems: "center",
-                marginRight: 20,
-              }}
-            >
-              {/* Number above line */}
-              <Text
-                style={{
-                  fontSize: isSelected ? 16 : 14,
-                  fontWeight: isSelected ? "700" : "400",
-                  color: isSelected ? "#010101" : "rgba(0,0,0,0.6)",
-                  marginBottom: 6,
-                }}
-              >
-                {option}
-              </Text>
-
-              {/* Line */}
-              <View
-                style={{
-                  width: 2,
-                  height: isSelected ? 28 : 16,
-                  backgroundColor: isSelected ? "#010101" : "rgba(0,0,0,0.3)",
-                  borderRadius: 1,
-                }}
-              />
-            </Pressable>
-          );
-        })}
-      </ScrollView>
-      </View>
-  );
-};
