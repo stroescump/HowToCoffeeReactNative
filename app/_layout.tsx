@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useOnboardingGate } from "@/src/features/onboarding/hooks/useOnboardingGate";
 import "../global.css";
 import "../src/i18n/i18n";
 
@@ -20,14 +21,15 @@ export default function RootLayout() {
     InterRegular: require("../assets/fonts/InterDisplay-Regular.ttf"),
     InterSemiBold: require("../assets/fonts/InterDisplay-SemiBold.ttf"),
   });
+  const { ready: onboardingReady } = useOnboardingGate();
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded && onboardingReady) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, onboardingReady]);
 
-  if (!loaded) return null;
+  if (!loaded || !onboardingReady) return null;
 
   return (
     <SafeAreaProvider>
@@ -44,6 +46,9 @@ export default function RootLayout() {
         /* restul screen-urilor pornite din HOME_ITEMS */
           <Stack.Screen
             name="findyourtaste/index"
+          />
+          <Stack.Screen
+            name="onboardingTaste/index"
           />
           <Stack.Screen
             name="diagnose/index"

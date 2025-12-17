@@ -1,7 +1,9 @@
+import { StringRes } from "@/src/i18n/strings";
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import { useRouter } from "expo-router";
 import { Trash2 } from "lucide-react-native";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
     FlatList,
     StatusBar,
@@ -23,8 +25,9 @@ type Props = {
 
 const RecipeAgendaScreen: React.FC<Props> = ({ recipes, onSelectRecipe, onDeleteRecipe, deletingIds }) => {
     const router = useRouter();
+    const { t } = useTranslation();
     return (
-        <BaseScreen safeAreaBgColor={PALETTE.background} onBack={() => { router.back() }}>
+        <BaseScreen title={t(StringRes.recipeAgenda.title)} safeAreaBgColor={PALETTE.background} onBack={() => { router.back() }}>
             <StatusBar barStyle="light-content" />
             <View style={styles.container}>
                 <FlatList
@@ -38,7 +41,7 @@ const RecipeAgendaScreen: React.FC<Props> = ({ recipes, onSelectRecipe, onDelete
                                 <TouchableOpacity
                                     style={{
                                         width: 140,
-                                         backgroundColor: "#DC2626",
+                                        backgroundColor: "#DC2626",
                                         justifyContent: "center",
                                         alignItems: "center",
                                         borderTopRightRadius: 24,

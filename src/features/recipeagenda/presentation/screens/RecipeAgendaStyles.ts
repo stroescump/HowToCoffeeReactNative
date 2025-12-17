@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 export const SPACING = 8;
 
 export const PALETTE = {
-    background: "#050506",
+    background: "#F1E9DD",
     cream: "#F5E7D5",
     orange: "#FF7A00",
     yellow: "#FFD400",

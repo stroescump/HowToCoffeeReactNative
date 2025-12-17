@@ -14,6 +14,7 @@ export type ButtonProps = {
   variant?: ButtonVariant;
   /** Accept Tailwind/nativewind className for layout or extra styling */
   className?: string;
+  disabled?: boolean;
 };
 
 const VARIANT_STYLES: Record<
@@ -50,12 +51,14 @@ export default function Button({
   onPress,
   variant = "primary",
   className = "",
+  disabled = false,
 }: ButtonProps) {
   const theme = VARIANT_STYLES[variant];
   const [pressed, setPressed] = useState(false);
 
   return (
     <Pressable
+      disabled={disabled}
       onPressIn={() => setPressed(true)}
       onPressOut={() => setPressed(false)}
       onPress={onPress}
@@ -71,7 +74,8 @@ export default function Button({
           borderWidth: theme.borderWidth,
           borderColor: theme.borderColor,
         },
-        pressed && styles.pressed,
+        pressed && !disabled && styles.pressed,
+        disabled && styles.disabled,
       ]}
     >
       <Text style={[styles.label, { color: theme.textColor }]}>
@@ -98,5 +102,8 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.9,
     transform: [{ scale: 0.99 }],
+  },
+  disabled: {
+    opacity: 0.6,
   },
 });

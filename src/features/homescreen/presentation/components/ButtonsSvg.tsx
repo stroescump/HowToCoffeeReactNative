@@ -1,12 +1,14 @@
+import { HomeScreenConfig } from "@/app/HomeScreenConfig";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import Svg, { G, Path, Text as SvgText, TSpan } from "react-native-svg";
 
 const FIGMA_HEIGHT = 746;
 const FIGMA_WIDTH = 428;
 
-  //TODO: Decide on a strategy for mitigating different padding/margings when device size varies.
+//TODO: Decide on a strategy for mitigating different padding/margings when device size varies.
 
 type ButtonLabelConfig = {
   label: string;
@@ -30,7 +32,8 @@ type BuiltLabel = {
 function buildLabel(
   config: ButtonLabelConfig,
 ): BuiltLabel {
-  const baseText = config?.label;
+  const { t } = useTranslation();
+  const baseText = t(config?.label);
   const text = config?.uppercase ? baseText.toUpperCase() : baseText;
 
   const lines = text.split("\n");
@@ -171,14 +174,14 @@ export function ButtonsSvg({ availableHeight, labels }: ButtonsSvgProps) {
                 {/* BTN: Coffee marketplace */}
                 <G
                   id="btn-coffee-market"
-                  onPress={() => router.push("/marketplace")}
+                  onPress={() => HomeScreenConfig.isClickable ? router.push("/marketplace") : null}
                   accessible
                   accessibilityRole="button"
                   accessibilityLabel={marketplaceLabel.lines.join(" ")}
                 >
                   <Path
                     d="M218 99C218 50.6751 257.175 11.5 305.5 11.5V11.5C353.825 11.5 393 50.6751 393 99V99C393 147.325 353.825 186.5 305.5 186.5V186.5C257.175 186.5 218 147.325 218 99V99Z"
-                    fill="#FF5210"
+                    fill={HomeScreenConfig.buyCoffeeColor}
                   />
                   {renderLabel(
                     marketplaceLabel,

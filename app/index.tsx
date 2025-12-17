@@ -1,12 +1,14 @@
 // app/index.tsx
 import { ButtonsSvg } from "@/src/features/homescreen/presentation/components/ButtonsSvg";
-import { StringRes } from "@/src/i18n/strings";
 import { API_BASE_URL_DEFAULTS, getApiBaseUrl, setApiBaseUrl } from "@/src/shared/config/config";
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import Button from "@/src/shared/ui/components/buttons/Button";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { HomeScreenConfig } from "./HomeScreenConfig";
+
+// TODO: Add "Edit taste preferences" entry when a Settings screen is available.
 
 export default function HomeScreen() {
   const [availableHeight, setAvailableHeight] = useState(0);
@@ -14,7 +16,6 @@ export default function HomeScreen() {
   const [selectedUrl, setSelectedUrl] = useState(getApiBaseUrl());
   const [customUrl, setCustomUrl] = useState("");
   const { t } = useTranslation();
-  const R = StringRes.homescreen;
 
   const handleSaveBaseUrl = () => {
     const trimmedCustom = customUrl.trim();
@@ -50,38 +51,7 @@ export default function HomeScreen() {
         {availableHeight > 0 && (
           <ButtonsSvg
             availableHeight={availableHeight}
-            labels={{
-              findYourTaste: {
-                label: t(R.findYourTaste),
-                fontSize: 32,
-                fontFamily: "InterBold",
-                fill: "#010101",
-              },
-              marketplace: {
-                label: t(R.marketplace),
-                fontSize: 32,
-                fontFamily: "InterBold",
-                fill: "#010101",
-              },
-              diagnoseBrew: {
-                label: t(R.diagnoseBrew),
-                fontSize: 32,
-                fontFamily: "InterBold",
-                fill: "#FFFFFF",
-              },
-              recipeAgenda: {
-                label: t(R.recipeAgenda),
-                fontSize: 32,
-                fontFamily: "InterBold",
-                fill: "#FFFFFF",
-              },
-              coffeePlacesNearby: {
-                label: t(R.coffeePlacesNearby),
-                fontSize: 32,
-                fontFamily: "InterBold",
-                fill: "#010101",
-              },
-            }}
+            labels={HomeScreenConfig.buttonLabelsConfig}
           />
         )}
       </View>

@@ -10,6 +10,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "test:diagnose": "mocha -r ts-node/register -r tsconfig-paths/register \"src/features/diagnose/**/*.test.ts\"",
+    "test:tastePrefs": "mocha -r ts-node/register -r tsconfig-paths/register \"src/shared/services/tastePrefsStore.test.ts\"",
     "gen:i18n": "node ./src/shared/scripts/generate-i18n-keys.mjs",
     "prepare": "husky"
   },
