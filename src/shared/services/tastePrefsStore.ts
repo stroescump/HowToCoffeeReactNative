@@ -14,7 +14,8 @@ export function setTastePrefsStorageOverride(adapter?: StorageAdapter) {
 export function createSkippedTastePrefs(): TastePrefs {
   return {
     acidityPreference: "NEUTRAL",
-    createdAtMillis: Date.now(),
+    bitternessPreference: "NEUTRAL",
+    drinkStyle: "BOTH"
   };
 }
 
@@ -24,7 +25,7 @@ export async function getTastePrefs(): Promise<TastePrefs | null> {
     if (!raw) return null;
 
     const parsed = JSON.parse(raw) as Partial<TastePrefs>;
-    if (!parsed.acidityPreference || !parsed.createdAtMillis) return null;
+    if (!parsed.acidityPreference) return null;
 
     return parsed as TastePrefs;
   } catch (err) {

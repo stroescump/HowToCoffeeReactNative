@@ -3,9 +3,13 @@ import { http } from "../lib/httpClient";
 
 export async function postTastePrefs(prefs: TastePrefs): Promise<void> {
   try {
-    await http("/taste-prefs", {
+    await http("/onboarding-taste-prefs", {
       method: "POST",
-      body: prefs,
+      body: {
+        acidity: prefs.acidityPreference,
+        bitterness: prefs.bitternessPreference,
+        drinkStyle: prefs.drinkStyle
+      },
       headers: {
         "Content-Type": "application/json",
       },

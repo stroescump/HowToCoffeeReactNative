@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "expo-router";
 import { getTastePrefs } from "@/src/shared/services/tastePrefsStore";
+import { usePathname, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 
 export function useOnboardingGate() {
   const router = useRouter();

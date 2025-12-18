@@ -1,13 +1,12 @@
+import { useOnboardingGate } from "@/src/features/onboarding/hooks/useOnboardingGate";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import React, { useEffect } from "react";
 import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useOnboardingGate } from "@/src/features/onboarding/hooks/useOnboardingGate";
 import "../global.css";
 import "../src/i18n/i18n";
-
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,6 +37,11 @@ export default function RootLayout() {
         <Stack screenOptions={{
           headerShown: false
         }}>
+        /* Onboarding */
+          <Stack.Screen
+            name="onboardingTaste/index"
+          />
+
         /* HomeScreen = app/home/index.tsx */
           <Stack.Screen
             name="index"
@@ -47,9 +51,7 @@ export default function RootLayout() {
           <Stack.Screen
             name="findyourtaste/index"
           />
-          <Stack.Screen
-            name="onboardingTaste/index"
-          />
+
           <Stack.Screen
             name="diagnose/index"
           />

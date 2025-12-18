@@ -29,9 +29,9 @@ const bitternessOptions: ChoiceOption<BitternessPreference>[] = [
 ];
 
 const drinkStyleOptions: ChoiceOption<DrinkStyle>[] = [
-  { value: "ESPRESSO_STRAIGHT", label: "Straight espresso" },
-  { value: "WITH_MILK", label: "Espresso with milk" },
-  { value: "DEPENDS", label: "It depends / mix it up" },
+  { value: "ESPRESSO", label: "Straight espresso" },
+  { value: "MILK_BASED", label: "Espresso with milk" },
+  { value: "BOTH", label: "It depends / mix it up" },
 ];
 
 export function OnboardingTasteScreen() {
