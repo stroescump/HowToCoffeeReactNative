@@ -29,13 +29,10 @@ type BuiltLabel = {
   lineHeight: number;
 };
 
-function buildLabel(
-  config: ButtonLabelConfig,
+function buildLabelFromText(
+  text: string,
+  config: ButtonLabelConfig | undefined,
 ): BuiltLabel {
-  const { t } = useTranslation();
-  const baseText = t(config?.label);
-  const text = config?.uppercase ? baseText.toUpperCase() : baseText;
-
   const lines = text.split("\n");
 
   const fontSize = config?.fontSize ?? 20;
@@ -107,6 +104,7 @@ function renderLabel(
 export function ButtonsSvg({ availableHeight, labels }: ButtonsSvgProps) {
   const router = useRouter();
   const [containerWidth, setContainerWidth] = useState(0);
+  const { t } = useTranslation();
 
   if (availableHeight <= 0) return null;
 
@@ -116,21 +114,18 @@ export function ButtonsSvg({ availableHeight, labels }: ButtonsSvgProps) {
 
   const preserve = canUseSlice ? "xMidYMax slice" : "xMidYMax meet";
 
-  const findYourTasteLabel = buildLabel(
-    labels?.findYourTaste
-  );
-  const marketplaceLabel = buildLabel(
-    labels?.marketplace
-  );
-  const diagnoseBrewLabel = buildLabel(
-    labels?.diagnoseBrew
-  );
-  const recipeAgendaLabel = buildLabel(
-    labels?.recipeAgenda
-  );
-  const coffeePlacesNearbyLabel = buildLabel(
-    labels?.coffeePlacesNearby
-  );
+  const buildTranslatedLabel = (config: ButtonLabelConfig | undefined) => {
+    const key = config?.label ?? "";
+    const baseText = key ? t(key) : "";
+    const text = config?.uppercase ? baseText.toUpperCase() : baseText;
+    return buildLabelFromText(text, config);
+  };
+
+  const findYourTasteLabel = buildTranslatedLabel(labels?.findYourTaste);
+  const marketplaceLabel = buildTranslatedLabel(labels?.marketplace);
+  const diagnoseBrewLabel = buildTranslatedLabel(labels?.diagnoseBrew);
+  const recipeAgendaLabel = buildTranslatedLabel(labels?.recipeAgenda);
+  const coffeePlacesNearbyLabel = buildTranslatedLabel(labels?.coffeePlacesNearby);
 
   return (
     <View

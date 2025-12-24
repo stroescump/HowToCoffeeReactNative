@@ -1,4 +1,4 @@
-import { getUserId } from "@/src/shared/domain/usecases/userIdUseCase";
+import { getAuthToken } from "@/src/shared/domain/usecases/authTokenUseCase";
 import { getApiBaseUrl } from "../config/config";
 
 function resolveBaseUrl() {
@@ -19,21 +19,27 @@ export async function http<TResponse = any, TBody = any>(
     path: string,
     options: HttpOptions<TBody> = {}
 ): Promise<TResponse> {
-    const userId = await getUserId();
+    const authToken = await getAuthToken();
 
     const url = `${resolveBaseUrl()}${path}`;
-    console.log(userId)
 
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'X-User-Id': userId,
+    };
+
+    if (authToken) {
+        headers.Authorization = `Bearer ${authToken}`;
+    }
+
+    const mergedHeaders: Record<string, string> = {
+        ...headers,
         ...(options.headers || {}),
     };
 
     const fetchOptions: RequestInit = {
         method: options.method || 'GET',
-        headers,
+        headers: mergedHeaders,
     };
 
     if (options.body !== undefined) {

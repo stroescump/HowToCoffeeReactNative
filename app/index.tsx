@@ -1,6 +1,7 @@
 // app/index.tsx
 import { ButtonsSvg } from "@/src/features/homescreen/presentation/components/ButtonsSvg";
 import { API_BASE_URL_DEFAULTS, getApiBaseUrl, setApiBaseUrl } from "@/src/shared/config/config";
+import { setAuthToken } from "@/src/shared/domain/usecases/authTokenUseCase";
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import Button from "@/src/shared/ui/components/buttons/Button";
 import React, { useState } from "react";
@@ -16,6 +17,28 @@ export default function HomeScreen() {
   const [selectedUrl, setSelectedUrl] = useState(getApiBaseUrl());
   const [customUrl, setCustomUrl] = useState("");
   const { t } = useTranslation();
+
+  const handleInjectDevJwt = async () => {
+    if (!__DEV__) return;
+
+    let devJwt: string | null = null;
+    try {
+      const mod = require("@/src/shared/config/devConfig") as {
+        getDevJwt?: () => string | null;
+      };
+      devJwt = mod.getDevJwt ? mod.getDevJwt() : null;
+    } catch {
+      devJwt = null;
+    }
+
+    if (!devJwt) {
+      console.warn("[Dev] DEV_JWT is not set or empty");
+      return;
+    }
+
+    await setAuthToken(devJwt);
+    setShowApiModal(false);
+  };
 
   const handleSaveBaseUrl = () => {
     const trimmedCustom = customUrl.trim();
@@ -103,14 +126,23 @@ export default function HomeScreen() {
               />
             </View>
 
-            <View className="mt-6 flex-row gap-3">
-              <Button className="flex-1" text="Save" onPress={handleSaveBaseUrl} />
-              <Button
-                className="flex-1"
-                variant="ghost"
-                text="Cancel"
-                onPress={() => setShowApiModal(false)}
-              />
+            <View className="mt-6" style={{ rowGap: 12 }}>
+              {__DEV__ && (
+                <Button
+                  variant="ghost"
+                  text="Inject DEV_JWT"
+                  onPress={handleInjectDevJwt}
+                />
+              )}
+              <View className="flex-row" style={{ columnGap: 12 }}>
+                <Button className="flex-1" text="Save" onPress={handleSaveBaseUrl} />
+                <Button
+                  className="flex-1"
+                  variant="ghost"
+                  text="Cancel"
+                  onPress={() => setShowApiModal(false)}
+                />
+              </View>
             </View>
           </View>
         </View>
