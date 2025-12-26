@@ -15,7 +15,7 @@ type BaseScreenProps = {
   onBack?: () => void
 };
 
-export function BaseScreen({ children, showHeader = true, title, disablePadding, safeAreaBgColor, onBack }: BaseScreenProps) {
+export function BaseScreen({ children, showHeader = false, title, disablePadding, safeAreaBgColor, onBack }: BaseScreenProps) {
   const safeAreaCtx = useSafeAreaColorOptional();
   const backgroundColor = safeAreaBgColor ?? safeAreaCtx?.color
   return (

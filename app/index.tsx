@@ -2,11 +2,14 @@
 import { ButtonsSvg } from "@/src/features/homescreen/presentation/components/ButtonsSvg";
 import { API_BASE_URL_DEFAULTS, getApiBaseUrl, setApiBaseUrl } from "@/src/shared/config/config";
 import { setAuthToken } from "@/src/shared/domain/usecases/authTokenUseCase";
+import { isUserAuthenticated } from "@/src/shared/domain/usecases/authStatusUseCase";
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import Button from "@/src/shared/ui/components/buttons/Button";
+import { useRouter } from "expo-router";
+import { User } from "lucide-react-native";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Modal, Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { HomeScreenConfig } from "./HomeScreenConfig";
 
 // TODO: Add "Edit taste preferences" entry when a Settings screen is available.
@@ -17,6 +20,7 @@ export default function HomeScreen() {
   const [selectedUrl, setSelectedUrl] = useState(getApiBaseUrl());
   const [customUrl, setCustomUrl] = useState("");
   const { t } = useTranslation();
+  const router = useRouter();
 
   const handleInjectDevJwt = async () => {
     if (!__DEV__) return;
@@ -49,24 +53,36 @@ export default function HomeScreen() {
     setShowApiModal(false);
   };
 
+  const onAppTitlePressed = () => {
+    const current = getApiBaseUrl();
+    if (API_BASE_URL_DEFAULTS.includes(current as any)) {
+      setSelectedUrl(current);
+      setCustomUrl("");
+    } else {
+      setSelectedUrl("custom");
+      setCustomUrl(current);
+    }
+    setShowApiModal(true);
+  }
+
+  const onUserPressed = async () => {
+    const isAuthenticated = await isUserAuthenticated();
+    router.push(isAuthenticated ? "/profile" : "/auth/login");
+  }
+
   return (
-    <BaseScreen showHeader={false}>
-      <Text
-        className="text-5xl text-center mt-2 mb-2 tracking-[-3px] font-[InterBold]"
-        onPress={() => {
-          const current = getApiBaseUrl();
-          if (API_BASE_URL_DEFAULTS.includes(current as any)) {
-            setSelectedUrl(current);
-            setCustomUrl("");
-          } else {
-            setSelectedUrl("custom");
-            setCustomUrl(current);
-          }
-          setShowApiModal(true);
-        }}
-      >
-        {t("appTitle")}
-      </Text>
+    <BaseScreen>
+      <View className="relative w-full">
+        <Text
+          className="text-5xl text-center mt-2 mb-2 tracking-[-2px] font-[InterBold] w-full"
+          onPress={onAppTitlePressed}
+        >
+          {t("appTitle")}
+        </Text>
+        <Pressable className="absolute right-4 top-0 bottom-2 justify-center" onPress={onUserPressed}>
+          <User size={32} />
+        </Pressable>
+      </View>
       <View className="flex-1 mb-2" onLayout={(e) => {
         const { height } = e.nativeEvent.layout;
         setAvailableHeight(height);

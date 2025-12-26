@@ -27,7 +27,7 @@ const RecipeAgendaScreen: React.FC<Props> = ({ recipes, onSelectRecipe, onDelete
     const router = useRouter();
     const { t } = useTranslation();
     return (
-        <BaseScreen title={t(StringRes.recipeAgenda.title)} safeAreaBgColor={PALETTE.background} onBack={() => { router.back() }}>
+        <BaseScreen showHeader={true} title={t(StringRes.recipeAgenda.title)} safeAreaBgColor={PALETTE.background} onBack={() => { router.back() }}>
             <StatusBar barStyle="light-content" />
             <View style={styles.container}>
                 <FlatList

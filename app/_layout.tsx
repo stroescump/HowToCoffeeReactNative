@@ -67,6 +67,23 @@ export default function RootLayout() {
           <Stack.Screen
             name="marketplace/index"
           />
+
+        /* Auth & Profile */
+          <Stack.Screen
+            name="auth/login"
+          />
+          <Stack.Screen
+            name="auth/register"
+          />
+          <Stack.Screen
+            name="auth/forgot-password"
+          />
+          <Stack.Screen
+            name="profile/index"
+          />
+          <Stack.Screen
+            name="profile/settings"
+          />
         </Stack>
       </GestureHandlerRootView>
     </SafeAreaProvider>
