@@ -6,7 +6,12 @@ import {
   setTastePrefs,
   setTastePrefsStorageOverride,
 } from "./tastePrefsStore";
-import { TastePrefs } from "../domain/tastePrefs";
+import {
+  DRINK_STYLE,
+  TastePrefs,
+  TASTE_LEVEL,
+  USER_EXPERIENCE,
+} from "../domain/tastePrefs";
 
 class MemoryStorage {
   private store = new Map<string, string>();
@@ -38,9 +43,9 @@ describe("tastePrefsStore", () => {
 
   it("saves and loads taste preferences", async () => {
     const prefs: TastePrefs = {
-      acidityPreference: "LIKES",
-      bitternessPreference: "NEUTRAL",
-      drinkStyle: "DEPENDS",
+      userExperience: USER_EXPERIENCE.BEGINNER,
+      bitterness: TASTE_LEVEL.MEDIUM,
+      drinkStyle: DRINK_STYLE.ALL,
       createdAtMillis: 123,
     };
 
@@ -50,13 +55,13 @@ describe("tastePrefsStore", () => {
     assert.deepEqual(loaded, prefs);
   });
 
-  it("marks skip path with neutral acidity", async () => {
+  it("marks skip path with medium acidity", async () => {
     const skipped = createSkippedTastePrefs();
     await setTastePrefs(skipped);
 
     const loaded = await getTastePrefs();
 
-    assert.equal(loaded?.acidityPreference, "NEUTRAL");
+    assert.equal(loaded?.acidity, TASTE_LEVEL.MEDIUM);
     assert.ok((loaded?.createdAtMillis ?? 0) > 0);
   });
 });

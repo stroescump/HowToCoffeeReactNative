@@ -62,6 +62,7 @@ export function DiagnoseFlowScreen() {
         <PopupProvider>
             <SafeAreaColorProvider initialColor={diagnoseStep.safeAreaColor}>
                 <BaseScreen
+                    showHeader={true}
                     title={t(diagnoseStep.titleRes)}
                     onBack={handleBack}
                 >

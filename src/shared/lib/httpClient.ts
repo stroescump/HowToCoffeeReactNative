@@ -45,7 +45,9 @@ export async function http<TResponse = any, TBody = any>(
     if (options.body !== undefined) {
         fetchOptions.body = JSON.stringify(options.body);
     }
-
+    /**
+     * TODO: Remove for Production
+     */
     // console.log(`[HTTP] ${fetchOptions.method} ${url}`, fetchOptions);
 
     const response = await fetch(url, fetchOptions);

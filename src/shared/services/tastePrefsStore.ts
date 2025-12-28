@@ -1,5 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { TastePrefs } from "../domain/tastePrefs";
+import {
+  CLEAN_FUNKY,
+  DRINK_STYLE,
+  TASTE_LEVEL,
+  TastePrefs,
+  USER_EXPERIENCE,
+} from "../domain/tastePrefs";
 
 const STORAGE_KEY = "howtocoffee:tastePrefs";
 
@@ -13,9 +19,14 @@ export function setTastePrefsStorageOverride(adapter?: StorageAdapter) {
 
 export function createSkippedTastePrefs(): TastePrefs {
   return {
-    acidityPreference: "NEUTRAL",
-    bitternessPreference: "NEUTRAL",
-    drinkStyle: "BOTH"
+    userExperience: USER_EXPERIENCE.BEGINNER,
+    bitterness: TASTE_LEVEL.MEDIUM,
+    acidity: TASTE_LEVEL.MEDIUM,
+    body: TASTE_LEVEL.MEDIUM,
+    sweetness: TASTE_LEVEL.MEDIUM,
+    cleanFunky: CLEAN_FUNKY.NEUTRAL,
+    drinkStyle: DRINK_STYLE.ALL,
+    createdAtMillis: Date.now(),
   };
 }
 
@@ -25,9 +36,12 @@ export async function getTastePrefs(): Promise<TastePrefs | null> {
     if (!raw) return null;
 
     const parsed = JSON.parse(raw) as Partial<TastePrefs>;
-    if (!parsed.acidityPreference) return null;
-
+    if (!parsed.userExperience || !parsed.bitterness) return null;
     return parsed as TastePrefs;
+    /**
+     * TODO: Remove for Production. Used to test Onboarding
+     */
+    // return null
   } catch (err) {
     console.error("[tastePrefsStore] Failed to read taste prefs", err);
     return null;
