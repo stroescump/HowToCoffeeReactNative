@@ -24,28 +24,40 @@ type DiagnoseFlowViewProps = {
 export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
     const { step, session, onUpdateSession, onNext, onGoToStep, onMarkSuccessful } = props
 
+    const updateSessionWithInvalidation = (
+        patch: BrewDiagnoseSessionDraft,
+        keys: Array<keyof BrewDiagnoseSessionDraft>
+    ) => {
+        const hasChange = keys.some((key) => patch[key] !== session[key]);
+        onUpdateSession(hasChange ? { ...patch, lastDiagnosis: undefined } : patch);
+    };
+
+    const invalidateDiagnosis = () => {
+        onUpdateSession({ lastDiagnosis: undefined });
+    };
+
     const handleCoffeeRoastSubmit = (coffeeRoast: CoffeeRoast) => {
-        onUpdateSession({ coffeeRoast })
+        updateSessionWithInvalidation({ coffeeRoast }, ["coffeeRoast"]);
         onNext()
     };
 
     const handleDoseSubmit = (doseGrams: number) => {
-        onUpdateSession({ doseGrams })
+        updateSessionWithInvalidation({ doseGrams }, ["doseGrams"]);
         onNext()
     };
 
     const handleExtractionDurationSubmit = (extractionDuration: number) => {
-        onUpdateSession({ brewTimeSeconds: extractionDuration })
+        updateSessionWithInvalidation({ brewTimeSeconds: extractionDuration }, ["brewTimeSeconds"]);
         onNext()
     }
 
     const handleYieldGramsSubmit = (yieldGrams: number) => {
-        onUpdateSession({ yieldGrams: yieldGrams })
+        updateSessionWithInvalidation({ yieldGrams: yieldGrams }, ["yieldGrams"]);
         onNext()
     }
 
     const handleTasteFeedbackSubmit = (tasteFeedback: TasteKind) => {
-        onUpdateSession({ tasteFeedback })
+        updateSessionWithInvalidation({ tasteFeedback }, ["tasteFeedback"]);
         onNext()
     }
 
@@ -71,7 +83,10 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
                         temperatureCelsius: session.temperatureCelsius,
                     },
                 ],
+                lastDiagnosis: undefined,
             });
+        } else {
+            invalidateDiagnosis();
         }
         onGoToStep(DiagnoseStep.Dose);
     };
