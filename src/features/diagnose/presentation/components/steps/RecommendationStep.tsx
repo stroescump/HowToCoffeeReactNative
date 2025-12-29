@@ -11,15 +11,27 @@ import { Recommendation } from "../../../domain/models/Recommendation";
 
 type Props = {
     session: BrewDiagnoseSessionDraft;
+    onUpdateSession: (patch: BrewDiagnoseSessionDraft) => void;
     onApplyAdvice: () => void;
     onSessionIdResolved: (id: string) => void;
 };
 
-export const RecommendationStep: React.FC<Props> = ({ session, onApplyAdvice, onSessionIdResolved }) => {
+export const RecommendationStep: React.FC<Props> = ({
+    session,
+    onUpdateSession,
+    onApplyAdvice,
+    onSessionIdResolved,
+}) => {
     const { t } = useTranslation();
-    const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+    const cachedRecommendations = session.lastDiagnosis?.recommendations ?? [];
+    const [recommendations, setRecommendations] = useState<Recommendation[]>(cachedRecommendations);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const applyRecommendations = (items: Recommendation[]) => {
+        const sorted = [...items].sort((a, b) => a.priority - b.priority);
+        setRecommendations(sorted);
+    };
 
     const fetchRecommendations = async () => {
         try {
@@ -28,9 +40,24 @@ export const RecommendationStep: React.FC<Props> = ({ session, onApplyAdvice, on
             const sessionReadyForDiagnose = isSessionCompleteOrThrow(session)
             const result = await queryClient.diagnoseShot(sessionReadyForDiagnose);
             // sort by priority just in case
-            result.brewDiagnosis.recommendations.sort((a, b) => a.priority - b.priority);
-            setRecommendations(result.brewDiagnosis.recommendations);
+            const sorted = [...result.brewDiagnosis.recommendations].sort((a, b) => a.priority - b.priority);
+            applyRecommendations(sorted);
             onSessionIdResolved(result.sessionId)
+            const [primary] = sorted;
+            if (primary) {
+                onUpdateSession({
+                    lastDiagnosis: {
+                        tags: result.brewDiagnosis.tags,
+                        summary: result.brewDiagnosis.summary,
+                        recommendations: sorted,
+                        recommendation: {
+                            id: primary.id,
+                            label: primary.title,
+                            description: primary.description,
+                        },
+                    },
+                });
+            }
         } catch (err: any) {
             setError(err.message ?? "Unexpected error");
         } finally {
@@ -39,9 +66,13 @@ export const RecommendationStep: React.FC<Props> = ({ session, onApplyAdvice, on
     };
 
     useEffect(() => {
+        if (cachedRecommendations.length > 0) {
+            applyRecommendations(cachedRecommendations);
+            return;
+        }
         fetchRecommendations();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [cachedRecommendations.length]);
 
     return (
         <ScrollView
@@ -55,7 +86,7 @@ export const RecommendationStep: React.FC<Props> = ({ session, onApplyAdvice, on
                 </Text>
                 <Text style={{ fontSize: 14, opacity: 0.8 }}>
                     {session.doseGrams ?? "?"}g in → {session.yieldGrams ?? "?"}g out, {session.brewTimeSeconds ?? "?"}s,{" "}
-                    {session.coffeeType ?? "unknown"} roast
+                    {session.coffeeRoast ?? "unknown"} roast
                 </Text>
                 {session.tasteFeedback ? (
                     <Text style={{ fontSize: 14, marginTop: 4, opacity: 0.9 }}>

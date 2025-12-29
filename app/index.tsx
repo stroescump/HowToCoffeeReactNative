@@ -1,13 +1,15 @@
 // app/index.tsx
 import { ButtonsSvg } from "@/src/features/homescreen/presentation/components/ButtonsSvg";
+import { draftRepo } from "@/src/features/diagnose/data/repositories/DiagnoseRepositoryImpl";
+import { usePendingDiagnoseSession } from "@/src/features/diagnose/presentation/hooks/usePendingDiagnoseSession";
 import { API_BASE_URL_DEFAULTS, getApiBaseUrl, setApiBaseUrl } from "@/src/shared/config/config";
 import { setAuthToken } from "@/src/shared/domain/usecases/authTokenUseCase";
 import { isUserAuthenticated } from "@/src/shared/domain/usecases/authStatusUseCase";
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import Button from "@/src/shared/ui/components/buttons/Button";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { User } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { HomeScreenConfig } from "./HomeScreenConfig";
@@ -17,10 +19,17 @@ import { HomeScreenConfig } from "./HomeScreenConfig";
 export default function HomeScreen() {
   const [availableHeight, setAvailableHeight] = useState(0);
   const [showApiModal, setShowApiModal] = useState(false);
+  const [showDiagnoseModal, setShowDiagnoseModal] = useState(false);
   const [selectedUrl, setSelectedUrl] = useState(getApiBaseUrl());
   const [customUrl, setCustomUrl] = useState("");
   const { t } = useTranslation();
   const router = useRouter();
+  const {
+    pendingCount,
+    refresh: refreshPending,
+    continueSession,
+    discardSession,
+  } = usePendingDiagnoseSession({ draftRepository: draftRepo });
 
   const handleInjectDevJwt = async () => {
     if (!__DEV__) return;
@@ -70,6 +79,41 @@ export default function HomeScreen() {
     router.push(isAuthenticated ? "/profile" : "/auth/login");
   }
 
+  useFocusEffect(
+    useCallback(() => {
+      void refreshPending();
+    }, [refreshPending]),
+  );
+
+  const handleDiagnosePress = async () => {
+    const candidate = await refreshPending();
+    if (!candidate) {
+      router.push("/diagnose");
+      return;
+    }
+    setShowDiagnoseModal(true);
+  };
+
+  const handleContinueDiagnose = async () => {
+    try {
+      const target = await continueSession();
+      setShowDiagnoseModal(false);
+      router.push(target === "success" ? "/diagnose/success" : "/diagnose");
+    } catch {
+      setShowDiagnoseModal(false);
+      router.push("/diagnose");
+    }
+  };
+
+  const handleDiscardDiagnose = async () => {
+    try {
+      await discardSession();
+    } finally {
+      setShowDiagnoseModal(false);
+      router.push("/diagnose");
+    }
+  };
+
   return (
     <BaseScreen>
       <View className="relative w-full">
@@ -91,6 +135,10 @@ export default function HomeScreen() {
           <ButtonsSvg
             availableHeight={availableHeight}
             labels={HomeScreenConfig.buttonLabelsConfig}
+            pendingDiagnoseCount={pendingCount}
+            onDiagnosePress={() => {
+              void handleDiagnosePress();
+            }}
           />
         )}
       </View>
@@ -159,6 +207,40 @@ export default function HomeScreen() {
                   onPress={() => setShowApiModal(false)}
                 />
               </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={showDiagnoseModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowDiagnoseModal(false)}
+      >
+        <View className="flex-1 bg-black/50 justify-center px-6">
+          <View className="bg-white rounded-3xl p-6">
+            <Text className="text-3xl font-[InterBold] mb-3 text-black">
+              Resume brew session?
+            </Text>
+            <Text className="text-base text-black/70 mb-6">
+              You have an unfinished diagnose session. Continue where you left off or start
+              a new one.
+            </Text>
+            <View style={{ rowGap: 12 }}>
+              <Button
+                text="Continue session"
+                onPress={() => {
+                  void handleContinueDiagnose();
+                }}
+              />
+              <Button
+                variant="ghost"
+                text="Start over"
+                onPress={() => {
+                  void handleDiscardDiagnose();
+                }}
+              />
             </View>
           </View>
         </View>

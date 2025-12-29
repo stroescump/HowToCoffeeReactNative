@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
-import Svg, { G, Path, Text as SvgText, TSpan } from "react-native-svg";
+import Svg, { Circle, G, Path, Text as SvgText, TSpan } from "react-native-svg";
 
 const FIGMA_HEIGHT = 746;
 const FIGMA_WIDTH = 428;
@@ -57,6 +57,8 @@ type ButtonsSvgProps = {
     recipeAgenda: ButtonLabelConfig;
     coffeePlacesNearby: ButtonLabelConfig;
   };
+  pendingDiagnoseCount?: number;
+  onDiagnosePress?: () => void;
 };
 
 type LabelPosition = {
@@ -101,7 +103,12 @@ function renderLabel(
   );
 }
 
-export function ButtonsSvg({ availableHeight, labels }: ButtonsSvgProps) {
+export function ButtonsSvg({
+  availableHeight,
+  labels,
+  pendingDiagnoseCount = 0,
+  onDiagnosePress,
+}: ButtonsSvgProps) {
   const router = useRouter();
   const [containerWidth, setContainerWidth] = useState(0);
   const { t } = useTranslation();
@@ -188,10 +195,15 @@ export function ButtonsSvg({ availableHeight, labels }: ButtonsSvgProps) {
                 {/* BTN: Diagnose brew */}
                 <G
                   id="btn-diagnose-brew"
-                  onPress={() => router.push("/diagnose")}
+                  onPress={() => (onDiagnosePress ? onDiagnosePress() : router.push("/diagnose"))}
                   accessible
                   accessibilityRole="button"
-                  accessibilityLabel={diagnoseBrewLabel.lines.join(" ")}
+                  accessibilityLabel={[
+                    diagnoseBrewLabel.lines.join(" "),
+                    pendingDiagnoseCount > 0 ? `${pendingDiagnoseCount} pending session` : "",
+                  ]
+                    .filter(Boolean)
+                    .join(". ")}
                 >
                   <Path
                     d="M218 287C218 235.638 259.638 194 311 194H393V276C393 327.362 351.362 369 300 369H218V287Z"
@@ -201,6 +213,21 @@ export function ButtonsSvg({ availableHeight, labels }: ButtonsSvgProps) {
                     diagnoseBrewLabel,
                     { x: 305.5, y: 285 },
                     "diagnose"
+                  )}
+                  {pendingDiagnoseCount > 0 && (
+                    <G id="diagnose-badge">
+                      <Circle cx={378} cy={214} r={14} fill="#FF5210" />
+                      <SvgText
+                        x={378}
+                        y={219}
+                        fontSize={12}
+                        fontFamily={diagnoseBrewLabel.fontFamily}
+                        fill="#FFFFFF"
+                        textAnchor="middle"
+                      >
+                        {pendingDiagnoseCount > 9 ? "9+" : String(pendingDiagnoseCount)}
+                      </SvgText>
+                    </G>
                   )}
                 </G>
               </G>

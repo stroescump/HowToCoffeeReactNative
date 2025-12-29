@@ -18,11 +18,11 @@ export const StringRes = {
     "areYouSure": "popupDetails.areYouSure"
   },
   "steps": {
-    "coffeeType": {
-      "title": "steps.coffeeType.title",
-      "buttonText": "steps.coffeeType.buttonText",
-      "popupDescription": "steps.coffeeType.popupDescription",
-      "popupButtonText": "steps.coffeeType.popupButtonText"
+    "coffeeRoast": {
+      "title": "steps.coffeeRoast.title",
+      "buttonText": "steps.coffeeRoast.buttonText",
+      "popupDescription": "steps.coffeeRoast.popupDescription",
+      "popupButtonText": "steps.coffeeRoast.popupButtonText"
     },
     "dose": {
       "title": "steps.dose.title",

@@ -15,8 +15,8 @@
     "areYouSure": "Are you sure?"
   },
   "steps": {
-    "coffeeType": {
-      "title": "What kind of coffee?",
+    "coffeeRoast": {
+      "title": "What roast is it?",
       "buttonText": "I have no idea",
       "popupDescription": "**Let's** figure it out together!\n**Here's** the 3 types of coffee roast available",
       "popupButtonText": "Thanks!"

@@ -1,8 +1,8 @@
 import {
   BitternessPreference,
+  TastePrefs,
   USER_EXPERIENCE,
   UserExperience,
-  TastePrefs,
 } from "@/src/shared/domain/tastePrefs";
 import { postTastePrefs } from "@/src/shared/services/tastePrefsApi";
 import { setTastePrefs } from "@/src/shared/services/tastePrefsStore";
@@ -16,8 +16,8 @@ import {
   DrinkStyleChoice,
   mapDrinkStyle,
 } from "../tasteFlowOptions";
-import { ADVANCED_TAB, AdvancedTabId, SliderOption } from "../types";
 import { TASTE_STEP, TasteStepKey } from "../tasteFlowState";
+import { ADVANCED_TAB, AdvancedTabId, SliderOption } from "../types";
 
 type AdvancedPrefs = typeof ADVANCED_DEFAULTS;
 

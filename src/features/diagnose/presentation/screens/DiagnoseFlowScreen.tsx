@@ -22,17 +22,15 @@ export function DiagnoseFlowScreen() {
         nextStep,
         prevStep,
         goToStep,
-        clearAndReset,
+        setResumeTarget,
     } = useDiagnoseFlow({ draftRepository: draftRepo });
 
     const diagnoseStep = DiagnoseStepConfigurator[step];
 
     function handleBack() {
-        if (step === DiagnoseStep.CoffeeType) {
+        if (step === DiagnoseStep.CoffeeRoast) {
             // suntem în primul step din flow → ieșim din flow
-            void clearAndReset().finally(() => {
-                router.back();
-            });
+            router.back();
             return;
         }
 
@@ -41,6 +39,8 @@ export function DiagnoseFlowScreen() {
     }
 
     const handleMarkSuccessful = async () => {
+        await updateSession({ markedAsSuccessful: true });
+        await setResumeTarget("success");
         try {
             if (session.id != null) {
                 // Ensure the mutation finishes before leaving the screen;
@@ -84,8 +84,8 @@ const DiagnoseStepConfigurator: Record<
     DiagnoseStep,
     { titleRes: string; safeAreaColor: string }
 > = {
-    [DiagnoseStep.CoffeeType]: {
-        titleRes: StringRes.steps.coffeeType.title,
+    [DiagnoseStep.CoffeeRoast]: {
+        titleRes: StringRes.steps.coffeeRoast.title,
         safeAreaColor: "#F1E9DD",
     },
     [DiagnoseStep.Dose]: {

@@ -4,6 +4,7 @@ import { BrewDiagnoseSessionDraft } from "../../domain/models/BrewDiagnoseSessio
 import {
   createInitialDiagnoseState,
   DiagnoseFlowState,
+  DiagnoseResumeTarget,
 } from "../../domain/models/DiagnoseFlowState";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import type { DiagnoseRepository } from "../../domain/repositories/DiagnoseRepository";
@@ -24,7 +25,7 @@ export function useDiagnoseFlow({ draftRepository }: UseDiagnoseFlowDeps) {
       switch (event.type) {
         case "HYDRATE":
           return;
-        case "RESET":
+        case "CLEAR_DRAFT":
           return draftRepository.clearDraft();
         default:
           return draftRepository.saveDraft(nextState);
@@ -36,10 +37,11 @@ export function useDiagnoseFlow({ draftRepository }: UseDiagnoseFlowDeps) {
   const dispatchEvent = useCallback(
     async (event: DiagnoseEvent) => {
       const nextState = diagnoseReducer(stateRef.current, event);
-      stateRef.current = nextState;
-      setState(nextState);
-      await persistByEvent(event, nextState);
-      return nextState;
+      const nextStateWithMeta = applyMetadata(nextState, event);
+      stateRef.current = nextStateWithMeta;
+      setState(nextStateWithMeta);
+      await persistByEvent(event, nextStateWithMeta);
+      return nextStateWithMeta;
     },
     [persistByEvent],
   );
@@ -81,9 +83,14 @@ export function useDiagnoseFlow({ draftRepository }: UseDiagnoseFlowDeps) {
     [dispatchEvent],
   );
 
+  const setResumeTarget = useCallback(
+    (target: DiagnoseResumeTarget) => dispatchEvent({ type: "SET_RESUME_TARGET", target }),
+    [dispatchEvent],
+  );
+
   const clearAndReset = useCallback(
     async () => {
-      await dispatchEvent({ type: "RESET" });
+      await dispatchEvent({ type: "CLEAR_DRAFT" });
     },
     [dispatchEvent],
   );
@@ -97,17 +104,41 @@ export function useDiagnoseFlow({ draftRepository }: UseDiagnoseFlowDeps) {
     nextStep,
     prevStep,
     goToStep,
+    setResumeTarget,
     clearAndReset,
     dispatchEvent,
   };
 }
 
 function ensureSessionDraft(draft: DiagnoseFlowState): DiagnoseFlowState {
+  const resumeTarget: DiagnoseResumeTarget = draft.session?.markedAsSuccessful ? "success" : "flow";
   return {
     ...draft,
     session: {
       ...(draft.session ?? {}),
       brewMethod: draft.session?.brewMethod ?? BrewMethod.ESPRESSO,
     },
+    createdAtMillis: draft.createdAtMillis ?? Date.now(),
+    updatedAtMillis: draft.updatedAtMillis ?? Date.now(),
+    resumeTarget: draft.resumeTarget ?? resumeTarget,
+  };
+}
+
+function applyMetadata(state: DiagnoseFlowState, event: DiagnoseEvent): DiagnoseFlowState {
+  if (event.type === "HYDRATE") return state;
+
+  const now = Date.now();
+  const createdAtMillis =
+    event.type === "RESET" || !state.createdAtMillis ? now : state.createdAtMillis;
+  const updatedAtMillis =
+    event.type === "CLEAR_DRAFT" ? state.updatedAtMillis : now;
+  const resumeTarget: DiagnoseResumeTarget =
+    state.resumeTarget ?? (state.session?.markedAsSuccessful ? "success" : "flow");
+
+  return {
+    ...state,
+    createdAtMillis,
+    updatedAtMillis,
+    resumeTarget,
   };
 }

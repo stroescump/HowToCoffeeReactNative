@@ -4,22 +4,22 @@ import { usePopup } from "@/src/shared/ui/contextproviders/PopupContext";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, View } from "react-native";
-import { CoffeeType } from "../../../domain/models/CoffeeType";
+import { CoffeeRoast } from "../../../domain/models/CoffeeRoast";
 
 
-type CoffeeTypeStepProps = {
-  value?: CoffeeType;
-  onSubmit: (coffeeType: CoffeeType) => void;
+type CoffeeRoastStepProps = {
+  value?: CoffeeRoast;
+  onSubmit: (coffeeRoast: CoffeeRoast) => void;
 };
 
-export const CoffeeTypeStep = ({ value, onSubmit }: CoffeeTypeStepProps) => {
+export const CoffeeRoastStep = ({ value, onSubmit }: CoffeeRoastStepProps) => {
   const { t } = useTranslation();
   const { showPopup } = usePopup();
-  const R = StringRes.steps.coffeeType
+  const R = StringRes.steps.coffeeRoast
 
-  const isLightSelected = value === CoffeeType.LightRoast;
-  const isMediumSelected = value === CoffeeType.MediumRoast;
-  const isDarkSelected = value === CoffeeType.DarkRoast;
+  const isLightSelected = value === CoffeeRoast.Light;
+  const isMediumSelected = value === CoffeeRoast.Medium;
+  const isDarkSelected = value === CoffeeRoast.Dark;
 
   return (
     <View className="flex-1 mx-6">
@@ -27,19 +27,19 @@ export const CoffeeTypeStep = ({ value, onSubmit }: CoffeeTypeStepProps) => {
         <Pressable
           className={`flex-1 bg-yellow-600 rounded-t-full justify-center items-center ${isLightSelected ? "border-[6px] border-pink-500" : ""
             }`}
-          onPress={() => onSubmit(CoffeeType.LightRoast)}
+          onPress={() => onSubmit(CoffeeRoast.Light)}
         >
         </Pressable>
         <Pressable
           className={`flex-1 bg-yellow-800 rounded-t-full justify-center items-center ${isMediumSelected ? "border-[6px] border-pink-500" : ""
             }`}
-          onPress={() => onSubmit(CoffeeType.MediumRoast)}
+          onPress={() => onSubmit(CoffeeRoast.Medium)}
         >
         </Pressable>
         <Pressable
           className={`flex-1 bg-yellow-950 rounded-t-full justify-center items-center ${isDarkSelected ? "border-[6px] border-pink-500" : ""
             }`}
-          onPress={() => onSubmit((CoffeeType.DarkRoast))}
+          onPress={() => onSubmit(CoffeeRoast.Dark)}
         >
         </Pressable>
       </View>

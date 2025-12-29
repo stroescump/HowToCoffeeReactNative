@@ -1,6 +1,7 @@
 import { BrewDiagnoseSession } from "@/src/features/diagnose/domain/models/BrewDiagnoseSession";
 import { BrewDiagnoseSessionSummary } from "@/src/features/diagnose/domain/models/BrewDiagnoseSessionDraft";
 import { BrewDiagnosis } from "@/src/features/diagnose/domain/models/BrewDiagnosis";
+import type { BrewSessionDetail } from "@/src/features/diagnose/domain/models/BrewSessionDetail";
 import { http } from './httpClient';
 
 // Types imported from your existing DTO folder:
@@ -42,6 +43,14 @@ export const queryClient = {
         return http(`/brew-sessions/${sessionId}/success`, {
             method: "POST"
         })
+    },
+
+    fetchBrewSessions(): Promise<BrewDiagnoseSessionSummary[]> {
+        return http("/brew-sessions", { method: "GET" });
+    },
+
+    fetchBrewSessionById(sessionId: string): Promise<BrewSessionDetail> {
+        return http(`/brew-sessions/${sessionId}`, { method: "GET" });
     },
 
     // Example placeholder for future coffee features:

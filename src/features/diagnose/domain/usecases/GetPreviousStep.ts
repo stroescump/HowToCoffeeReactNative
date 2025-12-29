@@ -7,10 +7,10 @@ export function getPreviousStep(
   answers: Partial<BrewDiagnoseSession>
 ): DiagnoseStepType {
   switch (current) {
-    case DiagnoseStep.CoffeeType:
-      return DiagnoseStep.CoffeeType;
+    case DiagnoseStep.CoffeeRoast:
+      return DiagnoseStep.CoffeeRoast;
     case DiagnoseStep.Dose:
-      return DiagnoseStep.CoffeeType;
+      return DiagnoseStep.CoffeeRoast;
     case DiagnoseStep.ExtractionDuration:
       return DiagnoseStep.Dose;
     case DiagnoseStep.Yield:

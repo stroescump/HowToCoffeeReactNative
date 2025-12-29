@@ -2,6 +2,7 @@ import { strict as assert } from "assert";
 import React from "react";
 import TestRenderer, { act } from "react-test-renderer";
 import { BrewMethod } from "@/src/shared/domain/models/BrewMethod";
+import type { DiagnoseArchiveEntry } from "../../domain/models/DiagnoseArchiveEntry";
 import type { DiagnoseFlowState } from "../../domain/models/DiagnoseFlowState";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import type { DiagnoseRepository } from "../../domain/repositories/DiagnoseRepository";
@@ -11,6 +12,8 @@ class InMemoryDiagnoseRepository implements DiagnoseRepository {
   savedStates: DiagnoseFlowState[] = [];
   clears = 0;
   private draft: DiagnoseFlowState | null;
+  archive: DiagnoseArchiveEntry[] = [];
+  finalizedIds: string[] = [];
 
   constructor(initialDraft: DiagnoseFlowState | null = null) {
     this.draft = initialDraft;
@@ -28,6 +31,24 @@ class InMemoryDiagnoseRepository implements DiagnoseRepository {
   async clearDraft(): Promise<void> {
     this.clears += 1;
     this.draft = null;
+  }
+
+  async appendArchive(entry: DiagnoseArchiveEntry): Promise<void> {
+    this.archive.push(entry);
+  }
+
+  async loadArchive(): Promise<DiagnoseArchiveEntry[]> {
+    return [...this.archive];
+  }
+
+  async addFinalizedSessionId(sessionId: string): Promise<void> {
+    if (!this.finalizedIds.includes(sessionId)) {
+      this.finalizedIds.push(sessionId);
+    }
+  }
+
+  async loadFinalizedSessionIds(): Promise<string[]> {
+    return [...this.finalizedIds];
   }
 }
 
@@ -54,9 +75,13 @@ function renderUseDiagnoseFlow(repo: DiagnoseRepository) {
 
 describe("useDiagnoseFlow persistence", () => {
   it("hydrates from repository without re-saving", async () => {
+    const now = Date.now();
     const draft: DiagnoseFlowState = {
       step: DiagnoseStep.Yield,
       session: { brewMethod: BrewMethod.ESPRESSO, doseGrams: 18 },
+      createdAtMillis: now - 1000,
+      updatedAtMillis: now - 500,
+      resumeTarget: "flow",
     };
     const repo = new InMemoryDiagnoseRepository(draft);
     const { bag, flushEffects } = renderUseDiagnoseFlow(repo);
@@ -77,8 +102,8 @@ describe("useDiagnoseFlow persistence", () => {
       await bag.current?.updateSession({ doseGrams: 18 });
     });
 
-    assert.equal(repo.savedStates.length, 1);
-    assert.equal(repo.savedStates[0].session.doseGrams, 18);
+    assert.equal(repo.savedStates.length, 2);
+    assert.equal(repo.savedStates[1].session.doseGrams, 18);
   });
 
   it("persists navigation events", async () => {
@@ -90,14 +115,18 @@ describe("useDiagnoseFlow persistence", () => {
       await bag.current?.nextStep();
     });
 
-    assert.equal(repo.savedStates.length, 1);
-    assert.equal(repo.savedStates[0].step, DiagnoseStep.Dose);
+    assert.equal(repo.savedStates.length, 2);
+    assert.equal(repo.savedStates[1].step, DiagnoseStep.Dose);
   });
 
   it("clears storage on reset without re-saving reset state", async () => {
+    const now = Date.now();
     const repo = new InMemoryDiagnoseRepository({
       step: DiagnoseStep.Recommendation,
       session: { brewMethod: BrewMethod.ESPRESSO, doseGrams: 18, yieldGrams: 36 },
+      createdAtMillis: now - 2000,
+      updatedAtMillis: now - 1000,
+      resumeTarget: "flow",
     });
     const { bag, flushEffects } = renderUseDiagnoseFlow(repo);
     await flushEffects();
@@ -112,6 +141,6 @@ describe("useDiagnoseFlow persistence", () => {
       0,
       "reset should not persist the cleared state back to storage",
     );
-    assert.equal(bag.current?.state.step, DiagnoseStep.CoffeeType);
+    assert.equal(bag.current?.state.step, DiagnoseStep.CoffeeRoast);
   });
 });

@@ -7,7 +7,7 @@ export function getNextStep(
   answers: Partial<BrewDiagnoseSession>
 ): DiagnoseStep {
   switch (current) {
-    case DiagnoseStep.CoffeeType:
+    case DiagnoseStep.CoffeeRoast:
       return DiagnoseStep.Dose;
     case DiagnoseStep.Dose:
       // aici poți pune logica de skip în funcție de hasScale

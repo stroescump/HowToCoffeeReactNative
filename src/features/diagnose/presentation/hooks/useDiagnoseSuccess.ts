@@ -17,7 +17,7 @@ export function useDiagnoseSuccess({
 }: UseDiagnoseSuccessDeps) {
   const router = useRouter();
   const { t } = useTranslation();
-  const { session, clearAndReset } = useDiagnoseFlow({ draftRepository });
+  const { session, state, clearAndReset } = useDiagnoseFlow({ draftRepository });
 
   const [coffeeName, setCoffeeName] = useState(session.coffeeDisplayName ?? "");
   const [grindSetting, setGrindSetting] = useState(session.grindSetting ?? "");
@@ -54,10 +54,12 @@ export function useDiagnoseSuccess({
     setShowLeaveWarning(false);
     const destination = pendingNavigation ?? "home";
     setPendingNavigation(null);
-    void clearAndReset().finally(() => {
-      router.replace(destination === "home" ? "/" : "/recipeagenda");
+    void finalizeSession("discarded").finally(() => {
+      void clearAndReset().finally(() => {
+        router.replace(destination === "home" ? "/" : "/recipeagenda");
+      });
     });
-  }, [clearAndReset, pendingNavigation, router]);
+  }, [clearAndReset, finalizeSession, pendingNavigation, router]);
 
   const dismissLeaveWarning = useCallback(() => {
     setShowLeaveWarning(false);
@@ -78,6 +80,7 @@ export function useDiagnoseSuccess({
         coffeeDisplayName: coffeeName.trim(),
         grindSetting,
       });
+      await finalizeSession("saved");
       setHasSaved(true);
       await clearAndReset();
       router.replace("/recipeagenda");
@@ -86,7 +89,32 @@ export function useDiagnoseSuccess({
     } finally {
       setIsSaving(false);
     }
-  }, [clearAndReset, coffeeName, grindSetting, isSaving, router, session, showError, t]);
+  }, [clearAndReset, coffeeName, finalizeSession, grindSetting, isSaving, router, session, showError, t]);
+
+  const finalizeSession = useCallback(
+    async (reason: "saved" | "discarded") => {
+      const normalizedName = coffeeName.trim();
+      const archivedState = {
+        ...state,
+        session: {
+          ...state.session,
+          coffeeDisplayName: normalizedName || state.session.coffeeDisplayName,
+          grindSetting: grindSetting || state.session.grindSetting,
+        },
+      };
+
+      await draftRepository.appendArchive({
+        state: archivedState,
+        reason,
+        finalizedAtMillis: Date.now(),
+      });
+
+      if (archivedState.session.id) {
+        await draftRepository.addFinalizedSessionId(archivedState.session.id);
+      }
+    },
+    [coffeeName, draftRepository, grindSetting, state],
+  );
 
   const uiState = {
     session,

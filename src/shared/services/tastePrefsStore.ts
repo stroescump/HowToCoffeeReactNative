@@ -38,10 +38,6 @@ export async function getTastePrefs(): Promise<TastePrefs | null> {
     const parsed = JSON.parse(raw) as Partial<TastePrefs>;
     if (!parsed.userExperience || !parsed.bitterness) return null;
     return parsed as TastePrefs;
-    /**
-     * TODO: Remove for Production. Used to test Onboarding
-     */
-    // return null
   } catch (err) {
     console.error("[tastePrefsStore] Failed to read taste prefs", err);
     return null;

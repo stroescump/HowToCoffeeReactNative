@@ -2,9 +2,9 @@
 import React from "react";
 import { Text } from "react-native";
 import { BrewDiagnoseSessionDraft } from "../../domain/models/BrewDiagnoseSessionDraft";
-import { CoffeeType } from "../../domain/models/CoffeeType";
+import { CoffeeRoast } from "../../domain/models/CoffeeRoast";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
-import { CoffeeTypeStep } from "./steps/CoffeeTypeStep";
+import { CoffeeRoastStep } from "./steps/CoffeeRoastStep";
 import { DoseStep } from "./steps/DoseStep";
 import { ExtractionDuration } from "./steps/ExtractionDurationStep";
 import { RecommendationStep } from "./steps/RecommendationStep";
@@ -24,8 +24,8 @@ type DiagnoseFlowViewProps = {
 export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
     const { step, session, onUpdateSession, onNext, onGoToStep, onMarkSuccessful } = props
 
-    const handleCoffeeTypeSubmit = (coffeeType: CoffeeType) => {
-        onUpdateSession({ coffeeType })
+    const handleCoffeeRoastSubmit = (coffeeRoast: CoffeeRoast) => {
+        onUpdateSession({ coffeeRoast })
         onNext()
     };
 
@@ -77,11 +77,11 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
     };
 
     switch (step) {
-        case DiagnoseStep.CoffeeType:
+        case DiagnoseStep.CoffeeRoast:
             return (
-                <CoffeeTypeStep
-                    value={session.coffeeType}
-                    onSubmit={handleCoffeeTypeSubmit}
+                <CoffeeRoastStep
+                    value={session.coffeeRoast}
+                    onSubmit={handleCoffeeRoastSubmit}
                 />
             );
 
@@ -119,6 +119,7 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
             return (
                 <RecommendationStep
                     session={session}
+                    onUpdateSession={onUpdateSession}
                     onApplyAdvice={handleApplyAdvice}
                     onSessionIdResolved={handleOnSessionIdResolved}
                 />

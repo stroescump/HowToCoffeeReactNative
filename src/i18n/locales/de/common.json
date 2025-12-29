@@ -11,8 +11,8 @@
   "defaultErrorTitle": "Oops, something is kaputt.",
   "defaultErrorButtonText": "Try Again",
   "steps": {
-    "coffeeType": {
-      "title": "What kind of coffee?"
+    "coffeeRoast": {
+      "title": "What roast is it?"
     },
     "dose": {
       "title": "Wie viel Kaffee?",

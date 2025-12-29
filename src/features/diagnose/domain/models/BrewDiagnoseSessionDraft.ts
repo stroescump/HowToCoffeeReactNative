@@ -1,5 +1,6 @@
 import { BrewMethod } from "@/src/shared/domain/models/BrewMethod";
-import { CoffeeType } from "./CoffeeType";
+import { CoffeeRoast } from "./CoffeeRoast";
+import { Recommendation } from "./Recommendation";
 import { TasteFeedback } from "./TasteFeedback";
 
 export type BrewDiagnoseSessionDraft = {
@@ -9,7 +10,7 @@ export type BrewDiagnoseSessionDraft = {
   coffeeProductId?: string;   // If linked to a known product (marketplace or saved)
   coffeeDisplayName?: string; // If user picked a coffee manually (“El Paraiso Pink Bourbon”)
   shopName?: string;          // Optional, for future crawling / metadata extraction
-  coffeeType?: CoffeeType;
+  coffeeRoast?: CoffeeRoast;
   tasteFeedback?: TasteFeedback;
   brewMethod?: BrewMethod
   // Current brew parameters (the ones user changes as they iterate)
@@ -25,6 +26,7 @@ export type BrewDiagnoseSessionDraft = {
   lastDiagnosis?: {
     tags: string[];
     summary: string;
+    recommendations: Recommendation[];
     recommendation: {
       id: string;
       label: string;
@@ -52,5 +54,6 @@ export type BrewDiagnoseSessionSummary = {
   coffeeDisplayName?: string;
   shotCount: number;
   markedAsSuccessful: boolean;
+  createdAtMillis?: number;
   updatedAtMillis: number;
 }

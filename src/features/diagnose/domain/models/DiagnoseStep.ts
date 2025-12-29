@@ -1,5 +1,5 @@
 export const DiagnoseStep = {
-    CoffeeType: "coffeeType",
+    CoffeeRoast: "coffeeRoast",
     Dose: "dose",
     ExtractionDuration: "extractionDuration",
     Yield: "yield",

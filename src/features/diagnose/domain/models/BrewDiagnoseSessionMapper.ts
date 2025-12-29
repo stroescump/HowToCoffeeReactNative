@@ -14,7 +14,7 @@ export function isSessionCompleteOrThrow(
   const {
     id,
     coffeeDisplayName,
-    coffeeType,
+    coffeeRoast,
     tasteFeedback,
     brewMethod,
     doseGrams,
@@ -23,8 +23,8 @@ export function isSessionCompleteOrThrow(
     grindSetting,
   } = draft;
 
-  if (!coffeeType) {
-    throw new BrewDiagnoseSessionError("Missing coffeeType");
+  if (!coffeeRoast) {
+    throw new BrewDiagnoseSessionError("Missing coffeeRoast");
   }
   if (!tasteFeedback) {
     throw new BrewDiagnoseSessionError("Missing tasteFeedback");
@@ -44,7 +44,7 @@ export function isSessionCompleteOrThrow(
 
   const result: BrewDiagnoseSession = {
     coffeeDisplayName,
-    coffeeType,
+    coffeeRoast,
     tasteFeedback,
     brewMethod,
     doseGrams,
