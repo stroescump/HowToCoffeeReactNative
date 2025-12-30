@@ -6,7 +6,7 @@ export async function postTastePrefs(prefs: TastePrefs): Promise<void> {
     await http("/onboarding-taste-prefs", {
       method: "POST",
       body: {
-        mode: prefs.userExperience,
+        userExperience: prefs.userExperience,
         bitterness: prefs.bitterness,
         acidity: prefs.acidity,
         body: prefs.body,

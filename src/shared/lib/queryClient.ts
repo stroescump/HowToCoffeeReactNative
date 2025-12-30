@@ -2,6 +2,8 @@ import { BrewDiagnoseSession } from "@/src/features/diagnose/domain/models/BrewD
 import { BrewDiagnoseSessionSummary } from "@/src/features/diagnose/domain/models/BrewDiagnoseSessionDraft";
 import { BrewDiagnosis } from "@/src/features/diagnose/domain/models/BrewDiagnosis";
 import type { BrewSessionDetail } from "@/src/features/diagnose/domain/models/BrewSessionDetail";
+import type { TasteProfileResponse, TasteProfileUpdate } from "@/src/shared/domain/models/taste/tasteProfile";
+import { getUserId } from "@/src/shared/domain/usecases/userIdUseCase";
 import { http } from './httpClient';
 
 // Types imported from your existing DTO folder:
@@ -58,7 +60,16 @@ export const queryClient = {
         return http('/coffee-shops', { method: 'GET' });
     },
 
-    getUserTasteProfile(): Promise<any> {
-        return http('/profile/taste', { method: 'GET' });
+    async getTasteProfile(): Promise<TasteProfileResponse> {
+        const userId = await getUserId();
+        return http(`/taste-profile?X-User-Id=${encodeURIComponent(userId)}`, { method: "GET" });
+    },
+
+    async updateTasteProfile(prefs: TasteProfileUpdate): Promise<void> {
+        const userId = await getUserId();
+        await http(`/taste-profile?X-User-Id=${encodeURIComponent(userId)}`, {
+            method: "POST",
+            body: prefs,
+        });
     },
 };
