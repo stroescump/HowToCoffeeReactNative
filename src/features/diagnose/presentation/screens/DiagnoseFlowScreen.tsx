@@ -1,11 +1,13 @@
 import { StringRes } from "@/src/i18n/strings";
 import { queryClient } from "@/src/shared/lib/queryClient";
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
+import Button from "@/src/shared/ui/components/buttons/Button";
 import { PopupProvider } from "@/src/shared/ui/contextproviders/PopupContext";
 import { SafeAreaColorProvider } from "@/src/shared/ui/contextproviders/SafeAreaColorContext";
 import { useRouter } from "expo-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { Modal, Text, View } from "react-native";
 import { draftRepo } from "../../data/repositories/DiagnoseRepositoryImpl";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import { DiagnoseFlowView } from "../components/DiagnoseFlowView";
@@ -14,6 +16,7 @@ import { useDiagnoseFlow } from "../hooks/useDiagnoseFlow";
 export function DiagnoseFlowScreen() {
     const router = useRouter();
     const { t } = useTranslation();
+    const [showLeaveWarning, setShowLeaveWarning] = React.useState(false);
 
     const {
         step,
@@ -22,6 +25,7 @@ export function DiagnoseFlowScreen() {
         nextStep,
         prevStep,
         goToStep,
+        clearAndReset,
         setResumeTarget,
     } = useDiagnoseFlow({ draftRepository: draftRepo });
 
@@ -29,8 +33,7 @@ export function DiagnoseFlowScreen() {
 
     function handleBack() {
         if (step === DiagnoseStep.CoffeeRoast) {
-            // suntem în primul step din flow → ieșim din flow
-            router.back();
+            setShowLeaveWarning(true);
             return;
         }
 
@@ -76,6 +79,50 @@ export function DiagnoseFlowScreen() {
                     />
                 </BaseScreen>
             </SafeAreaColorProvider>
+            {showLeaveWarning && (
+                <Modal
+                    transparent
+                    animationType="fade"
+                    visible={showLeaveWarning}
+                    onRequestClose={() => setShowLeaveWarning(false)}
+                >
+                    <View className="flex-1 justify-center items-center bg-black/50">
+                        <View
+                            className="bg-white rounded-3xl p-6 w-11/12"
+                            style={{
+                                shadowColor: "#000",
+                                shadowOpacity: 0.15,
+                                shadowOffset: { width: 0, height: 8 },
+                                shadowRadius: 20,
+                                elevation: 8,
+                            }}
+                        >
+                            <Text className="text-3xl font-[InterBold] mb-3 text-black">
+                                {t(StringRes.popupDetails.areYouSure)}
+                            </Text>
+                            <Text className="text-xl leading-6 text-black/80 mb-4">
+                                You can leave now without saving. No shot has been brewed yet.
+                            </Text>
+                            <View className="gap-3">
+                                <Button
+                                    text="Leave diagnose"
+                                    onPress={() => {
+                                        setShowLeaveWarning(false);
+                                        void clearAndReset().finally(() => {
+                                            router.back();
+                                        });
+                                    }}
+                                />
+                                <Button
+                                    variant="ghost"
+                                    text="Stay"
+                                    onPress={() => setShowLeaveWarning(false)}
+                                />
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+            )}
         </PopupProvider>
     );
 }

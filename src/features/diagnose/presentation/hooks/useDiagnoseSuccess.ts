@@ -50,15 +50,13 @@ export function useDiagnoseSuccess({
     [hasSaved, router],
   );
 
-  const confirmLeave = useCallback(() => {
+  const confirmLeave = useCallback(async () => {
     setShowLeaveWarning(false);
     const destination = pendingNavigation ?? "home";
     setPendingNavigation(null);
-    void finalizeSession("discarded").finally(() => {
-      void clearAndReset().finally(() => {
-        router.replace(destination === "home" ? "/" : "/recipeagenda");
-      });
-    });
+    await finalizeSession("discarded");
+    await clearAndReset();
+    router.replace(destination === "home" ? "/" : "/recipeagenda");
   }, [clearAndReset, finalizeSession, pendingNavigation, router]);
 
   const dismissLeaveWarning = useCallback(() => {
@@ -93,13 +91,17 @@ export function useDiagnoseSuccess({
 
   const finalizeSession = useCallback(
     async (reason: "saved" | "discarded") => {
+      const persisted = await draftRepository.loadDraft();
+      const baseState = persisted ?? state;
       const normalizedName = coffeeName.trim();
+      const sessionId = baseState.session.id ?? state.session.id;
       const archivedState = {
-        ...state,
+        ...baseState,
         session: {
-          ...state.session,
-          coffeeDisplayName: normalizedName || state.session.coffeeDisplayName,
-          grindSetting: grindSetting || state.session.grindSetting,
+          ...baseState.session,
+          id: sessionId,
+          coffeeDisplayName: normalizedName || baseState.session.coffeeDisplayName,
+          grindSetting: grindSetting || baseState.session.grindSetting,
         },
       };
 
@@ -109,8 +111,8 @@ export function useDiagnoseSuccess({
         finalizedAtMillis: Date.now(),
       });
 
-      if (archivedState.session.id) {
-        await draftRepository.addFinalizedSessionId(archivedState.session.id);
+      if (sessionId) {
+        await draftRepository.addFinalizedSessionId(sessionId);
       }
     },
     [coffeeName, draftRepository, grindSetting, state],

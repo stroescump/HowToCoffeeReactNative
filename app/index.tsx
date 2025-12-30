@@ -1,10 +1,10 @@
 // app/index.tsx
-import { ButtonsSvg } from "@/src/features/homescreen/presentation/components/ButtonsSvg";
 import { draftRepo } from "@/src/features/diagnose/data/repositories/DiagnoseRepositoryImpl";
 import { usePendingDiagnoseSession } from "@/src/features/diagnose/presentation/hooks/usePendingDiagnoseSession";
+import { ButtonsSvg } from "@/src/features/homescreen/presentation/components/ButtonsSvg";
 import { API_BASE_URL_DEFAULTS, getApiBaseUrl, setApiBaseUrl } from "@/src/shared/config/config";
-import { setAuthToken } from "@/src/shared/domain/usecases/authTokenUseCase";
 import { isUserAuthenticated } from "@/src/shared/domain/usecases/authStatusUseCase";
+import { setAuthToken } from "@/src/shared/domain/usecases/authTokenUseCase";
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import Button from "@/src/shared/ui/components/buttons/Button";
 import { useFocusEffect, useRouter } from "expo-router";
@@ -114,6 +114,10 @@ export default function HomeScreen() {
     }
   };
 
+  const handleCloseDiagnoseModal = () => {
+    setShowDiagnoseModal(false);
+  };
+
   return (
     <BaseScreen>
       <View className="relative w-full">
@@ -216,10 +220,26 @@ export default function HomeScreen() {
         visible={showDiagnoseModal}
         transparent
         animationType="fade"
-        onRequestClose={() => setShowDiagnoseModal(false)}
+        onRequestClose={handleCloseDiagnoseModal}
       >
-        <View className="flex-1 bg-black/50 justify-center px-6">
-          <View className="bg-white rounded-3xl p-6">
+        <Pressable
+          className="flex-1 bg-black/50 justify-center px-6"
+          onPress={handleCloseDiagnoseModal}
+        >
+          <Pressable
+            className="bg-white rounded-3xl p-6"
+            onPress={(event) => event.stopPropagation()}
+          >
+            <View className="flex-row justify-end">
+              <Pressable
+                className="p-2"
+                accessibilityRole="button"
+                accessibilityLabel="Close"
+                onPress={handleCloseDiagnoseModal}
+              >
+                <Text className="text-xl text-black/70">×</Text>
+              </Pressable>
+            </View>
             <Text className="text-3xl font-[InterBold] mb-3 text-black">
               Resume brew session?
             </Text>
@@ -242,8 +262,8 @@ export default function HomeScreen() {
                 }}
               />
             </View>
-          </View>
-        </View>
+          </Pressable>
+        </Pressable>
       </Modal>
     </BaseScreen >
   );
