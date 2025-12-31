@@ -30,20 +30,6 @@ export function ButtonsSvgFirstRow({
     <G id="first-row-buttons">
       <G id="first-row-left-column-buttons">
         <G
-          id="btn-find-your-taste"
-          onPress={onFindYourTastePress}
-          accessible
-          accessibilityRole="button"
-          accessibilityLabel={findYourTasteLabel.lines.join(" ")}
-        >
-          <Path
-            d="M35 87.5C35 39.1751 74.1751 0 122.5 0C170.825 0 210 39.1751 210 87.5V186.5H35V87.5Z"
-            fill="#FC9401"
-          />
-          {renderLabel(findYourTasteLabel, { x: 122.5, y: 99 }, "findYourTaste")}
-        </G>
-
-        <G
           id="btn-scan-bag"
           onPress={onScanBagPress}
           accessible
@@ -52,12 +38,27 @@ export function ButtonsSvgFirstRow({
         >
           <Rect
             x={35}
-            y={194}
+            y={11.5}
             width={175}
             height={175}
             fill={HomeScreenConfig.scanBagColor}
           />
-          {renderLabel(scanBagLabel, { x: 122.5, y: 285 }, "scanBag")}
+          {renderLabel(scanBagLabel, { x: 122.5, y: 99 }, "scanBag")}
+        </G>
+
+        <G
+          id="btn-find-your-taste"
+          onPress={onFindYourTastePress}
+          accessible
+          accessibilityRole="button"
+          accessibilityLabel={findYourTasteLabel.lines.join(" ")}
+        >
+          <Path
+            d="M218 287C218 235.638 259.638 194 311 194H393V276C393 327.362 351.362 369 300 369H218V287Z"
+            fill="#FC9401"
+            transform="translate(428 0) scale(-1 1)"
+          />
+          {renderLabel(findYourTasteLabel, { x: 122.5, y: 285 }, "findYourTaste")}
         </G>
       </G>
 
