@@ -1,41 +1,64 @@
 import { HomeScreenConfig } from "@/app/HomeScreenConfig";
 import React from "react";
-import { Circle, G, Path, Text as SvgText } from "react-native-svg";
+import { Circle, G, Path, Rect, Text as SvgText } from "react-native-svg";
 import { BuiltLabel, renderLabel } from "./ButtonsSvgLabels";
 
 type ButtonsSvgFirstRowProps = {
   findYourTasteLabel: BuiltLabel;
+  scanBagLabel: BuiltLabel;
   marketplaceLabel: BuiltLabel;
   diagnoseBrewLabel: BuiltLabel;
   pendingDiagnoseCount: number;
   onFindYourTastePress: () => void;
+  onScanBagPress: () => void;
   onMarketplacePress: () => void;
   onDiagnosePress: () => void;
 };
 
 export function ButtonsSvgFirstRow({
   findYourTasteLabel,
+  scanBagLabel,
   marketplaceLabel,
   diagnoseBrewLabel,
   pendingDiagnoseCount,
   onFindYourTastePress,
+  onScanBagPress,
   onMarketplacePress,
   onDiagnosePress,
 }: ButtonsSvgFirstRowProps) {
   return (
     <G id="first-row-buttons">
-      <G
-        id="btn-find-your-taste"
-        onPress={onFindYourTastePress}
-        accessible
-        accessibilityRole="button"
-        accessibilityLabel={findYourTasteLabel.lines.join(" ")}
-      >
-        <Path
-          d="M35 87.5C35 39.1751 74.1751 0 122.5 0C170.825 0 210 39.1751 210 87.5V369H128C76.6375 369 35 327.362 35 276V87.5Z"
-          fill="#FC9401"
-        />
-        {renderLabel(findYourTasteLabel, { x: 122.5, y: 200 }, "findYourTaste")}
+      <G id="first-row-left-column-buttons">
+        <G
+          id="btn-find-your-taste"
+          onPress={onFindYourTastePress}
+          accessible
+          accessibilityRole="button"
+          accessibilityLabel={findYourTasteLabel.lines.join(" ")}
+        >
+          <Path
+            d="M35 87.5C35 39.1751 74.1751 0 122.5 0C170.825 0 210 39.1751 210 87.5V186.5H35V87.5Z"
+            fill="#FC9401"
+          />
+          {renderLabel(findYourTasteLabel, { x: 122.5, y: 99 }, "findYourTaste")}
+        </G>
+
+        <G
+          id="btn-scan-bag"
+          onPress={onScanBagPress}
+          accessible
+          accessibilityRole="button"
+          accessibilityLabel={scanBagLabel.lines.join(" ")}
+        >
+          <Rect
+            x={35}
+            y={194}
+            width={175}
+            height={175}
+            fill={HomeScreenConfig.scanBagColor}
+          />
+          {renderLabel(scanBagLabel, { x: 122.5, y: 285 }, "scanBag")}
+        </G>
       </G>
 
       <G id="first-row-right-column-buttons">

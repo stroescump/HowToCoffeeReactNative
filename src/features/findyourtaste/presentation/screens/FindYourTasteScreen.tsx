@@ -6,8 +6,8 @@ import {
   applyExperienceChange,
   normalizeTasteProfile,
 } from "@/src/features/findyourtaste/utils/normalizeTasteProfile";
+import { TastePreference, TasteProfileResponse } from "@/src/shared/domain/models/taste/tasteProfile";
 import { USER_EXPERIENCE, UserExperience } from "@/src/shared/domain/tastePrefs";
-import { TasteProfilePrefs, TasteProfileResponse } from "@/src/shared/domain/models/taste/tasteProfile";
 import { queryClient } from "@/src/shared/lib/queryClient";
 import { BaseScreen } from "@/src/shared/ui/components/BaseScreen";
 import Button from "@/src/shared/ui/components/buttons/Button";
@@ -18,7 +18,7 @@ import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 export function FindYourTasteScreen() {
   const router = useRouter();
   const [profile, setProfile] = useState<TasteProfileResponse | null>(null);
-  const [prefsDraft, setPrefsDraft] = useState<TasteProfilePrefs | null>(null);
+  const [prefsDraft, setPrefsDraft] = useState<TastePreference | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,8 +29,11 @@ export function FindYourTasteScreen() {
     setLoading(true);
     setError(null);
     try {
-      const response = await queryClient.getTasteProfile();
-      const normalized = normalizeTasteProfile(response);
+      const [overview, prefs] = await Promise.all([
+        queryClient.getBrewProfileOverview(),
+        queryClient.getTastePreference(),
+      ]);
+      const normalized = normalizeTasteProfile({ ...overview, prefs });
       setProfile(normalized);
       setPrefsDraft(normalized.prefs ?? null);
     } catch (err) {
@@ -46,7 +49,7 @@ export function FindYourTasteScreen() {
   );
 
   const handlePrefChange = useCallback(
-    (key: keyof TasteProfilePrefs, value: TasteProfilePrefs[keyof TasteProfilePrefs]) => {
+    (key: keyof TastePreference, value: TastePreference[keyof TastePreference]) => {
       setPrefsDraft((prev) => (prev ? { ...prev, [key]: value } : prev));
     },
     [],
@@ -86,7 +89,7 @@ export function FindYourTasteScreen() {
     setSaving(true);
     setError(null);
     try {
-      await queryClient.updateTasteProfile(prefsDraft);
+      await queryClient.updateTastePreference(prefsDraft);
       await loadProfile();
     } catch (err) {
       setError("We could not update your taste profile. Please try again.");

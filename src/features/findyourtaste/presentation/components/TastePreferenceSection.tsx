@@ -7,16 +7,16 @@ import {
   SWEETNESS_OPTIONS,
 } from "@/src/features/onboarding/tasteFlowOptions";
 import { USER_EXPERIENCE, UserExperience } from "@/src/shared/domain/tastePrefs";
-import { TasteProfilePrefs } from "@/src/shared/domain/models/taste/tasteProfile";
+import { TastePreference } from "@/src/shared/domain/models/taste/tasteProfile";
 import React from "react";
 import { Text, View } from "react-native";
 
 type TastePreferenceSectionProps = {
   experience: UserExperience;
-  prefs: TasteProfilePrefs;
+  prefs: TastePreference;
   onPrefChange: (
-    key: keyof TasteProfilePrefs,
-    value: TasteProfilePrefs[keyof TasteProfilePrefs],
+    key: keyof TastePreference,
+    value: TastePreference[keyof TastePreference],
   ) => void;
   disabled?: boolean;
 };

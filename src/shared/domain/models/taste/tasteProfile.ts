@@ -8,14 +8,14 @@ import {
 } from "@/src/shared/domain/tastePrefs";
 import { TasteArchetype } from "./tasteArchetype";
 
-export type TasteProfileStats = {
+export type BrewProfileOverview = {
   totalShots: number;
   sourCount: number;
   bitterCount: number;
   acidicCount: number;
 };
 
-export type TasteProfile = TasteProfileStats;
+export type TasteProfile = BrewProfileOverview;
 
 export const EMPTY_TASTE_PROFILE: TasteProfile = {
   totalShots: 0,
@@ -24,7 +24,7 @@ export const EMPTY_TASTE_PROFILE: TasteProfile = {
   acidicCount: 0,
 };
 
-export type TasteProfilePrefs = {
+export type TastePreference = {
   userExperience: UserExperience;
   bitterness: BitternessPreference;
   sweetness?: SweetnessPreference;
@@ -34,11 +34,11 @@ export type TasteProfilePrefs = {
 };
 
 export type TasteProfileResponse = {
-  profile: TasteProfileStats;
+  profile: BrewProfileOverview;
   archetype: {
     type: TasteArchetype;
   };
-  prefs?: TasteProfilePrefs;
+  prefs?: TastePreference;
 };
 
-export type TasteProfileUpdate = TasteProfilePrefs;
+export type TastePreferenceUpdate = TastePreference;

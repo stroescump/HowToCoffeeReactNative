@@ -21,6 +21,7 @@ export function DiagnoseFlowScreen() {
     const {
         step,
         session,
+        state,
         updateSession,
         nextStep,
         prevStep,
@@ -40,6 +41,27 @@ export function DiagnoseFlowScreen() {
         // altfel → mergem un pas înapoi în flow
         prevStep();
     }
+
+    const hasProgressToArchive =
+        Boolean(session.id) ||
+        Boolean(session.lastDiagnosis) ||
+        (session.history?.length ?? 0) > 0;
+
+    const discardAndExit = async () => {
+        if (hasProgressToArchive) {
+            await draftRepo.appendArchive({
+                state,
+                reason: "discarded",
+                finalizedAtMillis: Date.now(),
+            });
+            if (session.id) {
+                await draftRepo.addFinalizedSessionId(session.id);
+            }
+        }
+
+        await clearAndReset();
+        router.back();
+    };
 
     const handleMarkSuccessful = async () => {
         await updateSession({ markedAsSuccessful: true });
@@ -108,9 +130,7 @@ export function DiagnoseFlowScreen() {
                                     text="Leave diagnose"
                                     onPress={() => {
                                         setShowLeaveWarning(false);
-                                        void clearAndReset().finally(() => {
-                                            router.back();
-                                        });
+                                        void discardAndExit();
                                     }}
                                 />
                                 <Button

@@ -2,7 +2,11 @@ import { BrewDiagnoseSession } from "@/src/features/diagnose/domain/models/BrewD
 import { BrewDiagnoseSessionSummary } from "@/src/features/diagnose/domain/models/BrewDiagnoseSessionDraft";
 import { BrewDiagnosis } from "@/src/features/diagnose/domain/models/BrewDiagnosis";
 import type { BrewSessionDetail } from "@/src/features/diagnose/domain/models/BrewSessionDetail";
-import type { TasteProfileResponse, TasteProfileUpdate } from "@/src/shared/domain/models/taste/tasteProfile";
+import type {
+    TastePreference,
+    TastePreferenceUpdate,
+    TasteProfileResponse,
+} from "@/src/shared/domain/models/taste/tasteProfile";
 import { getUserId } from "@/src/shared/domain/usecases/userIdUseCase";
 import { http } from './httpClient';
 
@@ -60,14 +64,19 @@ export const queryClient = {
         return http('/coffee-shops', { method: 'GET' });
     },
 
-    async getTasteProfile(): Promise<TasteProfileResponse> {
+    async getBrewProfileOverview(): Promise<TasteProfileResponse> {
         const userId = await getUserId();
-        return http(`/taste-profile?X-User-Id=${encodeURIComponent(userId)}`, { method: "GET" });
+        return http(`/brew-profile-overview?X-User-Id=${encodeURIComponent(userId)}`, { method: "GET" });
     },
 
-    async updateTasteProfile(prefs: TasteProfileUpdate): Promise<void> {
+    async getTastePreference(): Promise<TastePreference> {
         const userId = await getUserId();
-        await http(`/taste-profile?X-User-Id=${encodeURIComponent(userId)}`, {
+        return http(`/taste-preference?X-User-Id=${encodeURIComponent(userId)}`, { method: "GET" });
+    },
+
+    async updateTastePreference(prefs: TastePreferenceUpdate): Promise<void> {
+        const userId = await getUserId();
+        await http(`/taste-preference?X-User-Id=${encodeURIComponent(userId)}`, {
             method: "POST",
             body: prefs,
         });

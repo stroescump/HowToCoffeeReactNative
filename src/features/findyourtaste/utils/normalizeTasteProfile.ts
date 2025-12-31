@@ -1,17 +1,17 @@
 import { ADVANCED_DEFAULTS } from "@/src/features/onboarding/tasteFlowOptions";
+import { TastePreference, TasteProfileResponse } from "@/src/shared/domain/models/taste/tasteProfile";
 import {
   TASTE_LEVEL,
   USER_EXPERIENCE,
   UserExperience,
 } from "@/src/shared/domain/tastePrefs";
-import { TasteProfilePrefs, TasteProfileResponse } from "@/src/shared/domain/models/taste/tasteProfile";
 
 const DEFAULT_BITTERNESS = TASTE_LEVEL.MEDIUM;
 
 export function normalizeTasteProfile(
   response: TasteProfileResponse,
 ): TasteProfileResponse {
-  const basePrefs: TasteProfilePrefs = response.prefs ?? {
+  const basePrefs: TastePreference = response.prefs ?? {
     userExperience: USER_EXPERIENCE.BEGINNER,
     bitterness: DEFAULT_BITTERNESS,
   };
@@ -31,9 +31,9 @@ export function normalizeTasteProfile(
 }
 
 export function applyExperienceChange(
-  prefs: TasteProfilePrefs,
+  prefs: TastePreference,
   nextExperience: UserExperience,
-): TasteProfilePrefs {
+): TastePreference {
   if (nextExperience === USER_EXPERIENCE.ADVANCED) {
     return {
       ...prefs,

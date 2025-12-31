@@ -51,6 +51,9 @@ export default function RootLayout() {
           <Stack.Screen
             name="findyourtaste/index"
           />
+          <Stack.Screen
+            name="scanbag/index"
+          />
 
           <Stack.Screen
             name="diagnose/index"

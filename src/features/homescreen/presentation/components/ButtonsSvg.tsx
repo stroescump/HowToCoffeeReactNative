@@ -15,6 +15,7 @@ type ButtonsSvgProps = {
   availableHeight: number;
   labels: {
     findYourTaste: ButtonLabelConfig;
+    scanBag: ButtonLabelConfig;
     marketplace: ButtonLabelConfig;
     diagnoseBrew: ButtonLabelConfig;
     recipeAgenda: ButtonLabelConfig;
@@ -22,6 +23,7 @@ type ButtonsSvgProps = {
   };
   pendingDiagnoseCount?: number;
   onDiagnosePress?: () => void;
+  onScanBagPress?: () => void;
 };
 
 export function ButtonsSvg({
@@ -29,6 +31,7 @@ export function ButtonsSvg({
   labels,
   pendingDiagnoseCount = 0,
   onDiagnosePress,
+  onScanBagPress,
 }: ButtonsSvgProps) {
   const router = useRouter();
   const [containerWidth, setContainerWidth] = useState(0);
@@ -50,6 +53,7 @@ export function ButtonsSvg({
   };
 
   const findYourTasteLabel = buildTranslatedLabel(labels?.findYourTaste);
+  const scanBagLabel = buildTranslatedLabel(labels?.scanBag);
   const marketplaceLabel = buildTranslatedLabel(labels?.marketplace);
   const diagnoseBrewLabel = buildTranslatedLabel(labels?.diagnoseBrew);
   const recipeAgendaLabel = buildTranslatedLabel(labels?.recipeAgenda);
@@ -75,10 +79,14 @@ export function ButtonsSvg({
           <G id="buttons-area">
             <ButtonsSvgFirstRow
               findYourTasteLabel={findYourTasteLabel}
+              scanBagLabel={scanBagLabel}
               marketplaceLabel={marketplaceLabel}
               diagnoseBrewLabel={diagnoseBrewLabel}
               pendingDiagnoseCount={pendingDiagnoseCount}
               onFindYourTastePress={() => router.push("/findyourtaste")}
+              onScanBagPress={() =>
+                onScanBagPress ? onScanBagPress() : router.push("/scanbag")
+              }
               onMarketplacePress={() => {
                 if (HomeScreenConfig.isClickable) {
                   router.push("/marketplace");

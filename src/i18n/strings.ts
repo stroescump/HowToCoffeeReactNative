@@ -5,10 +5,26 @@ export const StringRes = {
   "appTitle": "appTitle",
   "homescreen": {
     "findYourTaste": "homescreen.findYourTaste",
+    "scanBag": "homescreen.scanBag",
     "marketplace": "homescreen.marketplace",
     "diagnoseBrew": "homescreen.diagnoseBrew",
     "recipeAgenda": "homescreen.recipeAgenda",
     "coffeePlacesNearby": "homescreen.coffeePlacesNearby"
+  },
+  "scanBagScreen": {
+    "title": "scanBagScreen.title",
+    "subtitle": "scanBagScreen.subtitle",
+    "scanLabel": "scanBagScreen.scanLabel",
+    "processing": "scanBagScreen.processing",
+    "resultsTitle": "scanBagScreen.resultsTitle",
+    "noTextFound": "scanBagScreen.noTextFound",
+    "retake": "scanBagScreen.retake",
+    "captureError": "scanBagScreen.captureError",
+    "permissionTitle": "scanBagScreen.permissionTitle",
+    "permissionBody": "scanBagScreen.permissionBody",
+    "permissionButton": "scanBagScreen.permissionButton",
+    "permissionLoading": "scanBagScreen.permissionLoading",
+    "backLabel": "scanBagScreen.backLabel"
   },
   "titleDefaultError": "titleDefaultError",
   "buttonDefaultError": "buttonDefaultError",

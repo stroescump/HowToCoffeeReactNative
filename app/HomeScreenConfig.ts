@@ -3,6 +3,7 @@ const R = StringRes.homescreen;
 
 export const HomeScreenConfig = {
     buyCoffeeColor: "#8D8A8A",
+    scanBagColor: "#1ECAD3",
     isClickable: false,
     buttonLabelsConfig: {
         findYourTaste: {
@@ -10,6 +11,12 @@ export const HomeScreenConfig = {
             fontSize: 32,
             fontFamily: "InterBold",
             fill: "#010101",
+        },
+        scanBag: {
+            label: R.scanBag,
+            fontSize: 32,
+            fontFamily: "InterBold",
+            fill: "#FFFFFF",
         },
         marketplace: {
             label: R.marketplace,

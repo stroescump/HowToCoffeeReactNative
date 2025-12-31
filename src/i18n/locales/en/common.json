@@ -2,10 +2,26 @@
   "appTitle": "?ToCoffee",
   "homescreen": {
     "findYourTaste": "find\nyour\ntaste",
+    "scanBag": "scan\na\nbag",
     "marketplace": "buy\ncoffee",
     "diagnoseBrew": "diagnose\nbrew",
     "recipeAgenda": "recipe\nagenda",
     "coffeePlacesNearby": "coffee\nplaces\nnearby"
+  },
+  "scanBagScreen": {
+    "title": "scan a bag",
+    "subtitle": "Line up the label inside the frame.",
+    "scanLabel": "Scan",
+    "processing": "Reading text...",
+    "resultsTitle": "Detected text",
+    "noTextFound": "No text found.",
+    "retake": "Retake",
+    "captureError": "We couldn't read the text. Try again.",
+    "permissionTitle": "Camera access needed",
+    "permissionBody": "Allow camera access to scan your coffee bag.",
+    "permissionButton": "Allow camera",
+    "permissionLoading": "Checking camera access...",
+    "backLabel": "Back"
   },
   "titleDefaultError": "Oops, something is kaputt.",
   "buttonDefaultError": "Try Again",
