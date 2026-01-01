@@ -7,6 +7,7 @@ type PopupProps = {
     popupTitle: string
     popupButtonDescription: string
     onDismiss: () => void
+    children?: React.ReactNode
 }
 
 // parses **bold** inside the string into nested <Text> pieces
@@ -43,7 +44,7 @@ const renderMarkedText = (text: string) => {
     })
 }
 
-const Popup = ({ popupTitle, popupButtonDescription, onDismiss }: PopupProps) => {
+const Popup = ({ popupTitle, popupButtonDescription, onDismiss, children }: PopupProps) => {
     return (
         <View
             className="self-center mx-[6%] items-center flex-col px-6 py-6 rounded-3xl bg-[#F1E9DD]"
@@ -60,6 +61,8 @@ const Popup = ({ popupTitle, popupButtonDescription, onDismiss }: PopupProps) =>
             <Text className="my-4">
                 {renderMarkedText(popupTitle)}
             </Text>
+
+            {children}
 
             <Button
                 variant="primary"

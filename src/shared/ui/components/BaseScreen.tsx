@@ -13,9 +13,22 @@ type BaseScreenProps = {
   disablePadding?: boolean;
   safeAreaBgColor?: string | undefined;
   onBack?: () => void
+  headerColor?: string | undefined;
+  backArrowColor?: string | undefined;
+  headerRight?: ReactNode;
 };
 
-export function BaseScreen({ children, showHeader = false, title, disablePadding, safeAreaBgColor, onBack }: BaseScreenProps) {
+export function BaseScreen({
+  children,
+  showHeader = false,
+  title,
+  disablePadding,
+  safeAreaBgColor,
+  onBack,
+  headerColor,
+  backArrowColor,
+  headerRight
+}: BaseScreenProps) {
   const safeAreaCtx = useSafeAreaColorOptional();
   const backgroundColor = safeAreaBgColor ?? safeAreaCtx?.color
   return (
@@ -29,7 +42,15 @@ export function BaseScreen({ children, showHeader = false, title, disablePadding
     >
         <View className="flex-1 relative">
           <View className={disablePadding ? "flex-1" : "flex-1"}>
-            {showHeader && <HeaderHowToCoffee title={title} onBack={onBack} />}
+            {showHeader && (
+              <HeaderHowToCoffee
+                title={title}
+                onBack={onBack}
+                headerColor={headerColor}
+                backArrowColor={backArrowColor}
+                rightAccessory={headerRight}
+              />
+            )}
             {children}
           </View>
         </View>

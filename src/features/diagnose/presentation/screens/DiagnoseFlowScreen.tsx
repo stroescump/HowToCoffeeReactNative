@@ -5,9 +5,10 @@ import Button from "@/src/shared/ui/components/buttons/Button";
 import { PopupProvider } from "@/src/shared/ui/contextproviders/PopupContext";
 import { SafeAreaColorProvider } from "@/src/shared/ui/contextproviders/SafeAreaColorContext";
 import { useRouter } from "expo-router";
+import { X } from "lucide-react-native";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Modal, Text, View } from "react-native";
+import { Modal, Pressable, Text, View } from "react-native";
 import { draftRepo } from "../../data/repositories/DiagnoseRepositoryImpl";
 import { DiagnoseStep } from "../../domain/models/DiagnoseStep";
 import { DiagnoseFlowView } from "../components/DiagnoseFlowView";
@@ -17,6 +18,7 @@ export function DiagnoseFlowScreen() {
     const router = useRouter();
     const { t } = useTranslation();
     const [showLeaveWarning, setShowLeaveWarning] = React.useState(false);
+    const [showExitOptions, setShowExitOptions] = React.useState(false);
 
     const {
         step,
@@ -32,7 +34,7 @@ export function DiagnoseFlowScreen() {
 
     const diagnoseStep = DiagnoseStepConfigurator[step];
 
-    function handleBack() {
+    const handleBack = () => {
         if (step === DiagnoseStep.CoffeeRoast) {
             setShowLeaveWarning(true);
             return;
@@ -40,7 +42,7 @@ export function DiagnoseFlowScreen() {
 
         // altfel → mergem un pas înapoi în flow
         prevStep();
-    }
+    };
 
     const hasProgressToArchive =
         Boolean(session.id) ||
@@ -83,6 +85,15 @@ export function DiagnoseFlowScreen() {
         });
     };
 
+    const headerColor = step === DiagnoseStep.TasteFeedback ? "#FFFFFF" : undefined;
+    const headerIconColor = headerColor ?? "#010101";
+
+    const handleSaveAndExit = async () => {
+        setShowExitOptions(false);
+        await setResumeTarget("flow");
+        router.back();
+    };
+
     return (
         <PopupProvider>
             <SafeAreaColorProvider initialColor={diagnoseStep.safeAreaColor}>
@@ -90,6 +101,16 @@ export function DiagnoseFlowScreen() {
                     showHeader={true}
                     title={t(diagnoseStep.titleRes)}
                     onBack={handleBack}
+                    headerColor={headerColor}
+                    headerRight={(
+                        <Pressable
+                            onPress={() => setShowExitOptions(true)}
+                            hitSlop={12}
+                            accessibilityLabel="Exit diagnose"
+                        >
+                            <X size={32} color={headerIconColor} />
+                        </Pressable>
+                    )}
                 >
                     <DiagnoseFlowView
                         step={step}
@@ -137,6 +158,55 @@ export function DiagnoseFlowScreen() {
                                     variant="ghost"
                                     text="Stay"
                                     onPress={() => setShowLeaveWarning(false)}
+                                />
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+            )}
+            {showExitOptions && (
+                <Modal
+                    transparent
+                    animationType="fade"
+                    visible={showExitOptions}
+                    onRequestClose={() => setShowExitOptions(false)}
+                >
+                    <View className="flex-1 justify-center items-center bg-black/50">
+                        <View
+                            className="bg-white rounded-3xl p-6 w-11/12"
+                            style={{
+                                shadowColor: "#000",
+                                shadowOpacity: 0.15,
+                                shadowOffset: { width: 0, height: 8 },
+                                shadowRadius: 20,
+                                elevation: 8,
+                            }}
+                        >
+                            <Text className="text-3xl font-[InterBold] mb-3 text-black">
+                                Exit diagnose?
+                            </Text>
+                            <Text className="text-xl leading-6 text-black/80 mb-4">
+                                You can leave now and keep this session to resume later, or discard it.
+                            </Text>
+                            <View className="gap-3">
+                                <Button
+                                    text="Save & exit"
+                                    onPress={() => {
+                                        void handleSaveAndExit();
+                                    }}
+                                />
+                                <Button
+                                    variant="ghost"
+                                    text="Discard session"
+                                    onPress={() => {
+                                        setShowExitOptions(false);
+                                        void discardAndExit();
+                                    }}
+                                />
+                                <Button
+                                    variant="ghost"
+                                    text="Stay"
+                                    onPress={() => setShowExitOptions(false)}
                                 />
                             </View>
                         </View>

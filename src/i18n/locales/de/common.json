@@ -22,9 +22,11 @@
     },
     "extractionDuration": {
       "title": "Extraction duration",
-      "buttonIdontKnow": "I don't know",
+      "buttonIdontKnow": "No coffee extracted",
       "popupNoTimerMessage": "Without knowing the extraction time, it will be very difficult to offer accurate tips.\n**Try** using your phone. Start a stopwatch when you start the extraction.",
-      "popupNoTimerButtonText": "Okay, I understand"
+      "popupNoTimerButtonText": "Okay, danke",
+      "doNotShowAgain": "Nicht erneut anzeigen.",
+      "beginnerHint": "If no coffee is extracted till 10s. it means the shot choked due to a too fine grind size. Think like sand, if too fine, water takes a long time to pass through. Try increasing the grind size and brew another shot"
     },
     "tasteFeedback": {
       "title": "How did it taste?",
