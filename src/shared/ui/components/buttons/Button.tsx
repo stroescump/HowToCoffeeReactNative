@@ -1,3 +1,4 @@
+import { FONTS } from "@/src/shared/ui/tokens/typography";
 import React, { useState } from "react";
 import {
   GestureResponderEvent,
@@ -6,7 +7,8 @@ import {
   Text
 } from "react-native";
 
-type ButtonVariant = "primary" | "secondary" | "ghost";
+type ButtonVariant = "primary" | "secondary" | "ghost" | "success" | "danger";
+type ButtonFont = "regular" | "italic" | "black" | "bold" | "light" | "medium";
 
 export type ButtonProps = {
   text: string;
@@ -15,6 +17,11 @@ export type ButtonProps = {
   /** Accept Tailwind/nativewind className for layout or extra styling */
   className?: string;
   disabled?: boolean;
+  cornerRadius?: number;
+  fontSize?: number;
+  lineHeight?: number;
+  font?: ButtonFont;
+  backgroundColor?: string;
 };
 
 const VARIANT_STYLES: Record<
@@ -44,6 +51,16 @@ const VARIANT_STYLES: Record<
     textColor: "#010101",
     hasShadow: false,
   },
+  success: {
+    backgroundColor: "#2FBF4A",
+    textColor: "#FFFFFF",
+    hasShadow: true,
+  },
+  danger: {
+    backgroundColor: "#E53935",
+    textColor: "#FFFFFF",
+    hasShadow: true,
+  },
 };
 
 export default function Button({
@@ -52,7 +69,16 @@ export default function Button({
   variant = "primary",
   className = "",
   disabled = false,
+  cornerRadius = 999,
+  fontSize = 18,
+  lineHeight,
+  font = "bold",
+  backgroundColor,
 }: ButtonProps) {
+  const resolvedFont = (() => {
+    if (font === "italic") return FONTS.regular;
+    return FONTS[font];
+  })();
   const theme = VARIANT_STYLES[variant];
   const [pressed, setPressed] = useState(false);
 
@@ -70,15 +96,26 @@ export default function Button({
       style={[
         styles.base,
         {
-          backgroundColor: theme.backgroundColor,
+          backgroundColor: backgroundColor ?? theme.backgroundColor,
           borderWidth: theme.borderWidth,
           borderColor: theme.borderColor,
+          borderRadius: cornerRadius,
         },
         pressed && !disabled && styles.pressed,
         disabled && styles.disabled,
       ]}
     >
-      <Text style={[styles.label, { color: theme.textColor }]}>
+      <Text
+        style={[
+          styles.label,
+          {
+            color: theme.textColor,
+            fontSize,
+            lineHeight,
+            fontFamily: resolvedFont,
+          },
+        ]}
+      >
         {text}
       </Text>
     </Pressable>

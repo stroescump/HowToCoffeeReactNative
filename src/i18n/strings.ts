@@ -48,8 +48,11 @@ export const StringRes = {
     "extractionDuration": {
       "title": "steps.extractionDuration.title",
       "buttonIdontKnow": "steps.extractionDuration.buttonIdontKnow",
+      "buttonStart": "steps.extractionDuration.buttonStart",
+      "buttonStop": "steps.extractionDuration.buttonStop",
       "popupNoTimerMessage": "steps.extractionDuration.popupNoTimerMessage",
       "popupNoTimerButtonText": "steps.extractionDuration.popupNoTimerButtonText",
+      "popupAutoStopMessage": "steps.extractionDuration.popupAutoStopMessage",
       "doNotShowAgain": "steps.extractionDuration.doNotShowAgain",
       "beginnerHint": "steps.extractionDuration.beginnerHint"
     },

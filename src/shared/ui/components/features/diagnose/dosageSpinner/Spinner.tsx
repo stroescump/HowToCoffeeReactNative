@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
     Animated,
+    Easing,
     FlatList,
     NativeScrollEvent,
     NativeSyntheticEvent,
@@ -31,9 +32,13 @@ const DEFAULT_DOSAGE_VALUES = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 
 type SpinnerProps = {
     values: number[];
     initialValue: number;
+    value?: number;
     onChange?: (value: number) => void;
     gapCenter?: number | null;
     unitOfMeasurement: string;
+    isInteractionEnabled?: boolean;
+    isAutoScrolling?: boolean;
+    autoScrollDurationMs?: number;
 };
 
 type SpinnerItemProps = {
@@ -136,9 +141,13 @@ const SpinnerItem: React.FC<SpinnerItemProps> = ({
 export const Spinner: React.FC<SpinnerProps> = ({
     values = DEFAULT_DOSAGE_VALUES,
     initialValue = 10,
+    value,
     onChange,
     gapCenter,
-    unitOfMeasurement
+    unitOfMeasurement,
+    isInteractionEnabled = true,
+    isAutoScrolling = false,
+    autoScrollDurationMs = 400,
 }) => {
     const { height: screenHeight, width: screenWidth } = useWindowDimensions();
     const [containerHeight, setContainerHeight] = useState<number | null>(null);
@@ -158,14 +167,19 @@ export const Spinner: React.FC<SpinnerProps> = ({
     const EXTRA_ITEM_SPACING = 4;
 
     // determinăm indexul inițial
+    const resolvedValue = value ?? initialValue;
+
     const initialIndex = (() => {
-        const candidateIndex = values.indexOf(initialValue);
+        const candidateIndex = values.indexOf(resolvedValue);
         return candidateIndex === -1 ? 0 : candidateIndex;
     })();
 
     const [selectedIndex, setSelectedIndex] = useState(initialIndex);
     const selectedIndexRef = useRef(initialIndex);
     const listRef = useRef<FlatList<number>>(null);
+    const scrollOffsetRef = useRef(0);
+    const scrollAnimRef = useRef<Animated.CompositeAnimation | null>(null);
+    const scrollAnimValue = useRef(new Animated.Value(0)).current;
 
     // guard: facem auto-scroll inițial o singură dată
     const hasDoneInitialScroll = useRef(false);
@@ -263,7 +277,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
         };
     }, [screenWidth, containerHeight, maxItemWidth]);
 
-    const snapToIndex = (index: number) => {
+    const snapToIndex = React.useCallback((index: number, animated = true) => {
         if (!listRef.current || !itemHeight) return;
 
         const clamped = Math.max(0, Math.min(index, values.length - 1));
@@ -271,18 +285,84 @@ export const Spinner: React.FC<SpinnerProps> = ({
 
         listRef.current.scrollToOffset({
             offset,
-            animated: true,
+            animated,
         });
-    };
+    }, [itemHeight, values.length]);
+
+    useEffect(() => {
+        if (!isAutoScrolling) return;
+        if (!itemHeight || !Number.isFinite(itemHeight)) return;
+        const id = scrollAnimValue.addListener(({ value }) => {
+            scrollOffsetRef.current = value;
+            listRef.current?.scrollToOffset({ offset: value, animated: false });
+
+            const rawIndex = value / itemHeight;
+            const index = Math.round(rawIndex);
+            const clamped = Math.max(0, Math.min(index, values.length - 1));
+            if (clamped !== selectedIndexRef.current) {
+                selectedIndexRef.current = clamped;
+                setSelectedIndex(clamped);
+            }
+        });
+        return () => {
+            scrollAnimValue.removeListener(id);
+        };
+    }, [isAutoScrolling, itemHeight, scrollAnimValue, values.length]);
+
+    useEffect(() => {
+        return () => {
+            scrollAnimRef.current?.stop();
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!isAutoScrolling) {
+            scrollAnimRef.current?.stop();
+        }
+    }, [isAutoScrolling]);
+
+    useEffect(() => {
+        if (!isAutoScrolling) return;
+        if (value == null) return;
+        if (!itemHeight || !Number.isFinite(itemHeight)) return;
+        const nextIndex = values.indexOf(value);
+        if (nextIndex === -1) return;
+
+        if (!listRef.current) return;
+        const clamped = Math.max(0, Math.min(nextIndex, values.length - 1));
+        const targetOffset = clamped * itemHeight;
+
+        scrollAnimRef.current?.stop();
+        scrollAnimValue.setValue(scrollOffsetRef.current);
+        scrollAnimRef.current = Animated.timing(scrollAnimValue, {
+            toValue: targetOffset,
+            duration: autoScrollDurationMs,
+            easing: Easing.linear,
+            useNativeDriver: false,
+        });
+        scrollAnimRef.current.start(({ finished }) => {
+            if (finished) {
+                scrollOffsetRef.current = targetOffset;
+            }
+        });
+    }, [
+        autoScrollDurationMs,
+        isAutoScrolling,
+        itemHeight,
+        scrollAnimValue,
+        value,
+        values,
+    ]);
 
     // notify onChange când se schimbă selecția
     useEffect(() => {
         if (!onChange) return;
+        if (isAutoScrolling) return;
         const value = values[selectedIndex];
         if (value != null) {
             onChange(value);
         }
-    }, [selectedIndex, onChange, values]);
+    }, [isAutoScrolling, onChange, selectedIndex, values]);
 
     // scroll inițial la valoarea dorită – doar după ce știm containerHeight-ul real
     useEffect(() => {
@@ -299,12 +379,16 @@ export const Spinner: React.FC<SpinnerProps> = ({
             offset,
             animated: false,
         });
+        scrollOffsetRef.current = offset;
+        scrollAnimValue.setValue(offset);
 
         hasDoneInitialScroll.current = true;
-    }, [itemHeight, initialIndex, containerHeight]);
+    }, [containerHeight, initialIndex, itemHeight, scrollAnimValue]);
 
     const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        if (isAutoScrolling) return;
         const offsetY = e.nativeEvent.contentOffset.y;
+        scrollOffsetRef.current = offsetY;
         const rawIndex = offsetY / itemHeight;
         const index = Math.round(rawIndex);
         const clamped = Math.max(0, Math.min(index, values.length - 1));
@@ -316,6 +400,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
     };
 
     const handleMomentumScrollEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        if (isAutoScrolling) return;
         const offsetY = e.nativeEvent.contentOffset.y;
         const rawIndex = offsetY / itemHeight;
         const index = Math.round(rawIndex);
@@ -414,6 +499,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
                                 height: wheelHeight,
                             },
                         ]}
+                        pointerEvents={isInteractionEnabled ? "auto" : "none"}
                     >
                         <FlatList
                             ref={listRef}
@@ -421,8 +507,9 @@ export const Spinner: React.FC<SpinnerProps> = ({
                             keyExtractor={(item) => item.toString()}
                             bounces={false}
                             showsVerticalScrollIndicator={false}
+                            scrollEnabled={isInteractionEnabled || isAutoScrolling}
                             decelerationRate={Platform.OS === 'ios' ? 0.993 : 0.979}
-                            snapToInterval={itemHeight}
+                            snapToInterval={isAutoScrolling ? undefined : itemHeight}
                             snapToAlignment="start"
                             disableIntervalMomentum={false}
                             onScroll={handleScroll}
