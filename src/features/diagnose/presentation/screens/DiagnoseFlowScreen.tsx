@@ -28,7 +28,6 @@ export function DiagnoseFlowScreen() {
         nextStep,
         prevStep,
         goToStep,
-        clearAndReset,
         setResumeTarget,
     } = useDiagnoseFlow({ draftRepository: draftRepo });
 
@@ -61,7 +60,7 @@ export function DiagnoseFlowScreen() {
             }
         }
 
-        await clearAndReset();
+        await draftRepo.clearDraft();
         router.back();
     };
 
