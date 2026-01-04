@@ -3,7 +3,7 @@ const R = StringRes.homescreen;
 
 export const HomeScreenConfig = {
     buyCoffeeColor: "#8D8A8A",
-    scanBagColor: "#1ECAD3",
+    scanBagColor: "#010101",
     isClickable: false,
     buttonLabelsConfig: {
         findYourTaste: {

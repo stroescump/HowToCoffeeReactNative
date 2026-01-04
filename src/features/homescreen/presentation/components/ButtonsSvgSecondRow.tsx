@@ -1,5 +1,5 @@
 import React from "react";
-import { G, Path } from "react-native-svg";
+import { G, Path, Rect } from "react-native-svg";
 import { BuiltLabel, renderLabel } from "./ButtonsSvgLabels";
 
 type ButtonsSvgSecondRowProps = {
@@ -15,6 +15,13 @@ export function ButtonsSvgSecondRow({
   onRecipeAgendaPress,
   onCoffeePlacesPress,
 }: ButtonsSvgSecondRowProps) {
+  const bottomRowTop = 560;
+  const bottomRowHeight = 175;
+  const bottomRowGap = 12;
+  const bottomRectHeight = (bottomRowHeight - bottomRowGap) / 2;
+  const bottomRowLeft = 35;
+  const bottomRowWidth = 358;
+
   return (
     <G id="second-row-buttons">
       <G id="second-row-column-left">
@@ -32,14 +39,6 @@ export function ButtonsSvgSecondRow({
           {renderLabel(recipeAgendaLabel, { x: 122.5, y: 465 }, "recipe")}
         </G>
 
-        <G id="do-not-import">
-          <G id="Drop">
-            <Path
-              d="M35 560H117C168.362 560 210 601.638 210 653V735H128C76.6375 735 35 693.362 35 642V560Z"
-              fill="#010101"
-            />
-          </G>
-        </G>
       </G>
 
       <G id="second-row-column-right">
@@ -57,12 +56,23 @@ export function ButtonsSvgSecondRow({
           {renderLabel(coffeePlacesNearbyLabel, { x: 305.5, y: 465 }, "coffeeNearby")}
         </G>
 
-        <G id="do-not-import_2">
-          <Path
-            d="M218 653C218 601.638 259.638 560 311 560H393V642C393 693.362 351.362 735 300 735H218V653Z"
-            fill="#FC9401"
-          />
-        </G>
+      </G>
+
+      <G id="bottom-row-rectangles">
+        <Rect
+          x={bottomRowLeft}
+          y={bottomRowTop}
+          width={bottomRowWidth}
+          height={bottomRectHeight}
+          fill="#010101"
+        />
+        <Rect
+          x={bottomRowLeft}
+          y={bottomRowTop + bottomRectHeight + bottomRowGap}
+          width={bottomRowWidth}
+          height={bottomRectHeight}
+          fill="#010101"
+        />
       </G>
     </G>
   );

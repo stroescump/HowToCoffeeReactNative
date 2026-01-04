@@ -1,6 +1,6 @@
 import { HomeScreenConfig } from "@/app/HomeScreenConfig";
 import React from "react";
-import { Circle, G, Path, Rect, Text as SvgText } from "react-native-svg";
+import { Circle, G, Path, Text as SvgText } from "react-native-svg";
 import { BuiltLabel, renderLabel } from "./ButtonsSvgLabels";
 
 type ButtonsSvgFirstRowProps = {
@@ -36,11 +36,8 @@ export function ButtonsSvgFirstRow({
           accessibilityRole="button"
           accessibilityLabel={scanBagLabel.lines.join(" ")}
         >
-          <Rect
-            x={35}
-            y={11.5}
-            width={175}
-            height={175}
+          <Path
+            d="M35 11.5H122.5A87.5 87.5 0 0 1 122.5 186.5H35V11.5Z"
             fill={HomeScreenConfig.scanBagColor}
           />
           {renderLabel(scanBagLabel, { x: 122.5, y: 99 }, "scanBag")}
