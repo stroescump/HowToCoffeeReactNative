@@ -12,11 +12,16 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.mariusstroescu.howtocoffee",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSLocationWhenInUseUsageDescription": "Allow HowToCoffee to access your location to show nearby coffee shops."
       }
     },
     "android": {
       "package": "com.mariusstroescu.howtocoffee",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/icon.png"
