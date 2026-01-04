@@ -23,11 +23,13 @@ const EXTRACTION_TIME_VALUES = Array.from(
 
 type ExtractionDurationProps = {
   extractionDuration?: number;
+  allowRetake?: boolean;
   onSubmit: (extractionDuration: number) => void;
 };
 
 export const ExtractionDuration = ({
   extractionDuration,
+  allowRetake = false,
   onSubmit,
 }: ExtractionDurationProps) => {
   const { showPopup } = usePopup();
@@ -38,12 +40,13 @@ export const ExtractionDuration = ({
     showPopup(t(R.popupAutoStopMessage), t(StringRes.buttonOkIUnderstand));
   }, [showPopup, t]);
 
-  const { seconds, setSeconds, isRunning, hasStopped, start, stop } =
+  const { seconds, setSeconds, isRunning, hasStopped, start, stop, prepareForRecording } =
     useExtractionTimer({
       autoStopSeconds: AUTO_STOP_SECONDS,
       initialSeconds,
       onAutoStop: handleAutoStop,
     });
+  const [spinnerVersion, setSpinnerVersion] = React.useState(0);
 
   const canSubmit = Number.isFinite(seconds);
   const showTimerButton = !hasStopped;
@@ -51,6 +54,7 @@ export const ExtractionDuration = ({
   const timerLabel = isRunning ? t(R.buttonStop) : t(R.buttonStart);
   const timerVariant = isRunning ? "danger" : "success";
   const timerBackgroundColor = isRunning ? STOP_BUTTON_BG : START_BUTTON_BG;
+  const showRetakeButton = allowRetake && showActionButtons;
 
   const handleNoCoffeeExtracted = () => {
     // TODO: define behavior for the "No coffee extracted" action.
@@ -72,6 +76,11 @@ export const ExtractionDuration = ({
     start();
   };
 
+  const handleRetakePress = () => {
+    prepareForRecording();
+    setSpinnerVersion((prev) => prev + 1);
+  };
+
   return (
     <View className="flex-1 bg-[#FC9401]">
       <ExtractionDurationHints />
@@ -86,6 +95,7 @@ export const ExtractionDuration = ({
 
         <View className="flex-1">
           <Spinner
+            key={spinnerVersion}
             values={EXTRACTION_TIME_VALUES}
             unitOfMeasurement="sec."
             initialValue={seconds}
@@ -113,17 +123,26 @@ export const ExtractionDuration = ({
         </View>
       )}
       {showActionButtons && (
-        <View className="absolute flex-row gap-2 mx-4 left-0 right-0 justify-center bottom-5">
-          <Button
-            className="flex-[0.4]"
-            text={t(R.buttonIdontKnow)}
-            onPress={handleNoCoffeeExtracted}
-          />
-          <Button
-            className="flex-[0.6]"
-            text={t(StringRes.buttonContinue)}
-            onPress={handleSubmit}
-          />
+        <View className="absolute mx-4 left-0 right-0 bottom-5">
+          {showRetakeButton && (
+            <Button
+              className="mb-3"
+              text={t(R.buttonRetake)}
+              onPress={handleRetakePress}
+            />
+          )}
+          <View className="flex-row gap-2 justify-center">
+            <Button
+              className="flex-[0.4]"
+              text={t(R.buttonIdontKnow)}
+              onPress={handleNoCoffeeExtracted}
+            />
+            <Button
+              className="flex-[0.6]"
+              text={t(StringRes.buttonContinue)}
+              onPress={handleSubmit}
+            />
+          </View>
         </View>
       )}
     </View>

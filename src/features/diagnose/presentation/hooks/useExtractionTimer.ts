@@ -13,6 +13,7 @@ type UseExtractionTimerResult = {
   hasStopped: boolean;
   start: () => void;
   stop: (autoStop?: boolean) => void;
+  prepareForRecording: () => void;
 };
 
 export const useExtractionTimer = ({
@@ -52,6 +53,15 @@ export const useExtractionTimer = ({
     [clearTimer, onAutoStop, seconds]
   );
 
+  const prepareForRecording = useCallback(() => {
+    clearTimer();
+    startTimeRef.current = null;
+    baseSecondsRef.current = 0;
+    setIsRunning(false);
+    setHasStopped(false);
+    setSeconds(0);
+  }, [clearTimer]);
+
   const start = useCallback(() => {
     if (isRunning) return;
     clearTimer();
@@ -80,9 +90,10 @@ export const useExtractionTimer = ({
   useEffect(() => () => clearTimer(), [clearTimer]);
 
   useEffect(() => {
-    if (isRunning) return;
+    if (isRunning || !hasStopped) return;
     baseSecondsRef.current = initialSeconds;
-  }, [initialSeconds, isRunning]);
+    setSeconds(initialSeconds);
+  }, [hasStopped, initialSeconds, isRunning]);
 
-  return { seconds, setSeconds, isRunning, hasStopped, start, stop };
+  return { seconds, setSeconds, isRunning, hasStopped, start, stop, prepareForRecording };
 };

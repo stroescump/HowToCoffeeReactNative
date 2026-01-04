@@ -112,6 +112,7 @@ export function DiagnoseFlowView(props: DiagnoseFlowViewProps) {
             return (
                 <ExtractionDuration
                     extractionDuration={session.brewTimeSeconds}
+                    allowRetake={(session.history?.length ?? 0) > 0}
                     onSubmit={handleExtractionDurationSubmit}
                 />
             );

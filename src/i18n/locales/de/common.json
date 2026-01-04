@@ -25,6 +25,7 @@
       "buttonIdontKnow": "No coffee extracted",
       "buttonStart": "Start",
       "buttonStop": "Stop",
+      "buttonRetake": "Record new brew time",
       "popupNoTimerMessage": "Without knowing the extraction time, it will be very difficult to offer accurate tips.\n**Try** using your phone. Start a stopwatch when you start the extraction.",
       "popupNoTimerButtonText": "Okay, danke",
       "popupAutoStopMessage": "Timer stopped at 30 seconds.",
