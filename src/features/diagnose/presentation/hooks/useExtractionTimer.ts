@@ -21,12 +21,13 @@ export const useExtractionTimer = ({
   initialSeconds,
   onAutoStop,
 }: UseExtractionTimerOptions): UseExtractionTimerResult => {
-  const [seconds, setSeconds] = useState(initialSeconds);
+  const [seconds, setSecondsState] = useState(initialSeconds);
   const [isRunning, setIsRunning] = useState(false);
   const [hasStopped, setHasStopped] = useState(initialSeconds > 0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef<number | null>(null);
-  const baseSecondsRef = useRef(0);
+  const baseSecondsRef = useRef(initialSeconds);
+  const hasUserEditedRef = useRef(false);
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
@@ -44,6 +45,7 @@ export const useExtractionTimer = ({
   const stop = useCallback(
     (autoStop = false) => {
       clearTimer();
+      startTimeRef.current = null;
       setIsRunning(false);
       setHasStopped(true);
       if (autoStop) {
@@ -57,9 +59,10 @@ export const useExtractionTimer = ({
     clearTimer();
     startTimeRef.current = null;
     baseSecondsRef.current = 0;
+    hasUserEditedRef.current = true;
     setIsRunning(false);
     setHasStopped(false);
-    setSeconds(0);
+    setSecondsState(0);
   }, [clearTimer]);
 
   const start = useCallback(() => {
@@ -67,7 +70,8 @@ export const useExtractionTimer = ({
     clearTimer();
     baseSecondsRef.current = 0;
     startTimeRef.current = Date.now();
-    setSeconds(0);
+    hasUserEditedRef.current = true;
+    setSecondsState(0);
     setHasStopped(false);
     setIsRunning(true);
   }, [clearTimer, isRunning]);
@@ -75,7 +79,7 @@ export const useExtractionTimer = ({
   useEffect(() => {
     if (!isRunning) return;
     timerRef.current = setInterval(() => {
-      setSeconds(() => Math.min(computeElapsedSeconds(), autoStopSeconds));
+      setSecondsState(() => Math.min(computeElapsedSeconds(), autoStopSeconds));
     }, 250);
     return () => clearTimer();
   }, [autoStopSeconds, clearTimer, computeElapsedSeconds, isRunning]);
@@ -90,10 +94,16 @@ export const useExtractionTimer = ({
   useEffect(() => () => clearTimer(), [clearTimer]);
 
   useEffect(() => {
-    if (isRunning || !hasStopped) return;
+    if (isRunning) return;
+    if (hasUserEditedRef.current) return;
     baseSecondsRef.current = initialSeconds;
-    setSeconds(initialSeconds);
-  }, [hasStopped, initialSeconds, isRunning]);
+    setSecondsState(initialSeconds);
+  }, [initialSeconds, isRunning]);
+
+  const setSeconds: Dispatch<SetStateAction<number>> = useCallback((value) => {
+    hasUserEditedRef.current = true;
+    setSecondsState(value);
+  }, []);
 
   return { seconds, setSeconds, isRunning, hasStopped, start, stop, prepareForRecording };
 };
