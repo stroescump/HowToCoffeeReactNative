@@ -63,6 +63,31 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     marginTop: SPACING,
   },
+  filtersRow: {
+    flexDirection: "row",
+    marginBottom: SPACING,
+  },
+  filterPill: {
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 999,
+    backgroundColor: PALETTE.tagBg,
+    borderWidth: 1,
+    borderColor: PALETTE.border,
+    marginRight: SPACING / 2,
+  },
+  filterPillActive: {
+    backgroundColor: PALETTE.accent,
+    borderColor: PALETTE.accent,
+  },
+  filterText: {
+    color: PALETTE.tagText,
+    fontSize: 13,
+    fontWeight: "600",
+  },
+  filterTextActive: {
+    color: "#FFFFFF",
+  },
   tagPill: {
     paddingHorizontal: 10,
     paddingVertical: 4,

@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { styles } from "../styles/marketplaceStyles";
+import { styles } from "../styles/coffeePlacesNearbyStyles";
 import { FilterPill } from "./FilterPill";
 
 type FilterOption = {

@@ -9,7 +9,9 @@ import {
   View,
 } from "react-native";
 import { CoffeeShopCard } from "../components/CoffeeShopCard";
+import { FilterBar } from "../components/FilterBar";
 import { StateView } from "../components/StateView";
+import { useCoffeeShopFilters } from "../hooks/useCoffeeShopFilters";
 import { useNearbyCoffeeShops } from "../hooks/useNearbyCoffeeShops";
 import { PALETTE, SPACING, styles } from "../styles/coffeePlacesNearbyStyles";
 const TITLE = "Coffee places nearby";
@@ -28,6 +30,14 @@ export function CoffeePlacesNearbyScreen() {
     openSettings,
     refresh,
   } = useNearbyCoffeeShops();
+  const {
+    options,
+    activeFilters,
+    toggleFilter,
+    clearFilters,
+    visibleShops,
+    hasActiveFilters,
+  } = useCoffeeShopFilters(shops);
 
   if (checkingPermission) {
     return (
@@ -88,9 +98,14 @@ export function CoffeePlacesNearbyScreen() {
   return (
     <ScreenShell onBack={onBack}>
       <View style={styles.container}>
+        <FilterBar
+          options={options}
+          activeIds={activeFilters}
+          onToggle={toggleFilter}
+        />
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
         <FlatList
-          data={shops}
+          data={visibleShops}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <CoffeeShopCard shop={item} />}
           ItemSeparatorComponent={() => <View style={{ height: SPACING }} />}
@@ -104,12 +119,21 @@ export function CoffeePlacesNearbyScreen() {
                 <Text style={styles.stateBody}>Loading nearby coffee shops...</Text>
               </View>
             ) : (
-              <StateView
-                title="No coffee shops nearby"
-                body="No coffee shops within 350 m right now. Try refreshing later."
-                actionLabel="Refresh"
-                onAction={refresh}
-              />
+              hasActiveFilters ? (
+                <StateView
+                  title="No matches yet"
+                  body="No coffee shops match those filters."
+                  actionLabel="Clear filters"
+                  onAction={clearFilters}
+                />
+              ) : (
+                <StateView
+                  title="No coffee shops nearby"
+                  body="No coffee shops within 350 m right now. Try refreshing later."
+                  actionLabel="Refresh"
+                  onAction={refresh}
+                />
+              )
             )
           }
         />
