@@ -34,6 +34,7 @@ const MarketplaceScreen = () => {
             />
           )}
           contentContainerStyle={styles.listContent}
+          ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
           onRefresh={refresh}
           refreshing={loading}
           ListEmptyComponent={

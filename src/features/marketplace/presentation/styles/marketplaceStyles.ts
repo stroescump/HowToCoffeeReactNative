@@ -1,7 +1,10 @@
 import { StyleSheet } from "react-native";
 
 export const SPACING = 12;
-export const CARD_IMAGE_WIDTH = 110;
+export const ITEM_SPACING = 8;
+export const CARD_IMAGE_WIDTH = 96;
+export const CARD_IMAGE_HEIGHT = 140;
+export const CARD_BODY_PADDING = 8;
 
 export const PALETTE = {
   background: "#F4EEE6",
@@ -53,6 +56,9 @@ export const styles = StyleSheet.create({
   listContent: {
     paddingBottom: SPACING * 3,
   },
+  listSeparator: {
+    height: ITEM_SPACING,
+  },
   card: {
     flexDirection: "row",
     backgroundColor: PALETTE.card,
@@ -64,12 +70,10 @@ export const styles = StyleSheet.create({
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 6 },
     elevation: 3,
-    minHeight: 140,
-    marginBottom: SPACING * 1.5,
   },
   cardImage: {
     width: CARD_IMAGE_WIDTH,
-    height: "100%",
+    height: CARD_IMAGE_HEIGHT,
     borderTopLeftRadius: 18,
     borderBottomLeftRadius: 18,
     backgroundColor: PALETTE.imageBg,
@@ -84,7 +88,7 @@ export const styles = StyleSheet.create({
   },
   cardBody: {
     flex: 1,
-    padding: SPACING * 1.5,
+    padding: CARD_BODY_PADDING,
   },
   badge: {
     alignSelf: "flex-start",
@@ -95,7 +99,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 999,
-    marginBottom: 6,
+    marginBottom: 4,
   },
   cardTitle: {
     fontSize: 16,
@@ -106,17 +110,17 @@ export const styles = StyleSheet.create({
   cardShop: {
     fontSize: 13,
     color: PALETTE.textMuted,
-    marginBottom: 6,
+    marginBottom: 4,
   },
   cardMeta: {
     fontSize: 12,
     color: PALETTE.textMuted,
-    marginBottom: 4,
+    marginBottom: 2,
   },
   cardNotes: {
     fontSize: 12,
     color: PALETTE.textPrimary,
-    marginTop: 6,
+    marginTop: 4,
   },
   stateContainer: {
     flex: 1,
