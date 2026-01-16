@@ -2,6 +2,7 @@ import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { CoffeeRecommendationItem } from "../../domain/models/CoffeeRecommendation";
 import { styles } from "../styles/marketplaceStyles";
+import { buildMarketplaceProductView } from "../utils/marketplaceProductView";
 
 type CoffeeCardProps = {
   item: CoffeeRecommendationItem;
@@ -9,30 +10,8 @@ type CoffeeCardProps = {
 };
 
 export function CoffeeCard({ item, onPress }: CoffeeCardProps) {
-  const { product } = item;
-  const origin = [product.originCountry, product.originRegion]
-    .filter(Boolean)
-    .join(", ");
-  const roast = formatEnumLabel(product.roastLevel);
-  const process = product.processing ? formatEnumLabel(product.processing) : undefined;
-  const altitude =
-    product.altitudeMeters != null ? `${product.altitudeMeters} m` : undefined;
-
-  const metaLineOne = buildMetaLine([
-    origin ? `Origin: ${origin}` : null,
-    roast ? `Roast: ${roast}` : null,
-  ]);
-
-  const metaLineTwo = buildMetaLine([
-    process ? `Process: ${process}` : null,
-    product.variety ? `Variety: ${product.variety}` : null,
-    altitude ? `Altitude: ${altitude}` : null,
-  ]);
-
-  const notesLine =
-    product.tasteNotes && product.tasteNotes.length > 0
-      ? `Taste: ${product.tasteNotes.join(", ")}`
-      : null;
+  const view = buildMarketplaceProductView(item.product);
+  const wildCardBadge = item.isWildCard ? "Wildcard" : null;
 
   return (
     <Pressable
@@ -40,14 +19,14 @@ export function CoffeeCard({ item, onPress }: CoffeeCardProps) {
       onPress={onPress}
       disabled={!onPress}
       accessibilityRole={onPress ? "button" : undefined}
-      accessibilityLabel={product.name}
+      accessibilityLabel={view.title}
     >
-      {product.imageUrl ? (
+      {view.primaryImageUrl ? (
         <Image
-          source={{ uri: product.imageUrl }}
+          source={{ uri: view.primaryImageUrl }}
           style={styles.cardImage}
           resizeMode="cover"
-          accessibilityLabel={`${product.name} photo`}
+          accessibilityLabel={`${view.title} photo`}
         />
       ) : (
         <View style={[styles.cardImage, styles.imagePlaceholder]}>
@@ -55,29 +34,37 @@ export function CoffeeCard({ item, onPress }: CoffeeCardProps) {
         </View>
       )}
       <View style={styles.cardBody}>
-        {item.badge ? <Text style={styles.badge}>{item.badge}</Text> : null}
-        <Text style={styles.cardTitle}>{product.name}</Text>
-        {product.shopName ? (
-          <Text style={styles.cardShop}>{product.shopName}</Text>
-        ) : null}
-        {metaLineOne ? <Text style={styles.cardMeta}>{metaLineOne}</Text> : null}
-        {metaLineTwo ? <Text style={styles.cardMeta}>{metaLineTwo}</Text> : null}
-        {notesLine ? <Text style={styles.cardNotes}>{notesLine}</Text> : null}
+        <View style={styles.badgeRow}>
+          {wildCardBadge ? (
+            <Text style={styles.badge}>{wildCardBadge}</Text>
+          ) : null}
+          {item.badge ? <Text style={styles.badge}>{item.badge}</Text> : null}
+          {view.roastBadge ? (
+            <Text style={styles.roastBadge}>{view.roastBadge}</Text>
+          ) : null}
+        </View>
+        <Text style={styles.cardTitle}>{view.title}</Text>
+        <Text style={styles.cardShop}>{view.subtitle}</Text>
+        <Text style={styles.cardMeta}>Origin: {view.originLabel}</Text>
+        <View style={styles.cardFooter}>
+          <Text style={styles.cardPrice}>{view.priceLabel}</Text>
+          <View
+            style={[
+              styles.ctaPill,
+              view.ctaDisabled ? styles.ctaPillDisabled : null,
+            ]}
+          >
+            <Text
+              style={[
+                styles.ctaText,
+                view.ctaDisabled ? styles.ctaTextDisabled : null,
+              ]}
+            >
+              {view.ctaLabel}
+            </Text>
+          </View>
+        </View>
       </View>
     </Pressable>
   );
-}
-
-function buildMetaLine(parts: Array<string | null>): string | null {
-  const filtered = parts.filter((part): part is string => Boolean(part));
-  if (filtered.length === 0) return null;
-  return filtered.join(" | ");
-}
-
-function formatEnumLabel(value: string): string {
-  return value
-    .toLowerCase()
-    .split("_")
-    .map((chunk) => chunk.charAt(0).toUpperCase() + chunk.slice(1))
-    .join(" ");
 }

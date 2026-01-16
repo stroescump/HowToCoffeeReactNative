@@ -6,7 +6,7 @@ export function sortRecommendationsByCuration(
   const indexed = items.map((item, index) => ({
     item,
     index,
-    score: item.product.curationScore ?? Number.NEGATIVE_INFINITY,
+    score: item.product.coffeeProduct.curationScore ?? Number.NEGATIVE_INFINITY,
   }));
 
   indexed.sort((a, b) => {

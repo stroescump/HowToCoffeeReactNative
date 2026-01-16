@@ -4,16 +4,11 @@ import {
   UsedArchetype,
 } from "../../domain/models/CoffeeRecommendation";
 import {
-  CoffeeProduct,
-  Processing,
-  RoastLevel,
-} from "../../domain/models/CoffeeProduct";
-import {
-  CoffeeProductSummaryDto,
-  CoffeeRecommendationItemDto,
-  CoffeeRecommendationResponseDto,
+  MarketplaceRecommendationItemDto,
+  MarketplaceRecommendationResponseDto,
   UsedArchetypeDto,
 } from "../dto/CoffeeRecommendationDto";
+import { mapMarketplaceListingFromProduct } from "./coffeeProductMapper";
 
 const ROAST_LEVELS: Record<string, RoastLevel> = {
   LIGHT: "LIGHT",
@@ -34,7 +29,7 @@ const PROCESSING: Record<string, Processing> = {
 };
 
 export function mapCoffeeRecommendationsPage(
-  dto: CoffeeRecommendationResponseDto
+  dto: MarketplaceRecommendationResponseDto
 ): CoffeeRecommendationPage {
   const items = dto.items
     .map(mapCoffeeRecommendationItem)
@@ -48,46 +43,15 @@ export function mapCoffeeRecommendationsPage(
 }
 
 function mapCoffeeRecommendationItem(
-  dto: CoffeeRecommendationItemDto
+  dto: MarketplaceRecommendationItemDto
 ): CoffeeRecommendationItem | null {
-  const product = mapCoffeeProduct(dto.product);
+  const product = mapMarketplaceListingFromProduct(dto.product);
   if (!product) return null;
   return {
     product,
-    reasonTags: dto.reasonTags ?? [],
     isWildCard: dto.isWildCard ?? false,
     badge: dto.badge ?? undefined,
   };
-}
-
-function mapCoffeeProduct(dto?: CoffeeProductSummaryDto | null): CoffeeProduct | null {
-  if (!dto?.id || !dto?.name) return null;
-  return {
-    id: dto.id,
-    shopName: dto.shopName ?? undefined,
-    name: dto.name,
-    roastLevel: mapRoastLevel(dto.roastLevel),
-    originCountry: dto.originCountry ?? undefined,
-    originRegion: dto.originRegion ?? undefined,
-    processing: mapProcessing(dto.processing),
-    variety: dto.variety ?? undefined,
-    altitudeMeters: dto.altitudeMeters ?? undefined,
-    tasteNotes: dto.tasteNotes ?? undefined,
-    imageUrl: dto.imageUrl ?? undefined,
-    curationScore: dto.curationScore ?? null,
-  };
-}
-
-function mapRoastLevel(value?: string | null): RoastLevel {
-  if (!value) return "UNKNOWN";
-  const normalized = value.toUpperCase();
-  return ROAST_LEVELS[normalized] ?? "UNKNOWN";
-}
-
-function mapProcessing(value?: string | null): Processing | undefined {
-  if (!value) return undefined;
-  const normalized = value.toUpperCase();
-  return PROCESSING[normalized];
 }
 
 function mapUsedArchetype(dto?: UsedArchetypeDto | null): UsedArchetype | null {

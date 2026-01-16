@@ -1,6 +1,6 @@
 import { strict as assert } from "assert";
 import { CoffeeRecommendationItem } from "../models/CoffeeRecommendation";
-import { CoffeeProduct } from "../models/CoffeeProduct";
+import { CoffeeProduct, CoffeeProductMarketplace } from "../models/CoffeeProduct";
 import { sortRecommendationsByCuration } from "./sortRecommendationsByCuration";
 
 function buildItem(
@@ -8,13 +8,33 @@ function buildItem(
   score: number | null,
   name = "Coffee"
 ): CoffeeRecommendationItem {
-  const product: CoffeeProduct = {
+  const coffeeProduct: CoffeeProduct = {
     id,
     name,
+    imageUrls: null,
+    roasterId: null,
+    roasterName: null,
+    shop: null,
+    origin: null,
     roastLevel: "UNKNOWN",
+    processing: null,
+    variety: null,
+    altitudeMeters: null,
+    roastDate: null,
+    tastingNotes: null,
+    tasteAxes: null,
+    fullLabelText: null,
+    marketplaceProductId: id,
     curationScore: score,
   };
-  return { product, reasonTags: [], isWildCard: false };
+  const product: CoffeeProductMarketplace = {
+    id,
+    coffeeProduct,
+    priceMinor: null,
+    currency: null,
+    isAvailable: true,
+  };
+  return { product, isWildCard: false };
 }
 
 describe("sortRecommendationsByCuration", () => {

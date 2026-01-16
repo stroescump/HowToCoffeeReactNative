@@ -14,8 +14,6 @@ import { useTranslation } from "react-i18next";
 import { Modal, Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { HomeScreenConfig } from "./HomeScreenConfig";
 
-// TODO: Add "Edit taste preferences" entry when a Settings screen is available.
-
 export default function HomeScreen() {
   const [availableHeight, setAvailableHeight] = useState(0);
   const [showApiModal, setShowApiModal] = useState(false);

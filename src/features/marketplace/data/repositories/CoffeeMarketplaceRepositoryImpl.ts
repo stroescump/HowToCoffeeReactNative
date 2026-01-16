@@ -6,8 +6,12 @@ import { mapCoffeeRecommendationsPage } from "../mappers/coffeeRecommendationMap
 export class CoffeeMarketplaceRepositoryImpl
   implements CoffeeMarketplaceRepository
 {
-  async getRecommended(): Promise<CoffeeRecommendationPage> {
-    const dto = await fetchCoffeeRecommendations();
+  async getRecommended(
+    limit: number,
+    offset: number,
+    roastLevel?: string | null
+  ): Promise<CoffeeRecommendationPage> {
+    const dto = await fetchCoffeeRecommendations({ limit, offset, roastLevel });
     return mapCoffeeRecommendationsPage(dto);
   }
 }

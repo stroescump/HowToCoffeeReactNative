@@ -1,8 +1,21 @@
 import { http } from "@/src/shared/lib/httpClient";
-import { CoffeeRecommendationResponseDto } from "../dto/CoffeeRecommendationDto";
+import { MarketplaceRecommendationResponseDto } from "../dto/CoffeeRecommendationDto";
 
-export async function fetchCoffeeRecommendations(): Promise<CoffeeRecommendationResponseDto> {
-  return http<CoffeeRecommendationResponseDto>("/coffee/recommended", {
-    method: "GET",
-  });
+type FetchRecommendationsParams = {
+  limit: number;
+  offset: number;
+  roastLevel?: string | null;
+};
+
+export async function fetchCoffeeRecommendations(
+  params: FetchRecommendationsParams
+): Promise<MarketplaceRecommendationResponseDto> {
+  const { limit, offset, roastLevel } = params;
+  const roastParam = roastLevel ? `&roastLevel=${roastLevel}` : "";
+  return http<MarketplaceRecommendationResponseDto>(
+    `/marketplace/recommended?limit=${limit}&offset=${offset}${roastParam}`,
+    {
+      method: "GET",
+    }
+  );
 }

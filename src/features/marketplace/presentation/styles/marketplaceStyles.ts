@@ -53,11 +53,45 @@ export const styles = StyleSheet.create({
   filterTextActive: {
     color: "#FFFFFF",
   },
+  dropdownMenu: {
+    marginTop: 8,
+    backgroundColor: PALETTE.card,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: PALETTE.border,
+    paddingVertical: 6,
+    paddingHorizontal: 6,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3,
+  },
+  dropdownItem: {
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+  },
+  dropdownItemActive: {
+    backgroundColor: PALETTE.filterBg,
+  },
+  dropdownText: {
+    fontSize: 13,
+    color: PALETTE.textPrimary,
+    fontWeight: "600",
+  },
+  dropdownTextActive: {
+    color: PALETTE.textPrimary,
+  },
   listContent: {
     paddingBottom: SPACING * 3,
   },
   listSeparator: {
     height: ITEM_SPACING,
+  },
+  footerLoading: {
+    paddingVertical: SPACING * 2,
+    alignItems: "center",
   },
   card: {
     flexDirection: "row",
@@ -90,6 +124,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     padding: CARD_BODY_PADDING,
   },
+  badgeRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    marginBottom: 4,
+  },
   badge: {
     alignSelf: "flex-start",
     backgroundColor: PALETTE.badgeBg,
@@ -99,7 +139,17 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 999,
-    marginBottom: 4,
+    marginRight: 6,
+  },
+  roastBadge: {
+    alignSelf: "flex-start",
+    backgroundColor: PALETTE.filterBg,
+    color: PALETTE.filterText,
+    fontSize: 11,
+    fontWeight: "700",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 999,
   },
   cardTitle: {
     fontSize: 16,
@@ -116,6 +166,34 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: PALETTE.textMuted,
     marginBottom: 2,
+  },
+  cardFooter: {
+    marginTop: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  cardPrice: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: PALETTE.textPrimary,
+  },
+  ctaPill: {
+    backgroundColor: PALETTE.accent,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+  },
+  ctaPillDisabled: {
+    backgroundColor: PALETTE.border,
+  },
+  ctaText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: "#FFFFFF",
+  },
+  ctaTextDisabled: {
+    color: PALETTE.textMuted,
   },
   cardNotes: {
     fontSize: 12,
@@ -137,5 +215,55 @@ export const styles = StyleSheet.create({
     color: "#9B1C1C",
     textAlign: "center",
     marginBottom: SPACING,
+  },
+  detailContainer: {
+    flex: 1,
+  },
+  detailImage: {
+    width: "100%",
+    height: 260,
+    borderRadius: 22,
+    marginBottom: SPACING,
+    backgroundColor: PALETTE.imageBg,
+  },
+  detailHeader: {
+    marginBottom: SPACING,
+  },
+  detailTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: PALETTE.textPrimary,
+    marginBottom: 6,
+  },
+  detailSubtitle: {
+    fontSize: 14,
+    color: PALETTE.textMuted,
+    marginBottom: 8,
+  },
+  detailBadgeRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  detailMeta: {
+    fontSize: 12,
+    color: PALETTE.textMuted,
+    marginLeft: 6,
+  },
+  detailRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: SPACING,
+  },
+  detailPrice: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: PALETTE.textPrimary,
+  },
+  detailAvailability: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: PALETTE.textMuted,
   },
 });

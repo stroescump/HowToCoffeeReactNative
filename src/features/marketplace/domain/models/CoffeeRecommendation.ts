@@ -1,8 +1,7 @@
-import { CoffeeProduct } from "./CoffeeProduct";
+import { CoffeeProductMarketplace } from "./CoffeeProduct";
 
 export type CoffeeRecommendationItem = {
-  product: CoffeeProduct;
-  reasonTags: string[];
+  product: CoffeeProductMarketplace;
   isWildCard: boolean;
   badge?: string;
 };
