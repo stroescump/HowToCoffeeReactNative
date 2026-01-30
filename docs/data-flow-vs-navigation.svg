@@ -15,6 +15,8 @@
     </marker>
   </defs>
 
+  <rect x="0" y="0" width="1200" height="720" fill="#ffffff" />
+
   <text x="60" y="60" class="title">Navigation flow (solid)</text>
   <text x="60" y="90" class="title">Data flow (dashed)</text>
 
