@@ -44,7 +44,7 @@
   <rect x="440" y="420" width="320" height="220" class="box2" />
   <text x="470" y="460" class="title">Data</text>
   <text x="470" y="490" class="label">Repositories</text>
-  <text x="470" y="520" class="small">DTOs & datasources</text>
+  <text x="470" y="520" class="small">DTOs &amp; datasources</text>
 
   <rect x="820" y="420" width="320" height="220" class="box2" />
   <text x="850" y="460" class="title">Services</text>
