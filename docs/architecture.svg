@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .box { fill: #f7f3ed; stroke: #2b2b2b; stroke-width: 2; rx: 16; }
+      .title { font: 600 20px 'Helvetica Neue', Arial, sans-serif; fill: #2b2b2b; }
+      .label { font: 16px 'Helvetica Neue', Arial, sans-serif; fill: #2b2b2b; }
+      .small { font: 13px 'Helvetica Neue', Arial, sans-serif; fill: #2b2b2b; }
+      .arrow { stroke: #2b2b2b; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2b2b2b" />
+    </marker>
+  </defs>
+
+  <!-- App -->
+  <rect x="60" y="80" width="280" height="220" class="box" />
+  <text x="90" y="120" class="title">app/</text>
+  <text x="90" y="150" class="label">Expo Router screens</text>
+  <text x="90" y="180" class="small">Routes and navigation</text>
+  <text x="90" y="205" class="small">Wire UI to features</text>
+
+  <!-- Features -->
+  <rect x="440" y="60" width="320" height="260" class="box" />
+  <text x="470" y="100" class="title">src/features/*</text>
+  <text x="470" y="140" class="label">presentation</text>
+  <text x="470" y="165" class="small">Screens, components, hooks</text>
+  <text x="470" y="205" class="label">domain</text>
+  <text x="470" y="230" class="small">Use cases, entities</text>
+  <text x="470" y="270" class="label">data</text>
+  <text x="470" y="295" class="small">Repositories, DTOs, datasources</text>
+
+  <!-- Shared -->
+  <rect x="840" y="40" width="300" height="280" class="box" />
+  <text x="870" y="80" class="title">src/shared/*</text>
+  <text x="870" y="120" class="label">ui</text>
+  <text x="920" y="120" class="small">components, tokens</text>
+  <text x="870" y="150" class="label">domain</text>
+  <text x="950" y="150" class="small">models, use cases</text>
+  <text x="870" y="180" class="label">services</text>
+  <text x="970" y="180" class="small">storage, api</text>
+  <text x="870" y="210" class="label">config</text>
+  <text x="940" y="210" class="small">api base url</text>
+  <text x="870" y="240" class="label">i18n</text>
+  <text x="920" y="240" class="small">locales, setup</text>
+
+  <!-- i18n standalone -->
+  <rect x="840" y="360" width="300" height="160" class="box" />
+  <text x="870" y="400" class="title">src/i18n/</text>
+  <text x="870" y="430" class="label">Resources + init</text>
+  <text x="870" y="460" class="small">locales/*/common.json</text>
+
+  <!-- Arrows -->
+  <line x1="340" y1="190" x2="440" y2="190" class="arrow" />
+  <line x1="760" y1="190" x2="840" y2="190" class="arrow" />
+  <line x1="760" y1="260" x2="840" y2="400" class="arrow" />
+
+  <!-- Caption -->
+  <text x="60" y="360" class="label">Flow: app/ screens → feature presentation → feature domain → feature data → shared services/config</text>
+</svg>

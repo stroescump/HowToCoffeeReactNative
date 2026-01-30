@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .box { fill: #f7f3ed; stroke: #2b2b2b; stroke-width: 2; rx: 16; }
+      .box2 { fill: #eef6f7; stroke: #2b2b2b; stroke-width: 2; rx: 16; }
+      .title { font: 600 20px 'Helvetica Neue', Arial, sans-serif; fill: #2b2b2b; }
+      .label { font: 16px 'Helvetica Neue', Arial, sans-serif; fill: #2b2b2b; }
+      .small { font: 13px 'Helvetica Neue', Arial, sans-serif; fill: #2b2b2b; }
+      .arrow { stroke: #2b2b2b; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .arrowDash { stroke: #2b2b2b; stroke-width: 2; stroke-dasharray: 6 6; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2b2b2b" />
+    </marker>
+  </defs>
+
+  <text x="60" y="60" class="title">Navigation flow (solid)</text>
+  <text x="60" y="90" class="title">Data flow (dashed)</text>
+
+  <!-- Navigation layer -->
+  <rect x="60" y="140" width="320" height="220" class="box" />
+  <text x="90" y="180" class="title">Navigation</text>
+  <text x="90" y="210" class="label">Expo Router</text>
+  <text x="90" y="240" class="small">app/ screens and stacks</text>
+
+  <rect x="440" y="140" width="320" height="220" class="box" />
+  <text x="470" y="180" class="title">Screens</text>
+  <text x="470" y="210" class="label">Feature UI</text>
+  <text x="470" y="240" class="small">presentation layer</text>
+
+  <rect x="820" y="140" width="320" height="220" class="box" />
+  <text x="850" y="180" class="title">Flows</text>
+  <text x="850" y="210" class="label">Onboarding</text>
+  <text x="850" y="235" class="label">Diagnose</text>
+  <text x="850" y="260" class="label">Scan bag</text>
+
+  <!-- Data layer -->
+  <rect x="60" y="420" width="320" height="220" class="box2" />
+  <text x="90" y="460" class="title">Domain</text>
+  <text x="90" y="490" class="label">Use cases</text>
+  <text x="90" y="520" class="small">business logic</text>
+
+  <rect x="440" y="420" width="320" height="220" class="box2" />
+  <text x="470" y="460" class="title">Data</text>
+  <text x="470" y="490" class="label">Repositories</text>
+  <text x="470" y="520" class="small">DTOs & datasources</text>
+
+  <rect x="820" y="420" width="320" height="220" class="box2" />
+  <text x="850" y="460" class="title">Services</text>
+  <text x="850" y="490" class="label">Storage / API</text>
+  <text x="850" y="520" class="small">AsyncStorage, network</text>
+
+  <!-- Navigation arrows (solid) -->
+  <line x1="380" y1="250" x2="440" y2="250" class="arrow" />
+  <line x1="760" y1="250" x2="820" y2="250" class="arrow" />
+
+  <!-- Data arrows (dashed) -->
+  <line x1="220" y1="360" x2="220" y2="420" class="arrowDash" />
+  <line x1="380" y1="530" x2="440" y2="530" class="arrowDash" />
+  <line x1="760" y1="530" x2="820" y2="530" class="arrowDash" />
+
+  <!-- Link between screens and domain -->
+  <line x1="600" y1="360" x2="220" y2="420" class="arrowDash" />
+</svg>
